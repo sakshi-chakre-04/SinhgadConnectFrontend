@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
+import CommentSection from './posts/CommentSection';
 
 const Posts = () => {
   const { user, token } = useAuth();
@@ -8,6 +9,15 @@ const Posts = () => {
   const [error, setError] = useState('');
   const [filter, setFilter] = useState('all');
   const [sortBy, setSortBy] = useState('createdAt');
+  const [expandedPost, setExpandedPost] = useState(null);
+  const [showComments, setShowComments] = useState({});
+
+  const toggleComments = (postId) => {
+    setShowComments(prev => ({
+      ...prev,
+      [postId]: !prev[postId]
+    }));
+  };
 
   useEffect(() => {
     fetchPosts();
@@ -189,32 +199,35 @@ const Posts = () => {
                       {/* Upvote */}
                       <button
                         onClick={() => handleVote(post._id, 'upvote')}
-                        className="flex items-center space-x-1 text-gray-500 hover:text-green-600 transition-colors"
+                        className={`flex items-center space-x-1 ${post.upvotes?.includes(user?._id) ? 'text-green-500' : 'text-gray-500'}`}
                       >
-                        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M3.293 9.707a1 1 0 010-1.414l6-6a1 1 0 011.414 0l6 6a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L4.707 9.707a1 1 0 01-1.414 0z" clipRule="evenodd"/>
-                        </svg>
-                        <span className="text-sm font-medium">{post.upvotes?.length || 0}</span>
+                        <span>▲</span>
+                        <span>{post.upvotes?.length || 0}</span>
                       </button>
 
                       {/* Downvote */}
                       <button
                         onClick={() => handleVote(post._id, 'downvote')}
-                        className="flex items-center space-x-1 text-gray-500 hover:text-red-600 transition-colors"
+                        className={`flex items-center space-x-1 ${post.downvotes?.includes(user?._id) ? 'text-red-500' : 'text-gray-500'}`}
                       >
-                        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M16.707 10.293a1 1 0 010 1.414l-6 6a1 1 0 01-1.414 0l-6-6a1 1 0 111.414-1.414L9 14.586V3a1 1 0 112 0v11.586l4.293-4.293a1 1 0 011.414 0z" clipRule="evenodd"/>
-                        </svg>
-                        <span className="text-sm font-medium">{post.downvotes?.length || 0}</span>
+                        <span>▼</span>
+                        <span>{post.downvotes?.length || 0}</span>
                       </button>
 
                       {/* Comments */}
-                      <button className="flex items-center space-x-1 text-gray-500 hover:text-blue-600 transition-colors">
-                        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clipRule="evenodd"/>
-                        </svg>
-                        <span className="text-sm font-medium">{post.commentCount || 0}</span>
+                      <button 
+                        onClick={() => toggleComments(post._id)}
+                        className={`flex items-center space-x-1 ${showComments[post._id] ? 'text-blue-500' : 'text-gray-500 hover:text-blue-500'}`}
+                      >
+                        <span>💬</span>
+                        <span>{post.comments?.length || 0} Comments</span>
                       </button>
+                      
+                      {showComments[post._id] && (
+                        <div className="mt-4 w-full">
+                          <CommentSection postId={post._id} />
+                        </div>
+                      )}
                     </div>
 
                     {/* Net Score */}
