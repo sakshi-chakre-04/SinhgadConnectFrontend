@@ -1,23 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
+import { useModal } from '../context/ModalContext';
 import { postsAPI } from '../services/api';
 
-const ASKQues = ({ isOpen, setIsOpen, initialTab }) => {
+const ASKQues = ({ isOpen, onClose, initialTab }) => {
   const [activeTab, setActiveTab] = useState(initialTab || 'Add Question');
+  const { activeTab: contextTab } = useModal();
 
-  // Listen for custom event to change the active tab
-  React.useEffect(() => {
-    const handleTabChange = (event) => {
-      if (event.detail && ['Add Question', 'Create Post'].includes(event.detail)) {
-        setActiveTab(event.detail);
-      }
-    };
-
-    document.addEventListener('setActiveTab', handleTabChange);
-    return () => {
-      document.removeEventListener('setActiveTab', handleTabChange);
-    };
-  }, []);
+  useEffect(() => {
+    if (isOpen && contextTab) {
+      setActiveTab(contextTab);
+    }
+  }, [isOpen, contextTab]);
   const [questionTitle, setQuestionTitle] = useState('');
   const [questionDescription, setQuestionDescription] = useState('');
   const [postContent, setPostContent] = useState('');
@@ -25,7 +19,7 @@ const ASKQues = ({ isOpen, setIsOpen, initialTab }) => {
   const { user, token } = useAuth();
 
   const handleClose = () => {
-    setIsOpen(false);
+    onClose();
     setQuestionTitle('');
     setQuestionDescription('');
     setPostContent('');

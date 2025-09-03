@@ -78,6 +78,12 @@ export const postsAPI = {
     return handleResponse(response);
   },
 
+  // Get posts by department
+  getDepartmentPosts: async (department) => {
+    const response = await fetch(`${API_BASE_URL}/posts/department/${department}`);
+    return handleResponse(response);
+  },
+
   // Create new post
   createPost: async (postData, token) => {
     const response = await fetch(`${API_BASE_URL}/posts`, {

@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from './context/AuthContext';
+import { useModal } from './context/ModalContext';
 import ASKQues from './components/ASKQues';
 
-
-const Dashboard = ({ initialModalOpen = false }) => {
+const Dashboard = () => {
   const navigate = useNavigate();
   const { user, isAuthenticated } = useAuth();
-  const [isModalOpen, setIsModalOpen] = useState(initialModalOpen);
+  const { isModalOpen, closeModal, openModal } = useModal();
+  const [modalTab, setModalTab] = useState('Create Post');
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -58,7 +59,10 @@ const Dashboard = ({ initialModalOpen = false }) => {
           </div>
           
           <div 
-            onClick={() => setIsModalOpen(true)}
+            onClick={() => {
+              setModalTab('Create Post');
+              openModal('Create Post');
+            }}
             className="bg-white p-6 rounded-lg shadow hover:shadow-md transition-all cursor-pointer transform hover:-translate-y-1 hover:bg-green-50"
           >
             <div className="text-green-500 mb-2">
@@ -100,7 +104,7 @@ const Dashboard = ({ initialModalOpen = false }) => {
       
       {/* ASKQues Modal */}
       <div className="relative z-[100]">
-        <ASKQues isOpen={isModalOpen} setIsOpen={setIsModalOpen} initialTab="Create Post" />
+        <ASKQues isOpen={isModalOpen} onClose={closeModal} initialTab={modalTab} />
       </div>
     </div>
   );
