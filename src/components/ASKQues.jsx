@@ -1,13 +1,28 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
+import { postsAPI } from '../services/api';
 
 const ASKQues = ({ isOpen, setIsOpen, initialTab }) => {
   const [activeTab, setActiveTab] = useState(initialTab || 'Add Question');
+
+  // Listen for custom event to change the active tab
+  React.useEffect(() => {
+    const handleTabChange = (event) => {
+      if (event.detail && ['Add Question', 'Create Post'].includes(event.detail)) {
+        setActiveTab(event.detail);
+      }
+    };
+
+    document.addEventListener('setActiveTab', handleTabChange);
+    return () => {
+      document.removeEventListener('setActiveTab', handleTabChange);
+    };
+  }, []);
   const [questionTitle, setQuestionTitle] = useState('');
   const [questionDescription, setQuestionDescription] = useState('');
   const [postContent, setPostContent] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { user } = useAuth();
+  const { user, token } = useAuth();
 
   const handleClose = () => {
     setIsOpen(false);
@@ -22,21 +37,20 @@ const ASKQues = ({ isOpen, setIsOpen, initialTab }) => {
 
     setIsSubmitting(true);
     try {
-      // TODO: Implement API call to create question/post
-      console.log('Submitting question:', {
+      const postData = {
         title: questionTitle,
-        description: questionDescription,
-        author: user?.name,
-        department: user?.department,
-        year: user?.year
-      });
+        content: questionDescription || 'Question posted by ' + user?.name,
+        department: user?.department
+      };
       
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
+      await postsAPI.createPost(postData, token);
       handleClose();
+      
+      // Refresh the page to show new post
+      window.location.reload();
     } catch (error) {
       console.error('Error submitting question:', error);
+      alert('Failed to post question. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
@@ -48,20 +62,20 @@ const ASKQues = ({ isOpen, setIsOpen, initialTab }) => {
 
     setIsSubmitting(true);
     try {
-      // TODO: Implement API call to create post
-      console.log('Submitting post:', {
+      const postData = {
+        title: postContent.substring(0, 100) + (postContent.length > 100 ? '...' : ''),
         content: postContent,
-        author: user?.name,
-        department: user?.department,
-        year: user?.year
-      });
+        department: user?.department
+      };
       
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
+      await postsAPI.createPost(postData, token);
       handleClose();
+      
+      // Refresh the page to show new post
+      window.location.reload();
     } catch (error) {
       console.error('Error submitting post:', error);
+      alert('Failed to create post. Please try again.');
     } finally {
       setIsSubmitting(false);
     }

@@ -28,15 +28,32 @@ export const authAPI = {
 
   // Login user
   login: async (credentials) => {
-    const response = await fetch(`${API_BASE_URL}/auth/login`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(credentials),
-    });
-    
-    return handleResponse(response);
+    try {
+      const response = await fetch(`${API_BASE_URL}/auth/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(credentials),
+      });
+      
+      const data = await response.json();
+      
+      if (!response.ok) {
+        const error = new Error(data.message || 'Login failed');
+        error.response = { data };
+        throw error;
+      }
+      
+      if (!data.token || !data.user) {
+        throw new Error('Invalid response format from server');
+      }
+      
+      return data;
+    } catch (error) {
+      console.error('API Login Error:', error);
+      throw error;
+    }
   },
 
   // Get current user (requires token)
