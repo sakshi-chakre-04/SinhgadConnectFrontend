@@ -3,23 +3,24 @@ import { useAuth } from '../context/AuthContext';
 import { useModal } from '../context/ModalContext';
 import { postsAPI } from '../services/api';
 
-const ASKQues = ({ isOpen, onClose, initialTab }) => {
-  const [activeTab, setActiveTab] = useState(initialTab || 'Add Question');
-  const { activeTab: contextTab } = useModal();
-
+const ASKQues = ({ isOpen, onClose }) => {
+  const { activeTab, closeModal, modalProps } = useModal();
+  const [currentTab, setCurrentTab] = useState(activeTab || 'Add Question');
+  
+  // Update current tab when activeTab from context changes
   useEffect(() => {
-    if (isOpen && contextTab) {
-      setActiveTab(contextTab);
+    if (activeTab) {
+      setCurrentTab(activeTab);
     }
-  }, [isOpen, contextTab]);
+  }, [activeTab]);
   const [questionTitle, setQuestionTitle] = useState('');
   const [questionDescription, setQuestionDescription] = useState('');
   const [postContent, setPostContent] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { user, token } = useAuth();
 
-  const handleClose = () => {
-    onClose();
+  const handleClose = (shouldRefresh = false) => {
+    closeModal(shouldRefresh);
     setQuestionTitle('');
     setQuestionDescription('');
     setPostContent('');
@@ -42,12 +43,11 @@ const ASKQues = ({ isOpen, onClose, initialTab }) => {
       const response = await postsAPI.createPost(postData);
       console.log('Question submitted successfully:', response);
       
-      handleClose();
+      // Close modal and refresh content
+      handleClose(true);
       
-      // Notify parent component to refresh posts
-      if (onClose) {
-        onClose(true); // Pass true to indicate successful post creation
-      }
+      // Show success message
+      alert('Question posted successfully!');
     } catch (error) {
       console.error('Error submitting question:', error);
       alert(error.response?.data?.message || 'Failed to post question. Please try again.');
@@ -73,12 +73,11 @@ const ASKQues = ({ isOpen, onClose, initialTab }) => {
       const response = await postsAPI.createPost(postData);
       console.log('Post submitted successfully:', response);
       
-      handleClose();
+      // Close modal and refresh content
+      handleClose(true);
       
-      // Notify parent component to refresh posts
-      if (onClose) {
-        onClose(true); // Pass true to indicate successful post creation
-      }
+      // Show success message
+      alert('Post created successfully!');
     } catch (error) {
       console.error('Error submitting post:', error);
       alert(error.response?.data?.message || 'Failed to create post. Please try again.');
@@ -87,6 +86,7 @@ const ASKQues = ({ isOpen, onClose, initialTab }) => {
     }
   };
 
+  // Don't render if not open
   if (!isOpen) return null;
 
   return (
@@ -96,21 +96,17 @@ const ASKQues = ({ isOpen, onClose, initialTab }) => {
         <div className="flex items-center justify-between p-4 border-b">
           <div className="flex space-x-4">
             <button
-              onClick={() => setActiveTab('Add Question')}
+              onClick={() => setCurrentTab('Add Question')}
               className={`px-4 py-2 rounded-lg font-medium transition duration-200 ${
-                activeTab === 'Add Question'
-                  ? 'bg-red-600 text-white'
-                  : 'text-gray-600 hover:bg-gray-100'
+                currentTab === 'Add Question' ? 'bg-indigo-100 text-indigo-700' : 'text-gray-600 hover:bg-gray-100'
               }`}
             >
               Add Question
             </button>
             <button
-              onClick={() => setActiveTab('Create Post')}
+              onClick={() => setCurrentTab('Create Post')}
               className={`px-4 py-2 rounded-lg font-medium transition duration-200 ${
-                activeTab === 'Create Post'
-                  ? 'bg-red-600 text-white'
-                  : 'text-gray-600 hover:bg-gray-100'
+                currentTab === 'Create Post' ? 'bg-indigo-100 text-indigo-700' : 'text-gray-600 hover:bg-gray-100'
               }`}
             >
               Create Post
@@ -126,7 +122,7 @@ const ASKQues = ({ isOpen, onClose, initialTab }) => {
 
         {/* Content */}
         <div className="p-6">
-          {activeTab === 'Add Question' ? (
+          {currentTab === 'Add Question' ? (
             <form onSubmit={handleSubmitQuestion} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">

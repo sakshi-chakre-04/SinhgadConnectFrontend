@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../context/AuthContext';
+import { useModal } from '../context/ModalContext';
 import CommentSection from './posts/CommentSection';
 
 const Posts = () => {
@@ -11,6 +12,8 @@ const Posts = () => {
   const [sortBy, setSortBy] = useState('createdAt');
   const [expandedPost, setExpandedPost] = useState(null);
   const [showComments, setShowComments] = useState({});
+  const [refreshKey, setRefreshKey] = useState(0);
+  const { isModalOpen } = useModal();
 
   const toggleComments = (postId) => {
     setShowComments(prev => ({
@@ -29,9 +32,22 @@ const Posts = () => {
     );
   };
 
+  // Refresh posts when filter, sort, or refreshKey changes
   useEffect(() => {
     fetchPosts();
-  }, [filter, sortBy]);
+  }, [filter, sortBy, refreshKey]);
+
+  // Listen for modal close with refresh
+  useEffect(() => {
+    if (!isModalOpen) {
+      // Small delay to ensure the modal is fully closed
+      const timer = setTimeout(() => {
+        setRefreshKey(prev => prev + 1);
+      }, 500);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [isModalOpen]);
 
   const fetchPosts = async () => {
     try {

@@ -1,25 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from './context/AuthContext';
 import { useModal } from './context/ModalContext';
-import ASKQues from './components/ASKQues';
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const { user, isAuthenticated } = useAuth();
-  const { isModalOpen, closeModal: closeModalContext, openModal } = useModal();
-  const [modalTab, setModalTab] = useState('Create Post');
-  const [refreshKey, setRefreshKey] = useState(0);
-  
-  // Wrap closeModal to handle post refresh
-  const closeModal = (shouldRefresh = false) => {
-    closeModalContext();
-    if (shouldRefresh) {
-      // Increment refreshKey to trigger a re-render of child components
-      setRefreshKey(prevKey => prevKey + 1);
-      // You can also add additional refresh logic here if needed
-    }
-  };
+  const { openModal } = useModal();
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -70,10 +57,7 @@ const Dashboard = () => {
           </div>
           
           <div 
-            onClick={() => {
-              setModalTab('Create Post');
-              openModal('Create Post');
-            }}
+            onClick={() => openModal('Create Post')}
             className="bg-white p-6 rounded-lg shadow hover:shadow-md transition-all cursor-pointer transform hover:-translate-y-1 hover:bg-green-50"
           >
             <div className="text-green-500 mb-2">
@@ -111,11 +95,6 @@ const Dashboard = () => {
             <p className="text-sm text-gray-600">Stay updated</p>
           </div>
         </div>
-      </div>
-      
-      {/* ASKQues Modal */}
-      <div className="relative z-[100]">
-        <ASKQues isOpen={isModalOpen} onClose={closeModal} initialTab={modalTab} />
       </div>
     </div>
   );
