@@ -34,17 +34,23 @@ const ASKQues = ({ isOpen, onClose, initialTab }) => {
       const postData = {
         title: questionTitle,
         content: questionDescription || 'Question posted by ' + user?.name,
-        department: user?.department
+        department: user?.department,
+        type: 'question'
       };
       
-      await postsAPI.createPost(postData, token);
+      console.log('Submitting question:', postData);
+      const response = await postsAPI.createPost(postData);
+      console.log('Question submitted successfully:', response);
+      
       handleClose();
       
-      // Refresh the page to show new post
-      window.location.reload();
+      // Notify parent component to refresh posts
+      if (onClose) {
+        onClose(true); // Pass true to indicate successful post creation
+      }
     } catch (error) {
       console.error('Error submitting question:', error);
-      alert('Failed to post question. Please try again.');
+      alert(error.response?.data?.message || 'Failed to post question. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
@@ -59,17 +65,23 @@ const ASKQues = ({ isOpen, onClose, initialTab }) => {
       const postData = {
         title: postContent.substring(0, 100) + (postContent.length > 100 ? '...' : ''),
         content: postContent,
-        department: user?.department
+        department: user?.department,
+        type: 'post'
       };
       
-      await postsAPI.createPost(postData, token);
+      console.log('Submitting post:', postData);
+      const response = await postsAPI.createPost(postData);
+      console.log('Post submitted successfully:', response);
+      
       handleClose();
       
-      // Refresh the page to show new post
-      window.location.reload();
+      // Notify parent component to refresh posts
+      if (onClose) {
+        onClose(true); // Pass true to indicate successful post creation
+      }
     } catch (error) {
       console.error('Error submitting post:', error);
-      alert('Failed to create post. Please try again.');
+      alert(error.response?.data?.message || 'Failed to create post. Please try again.');
     } finally {
       setIsSubmitting(false);
     }

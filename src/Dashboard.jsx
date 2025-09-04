@@ -7,8 +7,19 @@ import ASKQues from './components/ASKQues';
 const Dashboard = () => {
   const navigate = useNavigate();
   const { user, isAuthenticated } = useAuth();
-  const { isModalOpen, closeModal, openModal } = useModal();
+  const { isModalOpen, closeModal: closeModalContext, openModal } = useModal();
   const [modalTab, setModalTab] = useState('Create Post');
+  const [refreshKey, setRefreshKey] = useState(0);
+  
+  // Wrap closeModal to handle post refresh
+  const closeModal = (shouldRefresh = false) => {
+    closeModalContext();
+    if (shouldRefresh) {
+      // Increment refreshKey to trigger a re-render of child components
+      setRefreshKey(prevKey => prevKey + 1);
+      // You can also add additional refresh logic here if needed
+    }
+  };
 
   useEffect(() => {
     if (!isAuthenticated) {

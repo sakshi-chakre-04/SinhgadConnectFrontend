@@ -10,31 +10,137 @@ const api = axios.create({
     'Content-Type': 'application/json',
     'Accept': 'application/json',
   },
+  timeout: 10000, // 10 seconds timeout
 });
+
+// Store the current token
+let currentToken = null;
+
+// Function to update the current token
+const updateToken = () => {
+  currentToken = localStorage.getItem('token') || sessionStorage.getItem('token');
+  return currentToken;
+};
+
+// Initialize token
+updateToken();
 
 // Add request interceptor to include auth token
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+    // Skip adding auth header for login/register requests
+    if (config.url.includes('/auth/')) {
+      return config;
+    }
+    
+    const token = updateToken();
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
+      console.log(`[API] Adding token to request: ${config.method?.toUpperCase()} ${config.url}`);
+    } else {
+      console.warn(`[API] No token found for request: ${config.method?.toUpperCase()} ${config.url}`);
     }
     return config;
   },
   (error) => {
+    console.error('[API] Request interceptor error:', error);
     return Promise.reject(error);
   }
 );
 
 // Add response interceptor to handle errors
 api.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    if (error.response?.status === 401) {
-      // Handle unauthorized errors (e.g., redirect to login)
-      console.error('Authentication error:', error.response?.data?.message || 'Unauthorized');
-      // You might want to clear auth state and redirect to login here
+  (response) => {
+    // Log successful responses in development
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`[API] ${response.config.method?.toUpperCase()} ${response.config.url} - ${response.status}`);
     }
+    return response;
+  },
+  async (error) => {
+    const originalRequest = error.config;
+    
+    // Log error details
+    console.error('[API] Error:', {
+      url: originalRequest?.url,
+      method: originalRequest?.method,
+      status: error.response?.status,
+      message: error.message,
+      response: error.response?.data
+    });
+    
+    // Handle 401 Unauthorized errors
+    if (error.response?.status === 401) {
+      console.error('[API] Authentication error:', error.response?.data?.message || 'Unauthorized');
+      
+      // Only handle if this isn't a retry and not already a login request
+      if (!originalRequest._retry && !originalRequest.url.includes('/auth/')) {
+        // Mark this request as retried to prevent infinite loops
+        originalRequest._retry = true;
+        
+        // Get the current token from storage
+        const token = updateToken();
+        
+        // If we have a token but still got 401, it might be expired
+        if (token) {
+          try {
+            // Try to refresh the token if your backend supports it
+            // const refreshToken = localStorage.getItem('refreshToken') || sessionStorage.getItem('refreshToken');
+            // if (refreshToken) {
+            //   const response = await axios.post(`${API_BASE_URL}/auth/refresh-token`, { refreshToken });
+            //   const { token: newToken } = response.data;
+            //   
+            //   // Update the token in storage
+            //   if (localStorage.getItem('token')) {
+            //     localStorage.setItem('token', newToken);
+            //   } else {
+            //     sessionStorage.setItem('token', newToken);
+            //   }
+            //   
+            //   // Update the current token
+            //   updateToken();
+            //   
+            //   // Update the Authorization header
+            //   originalRequest.headers.Authorization = `Bearer ${newToken}`;
+            //   
+            //   // Retry the original request
+            //   return api(originalRequest);
+            // }
+            
+            // If token refresh isn't implemented or fails, clear auth and redirect to login
+            console.log('[API] Token might be invalid or expired, clearing auth data...');
+            
+            // Only clear and redirect if we're not already on the login page
+            if (!window.location.pathname.includes('/login')) {
+              // Clear auth data
+              localStorage.removeItem('token');
+              localStorage.removeItem('user');
+              sessionStorage.removeItem('token');
+              sessionStorage.removeItem('user');
+              
+              // Update current token
+              updateToken();
+              
+              // Redirect to login page with a return URL
+              window.location.href = `/login?returnUrl=${encodeURIComponent(window.location.pathname)}`;
+            }
+          } catch (error) {
+            console.error('[API] Error during token refresh:', error);
+            // Clear auth data on refresh error
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            sessionStorage.removeItem('token');
+            sessionStorage.removeItem('user');
+          }
+        } else {
+          // No token found, redirect to login
+          if (!window.location.pathname.includes('/login')) {
+            window.location.href = '/login';
+          }
+        }
+      }
+    }
+    
     return Promise.reject(error);
   }
 );
