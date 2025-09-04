@@ -38,16 +38,23 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = (userData, token, rememberMe = false) => {
+    console.log('AuthContext - login called with:', { userData, token, rememberMe });
     setUser(userData);
     setToken(token);
     
     if (rememberMe) {
+      console.log('Storing token in localStorage');
       localStorage.setItem('token', token);
       localStorage.setItem('user', JSON.stringify(userData));
     } else {
+      console.log('Storing token in sessionStorage');
       sessionStorage.setItem('token', token);
       sessionStorage.setItem('user', JSON.stringify(userData));
     }
+    
+    // Verify storage
+    console.log('Verifying token storage - localStorage:', localStorage.getItem('token') ? 'exists' : 'missing');
+    console.log('Verifying token storage - sessionStorage:', sessionStorage.getItem('token') ? 'exists' : 'missing');
   };
 
   const logout = () => {

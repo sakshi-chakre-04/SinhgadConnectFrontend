@@ -19,6 +19,16 @@ const Posts = () => {
     }));
   };
 
+  const handleCommentCountUpdate = (postId, count) => {
+    setPosts(prevPosts => 
+      prevPosts.map(post => 
+        post._id === postId 
+          ? { ...post, commentCount: count } 
+          : post
+      )
+    );
+  };
+
   useEffect(() => {
     fetchPosts();
   }, [filter, sortBy]);
@@ -54,7 +64,10 @@ const Posts = () => {
   };
 
   const handleVote = async (postId, voteType) => {
-    if (!token) return;
+    if (!token) {
+      alert('Please log in to vote');
+      return;
+    }
     
     try {
       const response = await fetch(`http://localhost:5000/api/posts/${postId}/vote`, {
@@ -66,11 +79,44 @@ const Posts = () => {
         body: JSON.stringify({ voteType }),
       });
       
-      if (response.ok) {
-        fetchPosts(); // Refresh posts to show updated vote counts
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.message || 'Failed to process vote');
       }
+      
+      // Update the specific post's vote count without refreshing all posts
+      setPosts(posts.map(post => {
+        if (post._id === postId) {
+          const updatedPost = { ...post };
+          
+          // Remove previous vote if exists
+          if (post.userVote === 1) {
+            updatedPost.upvotes = post.upvotes.filter(id => id !== user?._id);
+          } else if (post.userVote === -1) {
+            updatedPost.downvotes = post.downvotes.filter(id => id !== user?._id);
+          }
+          
+          // Add new vote
+          if (voteType === 'upvote' && post.userVote !== 1) {
+            updatedPost.upvotes = [...(updatedPost.upvotes || []), user?._id];
+            updatedPost.userVote = 1;
+          } else if (voteType === 'downvote' && post.userVote !== -1) {
+            updatedPost.downvotes = [...(updatedPost.downvotes || []), user?._id];
+            updatedPost.userVote = -1;
+          } else {
+            // If clicking the same vote button again, remove the vote
+            updatedPost.userVote = 0;
+          }
+          
+          return updatedPost;
+        }
+        return post;
+      }));
+      
     } catch (err) {
       console.error('Error voting:', err);
+      alert(err.message || 'Failed to process vote');
     }
   };
 
@@ -199,7 +245,7 @@ const Posts = () => {
                       {/* Upvote */}
                       <button
                         onClick={() => handleVote(post._id, 'upvote')}
-                        className={`flex items-center space-x-1 ${post.upvotes?.includes(user?._id) ? 'text-green-500' : 'text-gray-500'}`}
+                        className={`flex items-center space-x-1 ${post.userVote === 1 ? 'text-green-500' : 'text-gray-500'}`}
                       >
                         <span>▲</span>
                         <span>{post.upvotes?.length || 0}</span>
@@ -208,24 +254,34 @@ const Posts = () => {
                       {/* Downvote */}
                       <button
                         onClick={() => handleVote(post._id, 'downvote')}
-                        className={`flex items-center space-x-1 ${post.downvotes?.includes(user?._id) ? 'text-red-500' : 'text-gray-500'}`}
+                        className={`flex items-center space-x-1 ${post.userVote === -1 ? 'text-red-500' : 'text-gray-500'}`}
                       >
                         <span>▼</span>
                         <span>{post.downvotes?.length || 0}</span>
                       </button>
 
-                      {/* Comments */}
+                      {/* Comments - Show loading state when comments are being loaded */}
                       <button 
                         onClick={() => toggleComments(post._id)}
-                        className={`flex items-center space-x-1 ${showComments[post._id] ? 'text-blue-500' : 'text-gray-500 hover:text-blue-500'}`}
+                        disabled={loading}
+                        className={`flex items-center space-x-1 ${showComments[post._id] ? 'text-blue-500' : 'text-gray-500 hover:text-blue-500'} ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
                       >
                         <span>💬</span>
-                        <span>{post.comments?.length || 0} Comments</span>
+                        <span>
+                          {loading && showComments[post._id] ? (
+                            'Loading...'
+                          ) : (
+                            `${post.commentCount || 0} Comment${post.commentCount !== 1 ? 's' : ''}`
+                          )}
+                        </span>
                       </button>
                       
                       {showComments[post._id] && (
-                        <div className="mt-4 w-full">
-                          <CommentSection postId={post._id} />
+                        <div className="mt-4 border-t border-gray-200 pt-4">
+                          <CommentSection 
+                            postId={post._id} 
+                            onCommentCountUpdate={(count) => handleCommentCountUpdate(post._id, count)}
+                          />
                         </div>
                       )}
                     </div>

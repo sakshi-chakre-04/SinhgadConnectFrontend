@@ -39,14 +39,25 @@ const Login = () => {
         password: password
       };
 
+      console.log('Calling authAPI.login with credentials');
       const response = await authAPI.login(credentials);
+      console.log('Login API response:', response);
       
       if (response && response.token && response.user) {
+        console.log('Login successful, calling authContext.login with:', {
+          user: response.user,
+          token: response.token ? 'Token received' : 'No token',
+          rememberMe
+        });
+        
         // Use the auth context to login
         login(response.user, response.token, rememberMe);
+        
+        console.log('AuthContext login completed, redirecting to dashboard');
         // Redirect to dashboard or home page
         navigate('/dashboard');
       } else {
+        console.error('Invalid response from server:', response);
         throw new Error('Invalid response from server');
       }
       
