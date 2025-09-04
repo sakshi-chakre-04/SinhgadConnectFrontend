@@ -11,6 +11,8 @@ import Posts from './components/Posts';
 import Community from './Community';
 import Notifications from './Notifications';
 import Department from './Department';
+import Profile from './Profile';
+import Settings from './Settings';
 import ASKQues from './components/ASKQues';
 
 // Layout wrapper for authenticated routes
@@ -60,6 +62,8 @@ function App() {
             {/* Create Post is now handled by the ASKQues modal */}
             <Route path="/community" element={<AuthenticatedLayout><Community /></AuthenticatedLayout>} />
             <Route path="/notifications" element={<AuthenticatedLayout><Notifications /></AuthenticatedLayout>} />
+            <Route path="/profile" element={<AuthenticatedLayout><Profile /></AuthenticatedLayout>} />
+            <Route path="/settings" element={<AuthenticatedLayout><Settings /></AuthenticatedLayout>} />
             <Route path="/comments-demo" element={<AuthenticatedLayout><CommentsExample /></AuthenticatedLayout>} />
             {/* Redirect /create-post to dashboard with modal state */}
             <Route 
