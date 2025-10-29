@@ -1,15 +1,36 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { useAuth } from '../../context/AuthContext';
+import { useForm } from 'react-hook-form';
+import { useSelector } from 'react-redux';
+import { selectCurrentUser, selectToken } from '../../features/auth/authSlice';
 import commentsAPI from '../../services/commentsAPI';
 import { toast } from 'react-toastify';
 
+// Validation function for comments
+const validateComment = (value) => {
+  if (!value || value.trim() === '') return 'Comment cannot be empty';
+  if (value.length > 1000) return 'Comment cannot exceed 1000 characters';
+  return true;
+};
+
 const CommentSection = ({ postId, onCommentCountUpdate }) => {
-  const { user, token } = useAuth();
-  const [comments, setComments] = useState([]);
-  const [newComment, setNewComment] = useState('');
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const user = useSelector(selectCurrentUser);
+  const token = useSelector(selectToken);
+  const [comments, setComments] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
+  const [error, setError] = React.useState('');
+  
+  // Initialize React Hook Form
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm({
+    defaultValues: {
+      content: '',
+    },
+  });
 
   useEffect(() => {
     loadComments();
@@ -81,15 +102,7 @@ const CommentSection = ({ postId, onCommentCountUpdate }) => {
     }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    console.log('Comment submission started', { postId, user, token });
-    
-    if (!newComment.trim()) {
-      console.log('Empty comment, not submitting');
-      return;
-    }
-    
+  const onSubmit = async (data) => {
     if (!user || !token) {
       console.error('User not authenticated', { user, token });
       toast.error('Please log in to post a comment');
@@ -97,17 +110,17 @@ const CommentSection = ({ postId, onCommentCountUpdate }) => {
     }
 
     try {
-      console.log('Attempting to create comment with:', { postId, content: newComment });
+      console.log('Attempting to create comment with:', { postId, content: data.content });
       
       // Show loading state
       const toastId = toast.loading('Posting comment...');
       
       // Create the comment
-      const response = await commentsAPI.createComment(postId, newComment);
+      const response = await commentsAPI.createComment(postId, data.content);
       console.log('Comment created successfully:', response);
       
-      // Clear the comment input
-      setNewComment('');
+      // Reset the form
+      reset();
       
       // If the response includes a comment count, update the parent component
       if (typeof response.commentCount !== 'undefined' && typeof onCommentCountUpdate === 'function') {
@@ -132,7 +145,7 @@ const CommentSection = ({ postId, onCommentCountUpdate }) => {
       // Clear any previous errors
       setError(null);
     } catch (err) {
-      console.error('Error in handleSubmit:', {
+      console.error('Error in onSubmit:', {
         error: err,
         response: err.response?.data,
         status: err.response?.status
@@ -140,6 +153,10 @@ const CommentSection = ({ postId, onCommentCountUpdate }) => {
       
       const errorMessage = err.response?.data?.message || 'Failed to post comment';
       setError(errorMessage);
+      setFormError('root', {
+        type: 'manual',
+        message: errorMessage
+      });
       toast.error(errorMessage);
     }
   };
@@ -217,20 +234,35 @@ const CommentSection = ({ postId, onCommentCountUpdate }) => {
   return (
     <div className="mt-4">
       {user ? (
-        <form onSubmit={handleSubmit} className="mb-6">
+        <form onSubmit={handleSubmit(onSubmit)} className="mb-6">
+          {errors.root && (
+            <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-lg text-sm">
+              {errors.root.message}
+            </div>
+          )}
           <div className="flex items-start">
-            <textarea
-              value={newComment}
-              onChange={(e) => setNewComment(e.target.value)}
-              placeholder="Write a comment..."
-              className="flex-1 border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              rows={2}
-            />
+            <div className="flex-1">
+              <textarea
+                {...register('content', {
+                validate: validateComment
+              })}
+                placeholder="Write a comment..."
+                className={`w-full border rounded-lg p-3 focus:outline-none focus:ring-2 ${
+                  errors.content ? 'border-red-500 focus:ring-red-200' : 'border-gray-300 focus:ring-blue-500'
+                }`}
+                rows={3}
+                aria-invalid={errors.content ? 'true' : 'false'}
+              />
+              {errors.content && (
+                <p className="mt-1 text-sm text-red-600">{errors.content.message}</p>
+              )}
+            </div>
             <button
               type="submit"
-              className="ml-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+              disabled={isSubmitting}
+              className="ml-3 px-5 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
             >
-              Post
+              {isSubmitting ? 'Posting...' : 'Post'}
             </button>
           </div>
         </form>

@@ -13,17 +13,12 @@ const api = axios.create({
   timeout: 10000, // 10 seconds timeout
 });
 
-// Store the current token
-let currentToken = null;
+// Store reference to the Redux store
+let store;
 
-// Function to update the current token
-const updateToken = () => {
-  currentToken = localStorage.getItem('token') || sessionStorage.getItem('token');
-  return currentToken;
+export const injectStore = (_store) => {
+  store = _store;
 };
-
-// Initialize token
-updateToken();
 
 // Add request interceptor to include auth token
 api.interceptors.request.use(
@@ -33,11 +28,17 @@ api.interceptors.request.use(
       return config;
     }
     
-    const token = updateToken();
+    // Get token from Redux store if available
+    const token = store?.getState()?.auth?.token || 
+                 localStorage.getItem('token') || 
+                 sessionStorage.getItem('token');
+    
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
-      console.log(`[API] Adding token to request: ${config.method?.toUpperCase()} ${config.url}`);
-    } else {
+      if (process.env.NODE_ENV === 'development') {
+        console.log(`[API] Adding token to request: ${config.method?.toUpperCase()} ${config.url}`);
+      }
+    } else if (process.env.NODE_ENV === 'development') {
       console.warn(`[API] No token found for request: ${config.method?.toUpperCase()} ${config.url}`);
     }
     return config;
@@ -161,17 +162,57 @@ export const authAPI = {
   // Login user
   login: async (credentials) => {
     try {
-      const response = await api.post('/auth/login', credentials);
+      // Ensure email is trimmed and lowercase
+      const loginData = {
+        email: credentials.email.trim().toLowerCase(),
+        password: credentials.password
+      };
+      
+      console.log('Sending login request with credentials:', {
+        ...loginData,
+        password: '***' // Don't log actual password
+      });
+      
+      const response = await api.post('/auth/login', loginData);
+      
+      console.log('Login response received:', {
+        status: response.status,
+        hasToken: !!response.data?.token,
+        hasUser: !!response.data?.user
+      });
+      
       const { data } = response;
       
-      if (!data.token || !data.user) {
+      if (!data?.token || !data?.user) {
+        console.error('Invalid response format from server:', data);
         throw new Error('Invalid response format from server');
       }
       
       return data;
     } catch (error) {
-      console.error('Login error:', error);
-      throw error.response?.data?.message || 'Login failed';
+      console.error('Login error details:', {
+        message: error.message,
+        status: error.response?.status,
+        data: error.response?.data,
+        config: {
+          url: error.config?.url,
+          method: error.config?.method,
+          data: error.config?.data
+        }
+      });
+      
+      // Return more specific error messages
+      if (error.response?.status === 400) {
+        throw new Error('Invalid email or password');
+      }
+      if (error.response?.status === 401) {
+        throw new Error('Authentication failed. Please try again.');
+      }
+      if (!error.response) {
+        throw new Error('Network error. Please check your connection.');
+      }
+      
+      throw new Error(error.response?.data?.message || 'Login failed. Please try again.');
     }
   },
   
@@ -227,6 +268,42 @@ export const postsAPI = {
     const response = await api.post(`/posts/${postId}/vote`, { voteType });
     return handleResponse(response);
   },
+};
+
+// Users API calls
+export const usersAPI = {
+  // Update user profile
+  updateUserProfile: async (userData, token) => {
+    try {
+      // Ensure we only send the fields that the backend expects
+      const { name, department, year, bio } = userData;
+      const payload = { name, department, year, bio };
+      
+      const response = await api.patch('/auth/me', payload, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      return handleResponse(response);
+    } catch (error) {
+      console.error('Update profile error:', error);
+      throw error;
+    }
+  },
+  
+  // Get user profile
+  getUserProfile: async (userId) => {
+    const response = await api.get(`/users/${userId}`);
+    return handleResponse(response);
+  },
+  
+  // Update user settings
+  updateUserSettings: async (settings) => {
+    const response = await api.put('/users/settings', settings);
+    return handleResponse(response);
+  }
 };
 
 // Comments API calls

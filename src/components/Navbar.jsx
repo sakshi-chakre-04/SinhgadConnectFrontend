@@ -1,12 +1,14 @@
 import React, { useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import { useModal } from '../context/ModalContext';
+import { useDispatch, useSelector } from 'react-redux';
+import { useModal } from '../hooks/useModal';
+import { logout, selectCurrentUser } from '../features/auth/authSlice';
 import Avatar from 'react-avatar';
 import NotificationBadge from './NotificationBadge';
 
 const Navbar = () => {
-  const { user, logout } = useAuth();
+  const dispatch = useDispatch();
+  const user = useSelector(selectCurrentUser);
   const { openModal } = useModal();
   const navigate = useNavigate();
   
@@ -21,7 +23,7 @@ const Navbar = () => {
   }, []);
 
   const handleLogout = () => {
-    logout();
+    dispatch(logout());
     navigate('/login');
   };
 

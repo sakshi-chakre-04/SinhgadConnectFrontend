@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { useAuth } from './context/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { selectCurrentUser, selectToken } from './features/auth/authSlice';
+import { PencilIcon } from '@heroicons/react/24/outline';
 
 const Profile = () => {
-  const { user, token } = useAuth();
+  const user = useSelector(selectCurrentUser);
+  const token = useSelector(selectToken);
   const navigate = useNavigate();
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -51,7 +54,8 @@ const Profile = () => {
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-500"></div>
+        <span className="sr-only">Loading profile...</span>
       </div>
     );
   }
@@ -76,30 +80,25 @@ const Profile = () => {
           </div>
           <h1 className="text-2xl font-bold text-gray-800">{userData?.name || 'User'}</h1>
           <p className="text-gray-600">@{userData?.username || 'username'}</p>
-          <p className="text-gray-500 mt-2">
+          <p className="text-gray-500 mt-2 mb-4">
             {userData?.department} - Year {userData?.year}
           </p>
+          <Link
+            to="/edit-profile"
+            className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          >
+            <PencilIcon className="-ml-1 mr-2 h-4 w-4" aria-hidden="true" />
+            Edit Profile
+          </Link>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
-          <div className="bg-gray-50 p-4 rounded-lg">
-            <h2 className="text-lg font-semibold mb-3 text-gray-700">Personal Information</h2>
-            <div className="space-y-2">
-              <p><span className="font-medium">Email:</span> {userData?.email}</p>
-              <p><span className="font-medium">Department:</span> {userData?.department || 'Not specified'}</p>
-              <p><span className="font-medium">Year:</span> {userData?.year || 'Not specified'}</p>
-              <p><span className="font-medium">Member since:</span> {userData?.createdAt ? new Date(userData.createdAt).toLocaleDateString() : 'N/A'}</p>
-            </div>
-          </div>
-
-          <div className="bg-gray-50 p-4 rounded-lg">
-            <h2 className="text-lg font-semibold mb-3 text-gray-700">Activity</h2>
-            <div className="space-y-2">
-              <p><span className="font-medium">Posts:</span> {userData?.postCount || 0}</p>
-              <p><span className="font-medium">Comments:</span> {userData?.commentCount || 0}</p>
-              <p><span className="font-medium">Upvotes Received:</span> {userData?.upvotesReceived || 0}</p>
-              <p><span className="font-medium">Account Status:</span> <span className="text-green-600">Active</span></p>
-            </div>
+        <div className="mt-8 bg-gray-50 p-4 rounded-lg">
+          <h2 className="text-lg font-semibold mb-3 text-gray-700">Personal Information</h2>
+          <div className="space-y-2">
+            <p><span className="font-medium">Email:</span> {userData?.email}</p>
+            <p><span className="font-medium">Department:</span> {userData?.department || 'Not specified'}</p>
+            <p><span className="font-medium">Year:</span> {userData?.year || 'Not specified'}</p>
+            <p><span className="font-medium">Member since:</span> {userData?.createdAt ? new Date(userData.createdAt).toLocaleDateString() : 'N/A'}</p>
           </div>
         </div>
 

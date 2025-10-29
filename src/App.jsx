@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { Provider } from 'react-redux';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider } from './context/AuthContext';
-import { ModalProvider, useModal } from './context/ModalContext';
+import { store } from './app/store';
+import { injectStore } from './services/api';
+import { useModal } from './hooks/useModal';
 import Login from './Login';
 import Register from './Register';
 import Dashboard from './Dashboard';
@@ -14,6 +16,7 @@ import Department from './Department';
 import Profile from './Profile';
 import Settings from './Settings';
 import ASKQues from './components/ASKQues';
+import EditProfile from './components/profile/EditProfile';
 
 // Layout wrapper for authenticated routes
 const AuthenticatedLayout = ({ children }) => {
@@ -21,12 +24,16 @@ const AuthenticatedLayout = ({ children }) => {
   
   // Handle modal close with refresh option
   const handleCloseModal = (shouldRefresh = false) => {
-    closeModal(shouldRefresh);
+    console.log('handleCloseModal called with shouldRefresh:', shouldRefresh);
+    
+    // Close the modal first
+    closeModal({ shouldRefresh });
     
     // If we need to refresh the page content after closing the modal
     if (shouldRefresh && typeof window !== 'undefined') {
-      // You can add any additional refresh logic here if needed
       console.log('Refreshing page content...');
+      // You can add any additional refresh logic here if needed
+      // For example, you might want to refetch data or reset some state
     }
   };
   
@@ -38,9 +45,22 @@ const AuthenticatedLayout = ({ children }) => {
       </main>
       
       {/* Global ASKQues Modal - Rendered at the root level */}
-      <div className="fixed z-[1000]">
-        <ASKQues isOpen={isModalOpen} onClose={handleCloseModal} initialTab={activeTab} />
-      </div>
+      {isModalOpen && (
+        <div className="fixed inset-0 z-[1000]" onClick={(e) => {
+          // Close modal when clicking outside the modal content
+          if (e.target === e.currentTarget) {
+            handleCloseModal();
+          }
+        }}>
+          <div className="absolute inset-0 bg-gray-100/80 dark:bg-gray-900/80 backdrop-blur-sm flex items-center justify-center p-4" onClick={e => e.stopPropagation()}>
+            <ASKQues 
+              isOpen={isModalOpen} 
+              onClose={handleCloseModal} 
+              initialTab={activeTab} 
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 };
@@ -48,11 +68,13 @@ const AuthenticatedLayout = ({ children }) => {
 // Move Community and Notifications components to separate files
 // They are now imported from './Community' and './Notifications'
 
+// Initialize API service with Redux store
+injectStore(store);
+
 function App() {
   return (
-    <Router>
-      <AuthProvider>
-        <ModalProvider>
+    <Provider store={store}>
+      <Router>
         <div className="App">
           <Routes>
             <Route path="/login" element={<Login />} />
@@ -63,6 +85,7 @@ function App() {
             <Route path="/community" element={<AuthenticatedLayout><Community /></AuthenticatedLayout>} />
             <Route path="/notifications" element={<AuthenticatedLayout><Notifications /></AuthenticatedLayout>} />
             <Route path="/profile" element={<AuthenticatedLayout><Profile /></AuthenticatedLayout>} />
+            <Route path="/edit-profile" element={<AuthenticatedLayout><EditProfile /></AuthenticatedLayout>} />
             <Route path="/settings" element={<AuthenticatedLayout><Settings /></AuthenticatedLayout>} />
             <Route path="/comments-demo" element={<AuthenticatedLayout><CommentsExample /></AuthenticatedLayout>} />
             {/* Redirect /create-post to dashboard with modal state */}
@@ -85,9 +108,8 @@ function App() {
             <Route path="*" element={<Navigate to="/dashboard" replace />} />
           </Routes>
         </div>
-        </ModalProvider>
-      </AuthProvider>
-    </Router>
+      </Router>
+    </Provider>
   );
 }
 

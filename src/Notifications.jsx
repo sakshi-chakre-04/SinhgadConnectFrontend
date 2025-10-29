@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getNotifications, markAsRead, markAllAsRead } from './services/notificationsAPI';
-import { useAuth } from './context/AuthContext';
+import { useSelector } from 'react-redux';
+import { selectCurrentUser } from './features/auth/authSlice';
 
 const NotificationItem = ({ notification, onMarkAsRead }) => {
   const navigate = useNavigate();
@@ -75,7 +76,7 @@ export default function Notifications() {
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const { user } = useAuth();
+  const user = useSelector(selectCurrentUser);
 
   useEffect(() => {
     if (user) {

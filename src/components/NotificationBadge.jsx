@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { getNotifications, markAllAsRead, markAsRead } from '../services/notificationsAPI';
-import { useAuth } from '../context/AuthContext';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { selectCurrentUser } from '../features/auth/authSlice';
 
 const NotificationBadge = () => {
   const [unreadCount, setUnreadCount] = useState(0);
   const [showDropdown, setShowDropdown] = useState(false);
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
-  const { user } = useAuth();
+  const user = useSelector(selectCurrentUser);
 
   useEffect(() => {
     if (user) {

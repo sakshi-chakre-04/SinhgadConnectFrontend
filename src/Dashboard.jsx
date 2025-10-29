@@ -1,11 +1,13 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from './context/AuthContext';
-import { useModal } from './context/ModalContext';
+import { useSelector } from 'react-redux';
+import { useModal } from './hooks/useModal';
+import { selectCurrentUser, selectIsAuthenticated } from './features/auth/authSlice';
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  const { user, isAuthenticated } = useAuth();
+  const user = useSelector(selectCurrentUser);
+  const isAuthenticated = useSelector(selectIsAuthenticated);
   const { openModal } = useModal();
 
   useEffect(() => {
@@ -15,7 +17,11 @@ const Dashboard = () => {
   }, [isAuthenticated, navigate]);
 
   if (!user) {
-    return <div>Loading...</div>;
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-500"></div>
+      </div>
+    );
   }
 
   return (

@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useAuth } from './context/AuthContext';
+import { useSelector } from 'react-redux';
 import { postsAPI } from './services/api';
+import { selectIsAuthenticated } from './features/auth/authSlice';
 
 const Department = () => {
   const { departmentName } = useParams();
   const navigate = useNavigate();
-  const { isAuthenticated } = useAuth();
+  const isAuthenticated = useSelector(selectIsAuthenticated);
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -39,10 +40,8 @@ const Department = () => {
         <div className="max-w-4xl mx-auto">
           <div className="bg-white rounded-xl shadow-lg p-8">
             <h1 className="text-2xl font-bold text-gray-800 mb-6">Loading {departmentName} Department...</h1>
-            <div className="animate-pulse space-y-4">
-              {[...Array(3)].map((_, i) => (
-                <div key={i} className="h-24 bg-gray-200 rounded-lg"></div>
-              ))}
+            <div className="flex justify-center py-8">
+              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-500"></div>
             </div>
           </div>
         </div>

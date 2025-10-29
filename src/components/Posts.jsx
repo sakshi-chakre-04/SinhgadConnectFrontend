@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useAuth } from '../context/AuthContext';
-import { useModal } from '../context/ModalContext';
+import { useModal } from '../hooks/useModal';
+import { useSelector } from 'react-redux';
+import { selectCurrentUser, selectToken } from '../features/auth/authSlice';
 import CommentSection from './posts/CommentSection';
 
 const Posts = () => {
-  const { user, token } = useAuth();
+  const user = useSelector(selectCurrentUser);
+  const token = useSelector(selectToken);
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
