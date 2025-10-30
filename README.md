@@ -1,132 +1,145 @@
-# Sinhgad Connect Frontend
+# 🚀 Sinhgad Connect Frontend
 
-A React-based frontend application for Sinhgad Connect, featuring user authentication and social networking capabilities.
+A modern React-based frontend for Sinhgad Connect, a campus-exclusive social platform for SKNCOE students. Built with React 19, Vite, and TailwindCSS.
 
-## Features
+## ✨ Features
 
-- **User Authentication**
-  - User registration with validation
-  - User login with JWT tokens
-  - Remember me functionality
-  - Secure token storage
-  - Protected routes
+### 🔐 Authentication
+- Email-based registration with @sinhgad.edu validation
+- Secure JWT authentication
+- Persistent sessions with "Remember me"
+- Protected routes and role-based access
 
-- **Responsive Design**
-  - Mobile-first approach
-  - Works on both desktop and mobile devices
-  - Modern, clean UI matching the provided template
+### 📱 Modern UI/UX
+- Responsive design with TailwindCSS
+- Dark/light mode support
+- Interactive components with smooth animations
+- Mobile-first approach
 
-- **Backend Integration**
-  - RESTful API integration
-  - JWT-based authentication
-  - Real-time form validation
-  - Error handling and user feedback
+### 📝 Posts & Comments
+- Create, read, update, and delete posts
+- Rich text editor with CKEditor 5
+- Nested comments with replies
+- Upvote/downvote system
+- Department-based filtering
 
-## Prerequisites
+### 🔔 Real-time Features
+- WebSocket notifications
+- Real-time post updates
+- Comment threading
+- Online status indicators
 
-- Node.js 20.19.0 or higher
-- npm or yarn package manager
-- Backend server running on port 5000
+## 🛠 Tech Stack
 
-## Installation
+### Core
+- **Framework**: React 19
+- **Build Tool**: Vite
+- **Styling**: TailwindCSS
+- **State Management**: Redux Toolkit
+- **Routing**: React Router v7
 
-1. **Navigate to the frontend directory:**
+### Key Libraries
+- **Forms**: React Hook Form
+- **HTTP Client**: Axios
+- **Rich Text**: CKEditor 5
+- **Icons**: Heroicons
+- **UI Components**: Headless UI
+- **Notifications**: React Toastify
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Node.js 18.0.0 or higher
+- npm 9.0.0 or higher
+- Backend server running (see backend setup)
+
+### Installation
+
+1. **Clone the repository**
    ```bash
+   git clone https://github.com/yourusername/SinhgadConnectFrontend.git
    cd SinhgadConnectFrontend
    ```
 
-2. **Install dependencies:**
+2. **Install dependencies**
    ```bash
    npm install
+   # or
+   yarn install
    ```
 
-3. **Start the development server:**
+3. **Environment Setup**
+   Create a `.env` file in the root directory:
+   ```env
+   VITE_API_BASE_URL=http://localhost:5000/api
+   VITE_WS_URL=ws://localhost:5000
+   ```
+
+4. **Start the development server**
    ```bash
    npm run dev
+   # or
+   yarn dev
    ```
+   The app will be available at `http://localhost:5173`
 
-4. **Open your browser and navigate to:**
-   ```
-   http://localhost:5173
-   ```
-
-## Backend Connectivity
-
-### API Endpoints
-
-The frontend connects to the following backend endpoints:
-
-- **Authentication:**
-  - `POST /api/auth/register` - User registration
-  - `POST /api/auth/login` - User login
-  - `GET /api/auth/me` - Get current user (protected)
-
-- **Posts:**
-  - `GET /api/posts` - Get all posts
-  - `POST /api/posts` - Create new post (protected)
-
-- **Comments:**
-  - `GET /api/comments/:postId` - Get comments for a post
-  - `POST /api/comments` - Add comment to a post (protected)
-
-### Backend Requirements
-
-Ensure your backend server is:
-- Running on port 5000
-- Has CORS enabled
-- Has the required environment variables set (JWT_SECRET, MONGODB_URI)
-- MongoDB connection is active
-
-## Project Structure
+## 📁 Project Structure
 
 ```
 src/
-├── components/          # Reusable UI components
-│   └── comments/       # Comment-related components
-├── context/            # React Context providers
-│   └── AuthContext.jsx # Authentication state management
-├── services/           # API service functions
-│   └── api.js         # Backend API integration
-├── App.jsx            # Main application component
-├── Login.jsx          # Login page component
-├── Register.jsx       # Registration page component
-├── Dashboard.jsx      # Dashboard after login
-├── AuthForm.css       # Shared authentication styles
-└── main.jsx          # Application entry point
+├── assets/            # Static assets (images, icons)
+├── components/        # Reusable UI components
+│   ├── auth/         # Authentication components
+│   ├── comments/     # Comment components
+│   ├── layout/       # Layout components
+│   └── posts/        # Post components
+├── context/          # React Context providers
+│   ├── AuthContext.jsx
+│   └── ModalContext.jsx
+├── features/         # Feature-based modules
+│   ├── auth/         # Authentication slice
+│   └── modal/        # Modal slice
+├── services/         # API services
+│   ├── api.js        # Base API configuration
+│   ├── authAPI.js    # Auth API calls
+│   ├── postsAPI.js   # Posts API calls
+│   └── commentsAPI.js # Comments API calls
+├── App.jsx           # Main application component
+├── main.jsx          # Application entry point
+└── index.css         # Global styles
 ```
 
-## Usage
+## 📚 API Integration
 
-### Registration Flow
+The frontend integrates with the following API endpoints:
 
-1. Navigate to `/register`
-2. Fill in the required fields:
-   - Username (max 50 characters)
-   - Email (must be @sinhgad.edu)
-   - Password (min 6 characters)
-   - Department (select from dropdown)
-   - Year (select from dropdown)
-3. Check "Remember me" if desired
-4. Click "Sign Up"
-5. Upon success, you'll be redirected to the dashboard
+### Authentication
+- `POST /api/auth/register` - Register new user
+- `POST /api/auth/login` - User login
+- `GET /api/auth/me` - Get current user
+- `PATCH /api/auth/me` - Update profile
 
-### Login Flow
+### Posts
+- `GET /api/posts` - Get all posts
+- `GET /api/posts/:id` - Get single post
+- `POST /api/posts` - Create post
+- `PUT /api/posts/:id` - Update post
+- `DELETE /api/posts/:id` - Delete post
+- `POST /api/posts/:id/vote` - Vote on post
 
-1. Navigate to `/login`
-2. Enter your credentials:
-   - Email (must be @sinhgad.edu)
-   - Password
-3. Check "Remember me" if desired
-4. Click "Sign In"
-5. Upon success, you'll be redirected to the dashboard
+### Comments
+- `GET /api/comments/post/:postId` - Get post comments
+- `POST /api/comments` - Create comment
+- `PUT /api/comments/:id` - Update comment
+- `DELETE /api/comments/:id` - Delete comment
+- `POST /api/comments/:id/vote` - Vote on comment
 
-### Authentication State
+### Notifications
+- `GET /api/notifications` - Get user notifications
+- `PUT /api/notifications/read-all` - Mark all as read
+- `PUT /api/notifications/:id/read` - Mark as read
 
-- **Local Storage:** Used when "Remember me" is checked (persists across browser sessions)
-- **Session Storage:** Used when "Remember me" is unchecked (cleared when browser is closed)
-- **JWT Token:** Automatically included in API requests for protected endpoints
-
-## Development
+## 🛠 Development
 
 ### Available Scripts
 
@@ -134,48 +147,66 @@ src/
 - `npm run build` - Build for production
 - `npm run preview` - Preview production build
 - `npm run lint` - Run ESLint
+- `npm run format` - Format code with Prettier
 
-### Adding New Features
+### Code Style
+- Follows Airbnb JavaScript Style Guide
+- 2-space indentation
+- Single quotes for strings
+- Semicolons
+- Trailing commas in multiline objects/arrays
 
-1. **New API Endpoints:** Add to `src/services/api.js`
-2. **New Components:** Create in `src/components/`
-3. **New Routes:** Add to `src/App.jsx`
-4. **Styling:** Use `src/AuthForm.css` or create new CSS files
+## 🧪 Testing
 
-## Troubleshooting
+### Running Tests
+```bash
+# Run unit tests
+npm test
 
-### Common Issues
+# Run tests in watch mode
+npm test -- --watch
 
-1. **"Vite requires Node.js version 20.19+" error:**
-   - Upgrade Node.js to version 20.19.0 or higher
-
-2. **"Cannot connect to backend" error:**
-   - Ensure backend server is running on port 5000
-   - Check if CORS is enabled on backend
-   - Verify network connectivity
-
-3. **"Email validation failed" error:**
-   - Ensure email ends with `@sinhgad.edu`
-   - Check email format is valid
-
-4. **"Password too short" error:**
-   - Ensure password is at least 6 characters long
-
-### Debug Mode
-
-To enable debug logging, add this to your browser console:
-```javascript
-localStorage.setItem('debug', 'true');
+# Generate coverage report
+npm test -- --coverage
 ```
 
-## Contributing
+## 🚀 Deployment
 
-1. Follow the existing code structure
-2. Use consistent naming conventions
-3. Add proper error handling
-4. Test on both desktop and mobile devices
-5. Ensure backend connectivity works
+### Building for Production
+```bash
+# Build the app
+npm run build
 
-## License
+# Preview the production build
+npm run preview
+```
 
-This project is part of Sinhgad Connect and follows the project's licensing terms.
+### Deployment Options
+- **Vercel**: Recommended for easy deployment
+- **Netlify**: Great for static hosting
+- **AWS Amplify**: Full-stack deployment
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 👥 Team
+
+- [Your Name] - Frontend Developer
+- [Backend Developer]
+- [Designer]
+
+## 🙏 Acknowledgments
+
+- [React Documentation](https://reactjs.org/)
+- [Vite Documentation](https://vitejs.dev/)
+- [TailwindCSS Documentation](https://tailwindcss.com/)
+- [Redux Toolkit Documentation](https://redux-toolkit.js.org/)
