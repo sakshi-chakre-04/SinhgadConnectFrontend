@@ -1,137 +1,152 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useModal } from '../hooks/useModal';
 import { useSelector } from 'react-redux';
-import { selectCurrentUser, selectToken } from '../features/auth/authSlice';
-import CommentSection from './posts/CommentSection';
+import { selectUser, selectToken } from '../features/auth/authSlice';
+import CommentSection from './comments/CommentSection';
 
 const Posts = () => {
-  const user = useSelector(selectCurrentUser);
+  const user = useSelector(selectUser);
   const token = useSelector(selectToken);
+
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [filter, setFilter] = useState('all');
   const [sortBy, setSortBy] = useState('createdAt');
-  const [expandedPost, setExpandedPost] = useState(null);
   const [showComments, setShowComments] = useState({});
-  const [refreshKey, setRefreshKey] = useState(0);
-  const { isModalOpen } = useModal();
+  const { isModalOpen } = useModal(); // kept in case you need it elsewhere
 
   const toggleComments = (postId) => {
-    setShowComments(prev => ({
+    setShowComments((prev) => ({
       ...prev,
-      [postId]: !prev[postId]
+      [postId]: !prev[postId],
     }));
   };
 
   const handleCommentCountUpdate = (postId, count) => {
-    setPosts(prevPosts => 
-      prevPosts.map(post => 
-        post._id === postId 
-          ? { ...post, commentCount: count } 
-          : post
+    setPosts((prevPosts) =>
+      prevPosts.map((post) =>
+        post._id === postId ? { ...post, commentCount: count } : post
       )
     );
   };
 
-  // Refresh posts when filter, sort, or refreshKey changes
-  useEffect(() => {
-    fetchPosts();
-  }, [filter, sortBy, refreshKey]);
+  const fetchPosts = useCallback(async () => {
+    setLoading(true);
+    setError('');
+    let ignore = false;
 
-  // Listen for modal close with refresh
-  useEffect(() => {
-    if (!isModalOpen) {
-      // Small delay to ensure the modal is fully closed
-      const timer = setTimeout(() => {
-        setRefreshKey(prev => prev + 1);
-      }, 500);
-      
-      return () => clearTimeout(timer);
-    }
-  }, [isModalOpen]);
-
-  const fetchPosts = async () => {
     try {
-      setLoading(true);
-      setError('');
-      
       const params = new URLSearchParams({
         sortBy,
         sortOrder: 'desc',
-        limit: '20'
+        limit: '20',
       });
-      
+
       if (filter !== 'all') {
         params.append('department', filter);
       }
-      
-      const response = await fetch(`http://localhost:5000/api/posts?${params}`);
-      const data = await response.json();
-      
-      if (!response.ok) {
+
+      const res = await fetch(`http://localhost:5000/api/posts?${params}`);
+      const data = await res.json();
+
+      if (!res.ok) {
         throw new Error(data.message || 'Failed to fetch posts');
       }
-      
-      setPosts(data.posts || []);
+
+      if (!ignore) {
+        setPosts(data.posts || []);
+      }
     } catch (err) {
-      setError(err.message);
+      if (!ignore) {
+        setError(err.message || 'Failed to fetch posts');
+      }
     } finally {
-      setLoading(false);
+      if (!ignore) {
+        setLoading(false);
+      }
     }
-  };
+
+    return () => {
+      ignore = true;
+    };
+  }, [filter, sortBy]);
+
+  // Fetch when filter/sort changes
+  useEffect(() => {
+    let cleanup = () => {};
+    fetchPosts().then((c) => {
+      if (typeof c === 'function') cleanup = c;
+    });
+    return () => cleanup();
+  }, [fetchPosts]);
+
+  // Call this from modal on success (pass down as prop to your create/edit modal)
+  const refetchAfterMutation = useCallback(() => {
+    fetchPosts();
+  }, [fetchPosts]);
 
   const handleVote = async (postId, voteType) => {
     if (!token) {
       alert('Please log in to vote');
       return;
     }
-    
+
     try {
-      const response = await fetch(`http://localhost:5000/api/posts/${postId}/vote`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ voteType }),
-      });
-      
+      const response = await fetch(
+        `http://localhost:5000/api/posts/${postId}/vote`,
+        {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ voteType }),
+        }
+      );
+
       const data = await response.json();
-      
+
       if (!response.ok) {
         throw new Error(data.message || 'Failed to process vote');
       }
-      
-      // Update the specific post's vote count without refreshing all posts
-      setPosts(posts.map(post => {
-        if (post._id === postId) {
-          const updatedPost = { ...post };
-          
-          // Remove previous vote if exists
-          if (post.userVote === 1) {
-            updatedPost.upvotes = post.upvotes.filter(id => id !== user?._id);
-          } else if (post.userVote === -1) {
-            updatedPost.downvotes = post.downvotes.filter(id => id !== user?._id);
-          }
-          
-          // Add new vote
-          if (voteType === 'upvote' && post.userVote !== 1) {
-            updatedPost.upvotes = [...(updatedPost.upvotes || []), user?._id];
-            updatedPost.userVote = 1;
-          } else if (voteType === 'downvote' && post.userVote !== -1) {
-            updatedPost.downvotes = [...(updatedPost.downvotes || []), user?._id];
-            updatedPost.userVote = -1;
-          } else {
-            // If clicking the same vote button again, remove the vote
-            updatedPost.userVote = 0;
-          }
-          
-          return updatedPost;
-        }
-        return post;
-      }));
-      
+
+      // Prefer server as source of truth: assume API returns updated post as data.post
+      if (data?.post) {
+        setPosts((prev) =>
+          prev.map((p) => (p._id === postId ? data.post : p))
+        );
+      } else {
+        // Fallback: minimal optimistic update using functional state
+        setPosts((prev) =>
+          prev.map((post) => {
+            if (post._id !== postId) return post;
+            const updated = { ...post };
+
+            const userId = user?._id;
+            const up = new Set(updated.upvotes || []);
+            const down = new Set(updated.downvotes || []);
+
+            // Remove previous vote
+            up.delete(userId);
+            down.delete(userId);
+
+            if (voteType === 'upvote' && post.userVote !== 1) {
+              up.add(userId);
+              updated.userVote = 1;
+            } else if (voteType === 'downvote' && post.userVote !== -1) {
+              down.add(userId);
+              updated.userVote = -1;
+            } else {
+              updated.userVote = 0;
+            }
+
+            updated.upvotes = Array.from(up);
+            updated.downvotes = Array.from(down);
+            return updated;
+          })
+        );
+      }
     } catch (err) {
       console.error('Error voting:', err);
       alert(err.message || 'Failed to process vote');
@@ -141,8 +156,10 @@ const Posts = () => {
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     const now = new Date();
-    const diffInHours = (now - date) / (1000 * 60 * 60);
-    
+    if (isNaN(date.getTime())) return 'N/A';
+    const diffMs = Math.max(0, now - date);
+    const diffInHours = diffMs / (1000 * 60 * 60);
+
     if (diffInHours < 1) {
       return `${Math.floor(diffInHours * 60)}m ago`;
     } else if (diffInHours < 24) {
@@ -179,8 +196,8 @@ const Posts = () => {
           <div className="flex flex-col md:flex-row gap-4">
             <div className="flex-1">
               <label className="block text-sm font-medium text-gray-700 mb-2">Filter by Department:</label>
-              <select 
-                value={filter} 
+              <select
+                value={filter}
                 onChange={(e) => setFilter(e.target.value)}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
               >
@@ -193,11 +210,11 @@ const Posts = () => {
                 <option value="Electrical">Electrical</option>
               </select>
             </div>
-            
+
             <div className="flex-1">
               <label className="block text-sm font-medium text-gray-700 mb-2">Sort by:</label>
-              <select 
-                value={sortBy} 
+              <select
+                value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
               >
@@ -278,27 +295,23 @@ const Posts = () => {
                         <span>{post.downvotes?.length || 0}</span>
                       </button>
 
-                      {/* Comments - Show loading state when comments are being loaded */}
-                      <button 
+                      {/* Comments */}
+                      <button
                         onClick={() => toggleComments(post._id)}
-                        disabled={loading}
-                        className={`flex items-center space-x-1 ${showComments[post._id] ? 'text-blue-500' : 'text-gray-500 hover:text-blue-500'} ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                        className={`flex items-center space-x-1 ${showComments[post._id] ? 'text-blue-500' : 'text-gray-500 hover:text-blue-500'}`}
                       >
                         <span>💬</span>
                         <span>
-                          {loading && showComments[post._id] ? (
-                            'Loading...'
-                          ) : (
-                            `${post.commentCount || 0} Comment${post.commentCount !== 1 ? 's' : ''}`
-                          )}
+                          {(post.commentCount || 0)} Comment{post.commentCount !== 1 ? 's' : ''}
                         </span>
                       </button>
-                      
+
                       {showComments[post._id] && (
                         <div className="mt-4 border-t border-gray-200 pt-4">
-                          <CommentSection 
-                            postId={post._id} 
+                          <CommentSection
+                            postId={post._id}
                             onCommentCountUpdate={(count) => handleCommentCountUpdate(post._id, count)}
+                            onSuccessRefresh={refetchAfterMutation}
                           />
                         </div>
                       )}

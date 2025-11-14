@@ -1,7 +1,13 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { useEffect, useRef, useCallback } from 'react';
-import { closeModal, openModal, selectActiveTab, selectIsModalOpen, selectModalProps, resetModal } from '../features/modal/modalSlice';
+import { 
+  closeModal, 
+  openModal, 
+  selectActiveTab, 
+  selectIsModalOpen, 
+  selectModalProps 
+} from '../features/modal/modalSlice';
 
 export const useModal = () => {
   const dispatch = useDispatch();
@@ -16,25 +22,17 @@ export const useModal = () => {
     if (location.pathname !== locationRef.current) {
       locationRef.current = location.pathname;
       if (isModalOpen) {
-        console.log('Route changed, closing modal');
         dispatch(closeModal());
       }
     }
   }, [location.pathname, dispatch, isModalOpen]);
 
   const handleOpenModal = useCallback((tab = 'Add Question', props = {}) => {
-    console.log('Dispatching openModal with tab:', tab);
     dispatch(openModal({ tab, props }));
   }, [dispatch]);
 
-  const handleCloseModal = useCallback((options = {}) => {
-    console.log('Dispatching closeModal with options:', options);
-    dispatch(closeModal(options));
-  }, [dispatch]);
-
-  const handleResetModal = useCallback(() => {
-    console.log('Resetting modal state');
-    dispatch(resetModal());
+  const handleCloseModal = useCallback(() => {
+    dispatch(closeModal());
   }, [dispatch]);
 
   return {
@@ -42,9 +40,15 @@ export const useModal = () => {
     openModal: handleOpenModal,
     closeModal: handleCloseModal,
     activeTab,
-    modalProps,
-    resetModal: handleResetModal
+    modalProps
   };
 };
 
 export default useModal;
+// 🔹 useEffect is used when you want to react to something that happened after rendering —
+// like fetching data, updating the DOM, or syncing with external systems.
+// (You let React handle when it runs — after render.)
+
+// 🔹 useCallback is used when you want to control and reuse a function yourself,
+// especially to prevent it from being recreated on every render.
+// (You decide when to call it — React just keeps its reference stable.)

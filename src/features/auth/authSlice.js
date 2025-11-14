@@ -1,132 +1,98 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { authAPI, usersAPI } from '../../services/api';
+import { authAPI } from '../../services/api/authService'; 
+import { usersAPI } from '../../services/api/usersService';  
 
-// Helper function to get initial auth state from storage
-const getInitialState = () => {
-  const storedUser = localStorage.getItem('user') || sessionStorage.getItem('user');
-  const storedToken = localStorage.getItem('token') || sessionStorage.getItem('token');
-  
-  return {
-    user: storedUser ? JSON.parse(storedUser) : null,
-    token: storedToken,
-    isLoading: false,
-    error: null,
-  };
+// Initial state - check if user was logged in before
+const initialState = {
+  user: JSON.parse(localStorage.getItem('user')) || null,
+  token: localStorage.getItem('token') || null,
+  isLoading: false,
+  error: null,
 };
 
-// Async thunk for login
+// Login action
 export const loginUser = createAsyncThunk(
   'auth/login',
-  async ({ email, password }, { rejectWithValue }) => {
+  async ({ email, password, rememberMe }, { rejectWithValue }) => {
     try {
-      console.log('Attempting login with:', { email: email.trim().toLowerCase() });
       const response = await authAPI.login({ 
         email: email.trim().toLowerCase(), 
         password 
       });
       
-      if (!response) {
-        throw new Error('No response received from server');
+      // Store credentials if user wants to be remembered
+      if (rememberMe) {
+        localStorage.setItem('user', JSON.stringify(response.user));
+        localStorage.setItem('token', response.token);
       }
-      
-      console.log('Login successful:', {
-        hasToken: !!response.token,
-        user: response.user?.email
-      });
       
       return response;
     } catch (error) {
-      console.error('Login error in thunk:', {
-        status: error.response?.status,
-        data: error.response?.data,
-        message: error.message,
-        config: error.config,
-        stack: error.stack
-      });
-      
-      // Return a more specific error message based on the response
-      let errorMessage = 'Login failed. Please try again.';
-      
-      if (error.response) {
-        // The request was made and the server responded with a status code
-        // that falls out of the range of 2xx
-        if (error.response.status === 400) {
-          errorMessage = error.response.data?.message || 'Invalid email or password';
-        } else if (error.response.status === 401) {
-          errorMessage = 'Authentication failed. Please check your credentials.';
-        } else if (error.response.status >= 500) {
-          errorMessage = 'Server error. Please try again later.';
-        }
-      } else if (error.request) {
-        // The request was made but no response was received
-        errorMessage = 'No response from server. Please check your connection.';
+      if (error.response?.status === 401) {
+        return rejectWithValue('Invalid email or password');
       }
-      
-      return rejectWithValue(errorMessage);
+      return rejectWithValue(error.response?.data?.message || 'Login failed');
     }
   }
 );
 
-// Async thunk for registration
+// Register action
 export const registerUser = createAsyncThunk(
   'auth/register',
   async (userData, { rejectWithValue }) => {
     try {
       const response = await authAPI.register(userData);
+      
+      // Auto-save on registration
+      localStorage.setItem('user', JSON.stringify(response.user));
+      localStorage.setItem('token', response.token);
+      
       return response;
     } catch (error) {
-      return rejectWithValue(error.response?.data?.message || error.message);
+      return rejectWithValue(error.response?.data?.message || 'Registration failed');
     }
   }
 );
 
-// Async thunk for updating user profile
+// Update profile action
 export const updateUserProfile = createAsyncThunk(
   'auth/updateProfile',
   async (userData, { getState, rejectWithValue }) => {
     try {
       const { token } = getState().auth;
-      const response = await usersAPI.updateUserProfile(userData, token);
+      const response = await usersAPI.updateUserProfile(userData);
+      
+      // Update stored user data
+      localStorage.setItem('user', JSON.stringify(response.user));
+      
       return response;
     } catch (error) {
-      return rejectWithValue(error.response?.data?.message || 'Failed to update profile');
+      return rejectWithValue(error.response?.data?.message || 'Update failed');
     }
   }
 );
 
 const authSlice = createSlice({
   name: 'auth',
-  initialState: getInitialState(),
+  initialState,
   reducers: {
+    // Logout - clear everything
     logout: (state) => {
       state.user = null;
       state.token = null;
       state.error = null;
       localStorage.removeItem('user');
       localStorage.removeItem('token');
-      sessionStorage.removeItem('user');
-      sessionStorage.removeItem('token');
     },
-    setCredentials: (state, action) => {
-      const { user, token, rememberMe } = action.payload;
-      state.user = user;
-      state.token = token;
-      
-      if (rememberMe) {
-        localStorage.setItem('user', JSON.stringify(user));
-        localStorage.setItem('token', token);
-      } else {
-        sessionStorage.setItem('user', JSON.stringify(user));
-        sessionStorage.setItem('token', token);
-      }
-    },
+    
+    // Clear error messages
     clearError: (state) => {
       state.error = null;
     }
   },
   extraReducers: (builder) => {
-    // Login cases
     builder
+      // Login
       .addCase(loginUser.pending, (state) => {
         state.isLoading = true;
         state.error = null;
@@ -138,9 +104,10 @@ const authSlice = createSlice({
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.payload || 'Login failed';
+        state.error = action.payload;
       })
-      // Registration cases
+      
+      // Register
       .addCase(registerUser.pending, (state) => {
         state.isLoading = true;
         state.error = null;
@@ -152,37 +119,30 @@ const authSlice = createSlice({
       })
       .addCase(registerUser.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.payload || 'Registration failed';
+        state.error = action.payload;
       })
-      // Update profile cases
+      
+      // Update Profile
       .addCase(updateUserProfile.pending, (state) => {
         state.isLoading = true;
-        state.error = null;
       })
       .addCase(updateUserProfile.fulfilled, (state, action) => {
         state.isLoading = false;
         state.user = action.payload.user;
-        // Update storage
-        const storedUser = localStorage.getItem('user') || sessionStorage.getItem('user');
-        if (storedUser) {
-          const storage = localStorage.getItem('user') ? localStorage : sessionStorage;
-          storage.setItem('user', JSON.stringify(action.payload.user));
-        }
       })
       .addCase(updateUserProfile.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.payload || 'Failed to update profile';
+        state.error = action.payload;
       });
   }
 });
 
-// Export actions
-export const { logout, setCredentials, clearError, updateUser } = authSlice.actions;
+export const { logout, clearError } = authSlice.actions;
 
-// Selectors
-export const selectCurrentUser = (state) => state.auth.user;
-export const selectIsAuthenticated = (state) => !!state.auth.token;
+// Selectors - easy access to state
+export const selectUser = (state) => state.auth.user;
 export const selectToken = (state) => state.auth.token;
+export const selectIsAuthenticated = (state) => !!state.auth.token;
 export const selectAuthError = (state) => state.auth.error;
 export const selectAuthLoading = (state) => state.auth.isLoading;
 
