@@ -16,6 +16,7 @@ import Department from './pages/Department';
 import Profile from './pages/Profile';
 import Settings from './pages/Settings';
 import Search from './pages/Search';
+import PostDetail from './pages/PostDetail';
 import ASKQues from './components/askQues/ASKQues';
 import EditProfile from './pages/EditProfile';
 
@@ -87,6 +88,7 @@ function App() {
             <Route element={<ProtectedRoute />}>
               <Route path="/dashboard" element={<AuthenticatedLayout><Dashboard /></AuthenticatedLayout>} />
               <Route path="/posts" element={<AuthenticatedLayout><Posts /></AuthenticatedLayout>} />
+              <Route path="/posts/:id" element={<AuthenticatedLayout><PostDetail /></AuthenticatedLayout>} />
               <Route path="/community" element={<AuthenticatedLayout><Community /></AuthenticatedLayout>} />
               <Route path="/notifications" element={<AuthenticatedLayout><Notifications /></AuthenticatedLayout>} />
               <Route path="/profile" element={<AuthenticatedLayout><Profile /></AuthenticatedLayout>} />
