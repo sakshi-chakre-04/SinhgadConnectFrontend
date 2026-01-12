@@ -1,48 +1,81 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { postsAPI } from '../services/api/postsService';  // ✅ Updated
-import { selectIsAuthenticated } from '../features/auth/authSlice';
+import { postsAPI } from '../services/api/postsService';
+import { selectIsAuthenticated, selectToken } from '../features/auth/authSlice';
+import PostsList from '../components/posts/PostsList';
 
 const Department = () => {
   const { departmentName } = useParams();
   const navigate = useNavigate();
   const isAuthenticated = useSelector(selectIsAuthenticated);
+  const token = useSelector(selectToken);
+
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showComments, setShowComments] = useState({});
+
+  const fetchDepartmentPosts = useCallback(async () => {
+    try {
+      setLoading(true);
+      const response = await postsAPI.getDepartmentPosts(departmentName);
+      setPosts(response.posts || []);
+    } catch (err) {
+      console.error('Error fetching department posts:', err);
+      setError('Failed to load department posts');
+    } finally {
+      setLoading(false);
+    }
+  }, [departmentName]);
 
   useEffect(() => {
     if (!isAuthenticated) {
       navigate('/login');
       return;
     }
-
-    const fetchDepartmentPosts = async () => {
-      try {
-        setLoading(true);
-        const response = await postsAPI.getDepartmentPosts(departmentName);  // ✅ Works now
-        setPosts(response.posts || []);
-      } catch (err) {
-        console.error('Error fetching department posts:', err);
-        setError('Failed to load department posts');
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchDepartmentPosts();
-  }, [departmentName, isAuthenticated, navigate]);
-  
+  }, [departmentName, isAuthenticated, navigate, fetchDepartmentPosts]);
+
+  const toggleComments = (postId) => {
+    setShowComments((prev) => ({ ...prev, [postId]: !prev[postId] }));
+  };
+
+  const handleCommentCountUpdate = (postId, count) => {
+    setPosts((prev) => prev.map((p) => (p._id === postId ? { ...p, commentCount: count } : p)));
+  };
+
+  const handleVote = useCallback(async (postId, voteType) => {
+    if (!token) {
+      alert('Please log in to vote');
+      return;
+    }
+    try {
+      const response = await fetch(`http://localhost:5000/api/posts/${postId}/vote`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ voteType }),
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.message || 'Failed to process vote');
+
+      setPosts((prev) => prev.map((p) => (p._id === postId ? data.post : p)));
+    } catch (err) {
+      console.error('Error voting:', err);
+      alert(err.message || 'Failed to process vote');
+    }
+  }, [token]);
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 p-6">
         <div className="max-w-4xl mx-auto">
-          <div className="bg-white rounded-xl shadow-lg p-8">
-            <h1 className="text-2xl font-bold text-gray-800 mb-6">Loading {departmentName} Department...</h1>
-            <div className="flex justify-center py-8">
-              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-500"></div>
-            </div>
+          <div className="flex items-center justify-center py-12">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-500"></div>
+            <p className="ml-4 text-gray-600">Loading {departmentName} posts...</p>
           </div>
         </div>
       </div>
@@ -53,12 +86,11 @@ const Department = () => {
     return (
       <div className="min-h-screen bg-gray-50 p-6">
         <div className="max-w-4xl mx-auto">
-          <div className="bg-white rounded-xl shadow-lg p-8 text-center">
-            <h1 className="text-2xl font-bold text-red-600 mb-4">Error</h1>
-            <p className="text-gray-700 mb-6">{error}</p>
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
+            {error}
             <button
-              onClick={() => window.location.reload()}
-              className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+              onClick={fetchDepartmentPosts}
+              className="ml-4 underline hover:no-underline"
             >
               Try Again
             </button>
@@ -71,57 +103,21 @@ const Department = () => {
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-4xl mx-auto">
-        <div className="bg-white rounded-xl shadow-lg p-8">
-          <h1 className="text-2xl font-bold text-gray-800 mb-6">{departmentName} Department</h1>
-          
-          {error ? (
-            <div className="text-center py-12 text-red-600">
-              <p>{error}</p>
-              <button
-                onClick={() => window.location.reload()}
-                className="mt-4 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
-              >
-                Try Again
-              </button>
-            </div>
-          ) : posts.length === 0 ? (
-            <div className="text-center py-12">
-              <p className="text-gray-600 mb-4">No posts found in this department yet.</p>
-              <button
-                onClick={() => navigate('/create-post')}
-                className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
-              >
-                Create First Post
-              </button>
-            </div>
-          ) : (
-            <div className="space-y-4">
-              {posts.map((post) => (
-                <div 
-                  key={post._id} 
-                  className="border-b border-gray-200 pb-4 mb-4 cursor-pointer hover:bg-gray-50 p-3 rounded-lg transition-colors"
-                  onClick={() => navigate(`/posts/${post._id}`)}
-                >
-                  <h2 className="text-xl font-semibold text-gray-800 hover:text-indigo-600">{post.title}</h2>
-                  <p className="text-gray-600 mt-2">
-                    {post.content.length > 200 ? `${post.content.substring(0, 200)}...` : post.content}
-                  </p>
-                  <div className="flex items-center mt-2 text-sm text-gray-500">
-                    <span>Posted by {post.author?.name || 'Unknown'}</span>
-                    <span className="mx-2">•</span>
-                    <span>{new Date(post.createdAt).toLocaleDateString()}</span>
-                    {post.commentCount > 0 && (
-                      <>
-                        <span className="mx-2">•</span>
-                        <span>{post.commentCount} {post.commentCount === 1 ? 'comment' : 'comments'}</span>
-                      </>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
+        {/* Header */}
+        <div className="bg-white rounded-xl shadow-lg p-8 mb-6">
+          <h1 className="text-3xl font-bold text-gray-800 mb-2">{departmentName} Department</h1>
+          <p className="text-gray-600">Posts from the {departmentName} community</p>
         </div>
+
+        {/* Posts List - Same component as main posts page */}
+        <PostsList
+          posts={posts}
+          showComments={showComments}
+          onToggleComments={toggleComments}
+          onVote={handleVote}
+          onCommentCountUpdate={handleCommentCountUpdate}
+          onSuccessRefresh={fetchDepartmentPosts}
+        />
       </div>
     </div>
   );
