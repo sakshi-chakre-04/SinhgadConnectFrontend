@@ -22,7 +22,7 @@ import EditProfile from './pages/EditProfile';
 
 // Layout wrapper for authenticated routes
 const AuthenticatedLayout = ({ children }) => {
-  const { isModalOpen, closeModal, activeTab } = useModal();
+  const { isModalOpen, closeModal } = useModal();
   const navigate = useNavigate();
   const location = useLocation();
   const [refreshKey, setRefreshKey] = useState(0);
@@ -51,7 +51,7 @@ const AuthenticatedLayout = ({ children }) => {
         {children}
       </main>
 
-      {/* Global ASKQues Modal */}
+      {/* Global Post Creation Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 z-[1000]" onClick={(e) => {
           if (e.target === e.currentTarget) {
@@ -62,7 +62,6 @@ const AuthenticatedLayout = ({ children }) => {
             <ASKQues
               isOpen={isModalOpen}
               onClose={handleCloseModal}
-              initialTab={activeTab}
             />
           </div>
         </div>

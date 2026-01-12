@@ -7,23 +7,23 @@ import { selectUser } from '../features/auth/authSlice';
 const NotificationItem = ({ notification, onMarkAsRead }) => {
   const navigate = useNavigate();
   const [isRead, setIsRead] = useState(notification.read);
-  
+
   const handleClick = async () => {
     if (!isRead) {
       await onMarkAsRead(notification._id);
       setIsRead(true);
     }
-    
+
     // Navigate to the relevant post/comment
     if (notification.post) {
-      navigate(`/post/${notification.post._id}`);
+      navigate(`/posts/${notification.post._id}`);
     }
   };
 
   const getNotificationMessage = () => {
     const sender = notification.sender?.name || 'Someone';
     const postTitle = notification.post?.title ? `"${notification.post.title}"` : '';
-    
+
     switch (notification.type) {
       case 'like':
         return `${sender} liked your post ${postTitle}`;
@@ -52,7 +52,7 @@ const NotificationItem = ({ notification, onMarkAsRead }) => {
   };
 
   return (
-    <div 
+    <div
       className={`p-4 border-b hover:bg-gray-50 cursor-pointer transition-colors ${!isRead ? 'bg-blue-50' : ''}`}
       onClick={handleClick}
     >
@@ -101,8 +101,8 @@ export default function Notifications() {
     try {
       await notificationsAPI.markAsRead(notificationId);  // ✅ Updated
       // Update local state to reflect the read status
-      setNotifications(prev => 
-        prev.map(n => 
+      setNotifications(prev =>
+        prev.map(n =>
           n._id === notificationId ? { ...n, read: true } : n
         )
       );
@@ -115,7 +115,7 @@ export default function Notifications() {
     try {
       await notificationsAPI.markAllAsRead();  // ✅ Updated
       // Update local state to reflect all notifications as read
-      setNotifications(prev => 
+      setNotifications(prev =>
         prev.map(n => ({ ...n, read: true }))
       );
     } catch (err) {
@@ -185,7 +185,7 @@ export default function Notifications() {
               </p>
             )}
           </div>
-          
+
           {notifications.length > 0 ? (
             <div className="divide-y">
               {notifications.map(notification => (
@@ -200,7 +200,7 @@ export default function Notifications() {
             <div className="text-center py-12">
               <div className="text-gray-400 mb-4">
                 <svg className="w-16 h-16 mx-auto" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"/>
+                  <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
                 </svg>
               </div>
               <h3 className="text-xl font-semibold text-gray-800 mb-2">No notifications yet</h3>

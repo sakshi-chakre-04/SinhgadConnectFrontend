@@ -1,21 +1,20 @@
 import { useState, useCallback } from 'react';
 import { postsAPI } from '../services/api/postsService';
-import { POST_TYPES, buildPostData } from '../components/ASKQues/constants';
 
 export const usePostSubmission = (user, onClose, onPostCreated) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const submitPost = useCallback(async (formData, postType) => {
+  const submitPost = useCallback(async (postData) => {
     if (isSubmitting) return;
 
     try {
       setIsSubmitting(true);
 
-      const postData = buildPostData(formData, postType, user);
+      // postData already contains: title, content, department, postType
       const response = await postsAPI.createPost(postData);
-      
+
       onClose(true);
-      
+
       if (typeof onPostCreated === 'function') {
         onPostCreated(response);
       }
@@ -27,7 +26,7 @@ export const usePostSubmission = (user, onClose, onPostCreated) => {
     } finally {
       setIsSubmitting(false);
     }
-  }, [isSubmitting, user, onClose, onPostCreated]);
+  }, [isSubmitting, onClose, onPostCreated]);
 
   return { isSubmitting, submitPost };
 };
