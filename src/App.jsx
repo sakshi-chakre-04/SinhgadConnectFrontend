@@ -15,6 +15,7 @@ import Notifications from './pages/Notifications';
 import Department from './pages/Department';
 import Profile from './pages/Profile';
 import Settings from './pages/Settings';
+import Search from './pages/Search';
 import ASKQues from './components/askQues/ASKQues';
 import EditProfile from './pages/EditProfile';
 
@@ -98,6 +99,10 @@ function App() {
               <Route
                 path="/department/:departmentName"
                 element={<AuthenticatedLayout><Department /></AuthenticatedLayout>}
+              />
+              <Route
+                path="/search"
+                element={<AuthenticatedLayout><Search /></AuthenticatedLayout>}
               />
             </Route>
 
