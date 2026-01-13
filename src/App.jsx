@@ -19,6 +19,7 @@ import Search from './pages/Search';
 import PostDetail from './pages/PostDetail';
 import ASKQues from './components/askQues/ASKQues';
 import EditProfile from './pages/EditProfile';
+import ChatWidget from './components/chat/ChatWidget';
 
 // Layout wrapper for authenticated routes
 const AuthenticatedLayout = ({ children }) => {
@@ -66,6 +67,9 @@ const AuthenticatedLayout = ({ children }) => {
           </div>
         </div>
       )}
+
+      {/* AI Chat Widget */}
+      <ChatWidget />
     </div>
   );
 };
