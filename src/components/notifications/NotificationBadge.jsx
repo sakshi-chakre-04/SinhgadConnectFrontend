@@ -3,15 +3,31 @@ import { notificationsAPI } from '../../services/api/notificationsService';
 import { useSelector } from 'react-redux';
 import { selectUser } from '../../features/auth/authSlice';
 import NotificationDropdown from './NotificationDropdown';
+import { useSocket } from '../../context/SocketContext';
 
 const NotificationBadge = () => {
   const [allNotifications, setAllNotifications] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
   const [loading, setLoading] = useState(true);
   const user = useSelector(selectUser);
+  const socket = useSocket();
 
   const unreadCount = allNotifications.filter(n => !n.read).length;
   const displayedNotifications = allNotifications.slice(0, 5);
+
+  // Listen for real-time notifications
+  useEffect(() => {
+    if (socket) {
+      socket.on('new_notification', (notification) => {
+        console.log('🔔 Real-time notification received:', notification);
+        setAllNotifications(prev => [notification, ...prev]);
+      });
+
+      return () => {
+        socket.off('new_notification');
+      };
+    }
+  }, [socket]);
 
   useEffect(() => {
     if (user) {
@@ -61,7 +77,7 @@ const NotificationBadge = () => {
 
   return (
     <div className="relative">
-      <button 
+      <button
         onClick={() => setShowDropdown(!showDropdown)}
         className="relative p-2 text-gray-600 hover:text-gray-900 focus:outline-none"
       >
@@ -84,7 +100,7 @@ const NotificationBadge = () => {
           onClose={() => setShowDropdown(false)}
         />
       )}
-      
+
       {showDropdown && (
         <div className="fixed inset-0 z-40" onClick={() => setShowDropdown(false)} />
       )}

@@ -1,15 +1,31 @@
 import React, { useState, useEffect } from 'react';
-import { useSearchParams, Link } from 'react-router-dom';
+import { useSearchParams, Link, useNavigate } from 'react-router-dom';
 import { searchPosts } from '../services/api/searchService';
+import { MagnifyingGlassIcon, SparklesIcon } from '@heroicons/react/24/outline';
 
 const Search = () => {
     const [searchParams] = useSearchParams();
+    const navigate = useNavigate();
     const query = searchParams.get('q') || '';
 
+    const [searchInput, setSearchInput] = useState(query);
     const [results, setResults] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [searchedQuery, setSearchedQuery] = useState('');
+
+    // Handle search form submission
+    const handleSearch = (e) => {
+        e.preventDefault();
+        if (searchInput.trim()) {
+            navigate(`/search?q=${encodeURIComponent(searchInput.trim())}`);
+        }
+    };
+
+    // Update input when URL query changes
+    useEffect(() => {
+        setSearchInput(query);
+    }, [query]);
 
     useEffect(() => {
         const performSearch = async () => {
@@ -46,27 +62,95 @@ const Search = () => {
     };
 
     return (
-        <div className="max-w-4xl mx-auto px-4 py-8">
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-                Search Results
-            </h1>
+        <div className="max-w-4xl mx-auto px-4 py-6">
+            {/* Search Bar - Always visible */}
+            <div className="mb-8">
+                <form onSubmit={handleSearch} className="relative">
+                    <div className="relative">
+                        <MagnifyingGlassIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                        <input
+                            type="text"
+                            value={searchInput}
+                            onChange={(e) => setSearchInput(e.target.value)}
+                            placeholder="Search posts, questions, announcements..."
+                            className="w-full pl-12 pr-32 py-4 bg-white border-2 border-gray-200 rounded-2xl text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 transition-all shadow-sm"
+                        />
+                        <button
+                            type="submit"
+                            className="absolute right-2 top-1/2 -translate-y-1/2 px-5 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-medium rounded-xl hover:shadow-lg transition-all flex items-center gap-2"
+                        >
+                            <SparklesIcon className="w-4 h-4" />
+                            Search
+                        </button>
+                    </div>
+                    <p className="text-xs text-gray-500 mt-2 text-center">
+                        ✨ AI-powered semantic search finds relevant posts even with different wording
+                    </p>
+                </form>
+            </div>
+
+            {/* Show popular tags when no search query */}
+            {!searchedQuery && !loading && (
+                <div className="text-center py-4">
+                    <h2 className="text-lg font-bold text-gray-800 mb-4">
+                        Explore Topics
+                    </h2>
+
+                    {/* Popular Tags */}
+                    <div className="mb-8">
+                        <h3 className="text-sm font-semibold text-gray-700 mb-3">🔥 Popular Tags</h3>
+                        <div className="flex flex-wrap justify-center gap-2">
+                            {['Placement', 'DSA', 'Projects', 'Exams', 'Internship', 'Resume', 'Interview', 'GATE'].map((tag) => (
+                                <Link
+                                    key={tag}
+                                    to={`/search?q=${tag}`}
+                                    className="px-4 py-2 bg-indigo-50 text-indigo-600 rounded-full text-sm font-medium hover:bg-indigo-100 transition-colors"
+                                >
+                                    #{tag}
+                                </Link>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Quick Categories */}
+                    <div>
+                        <h3 className="text-sm font-semibold text-gray-700 mb-3">📚 Browse by Category</h3>
+                        <div className="flex flex-wrap justify-center gap-2">
+                            {['Questions', 'Announcements', 'Resources'].map((cat) => (
+                                <Link
+                                    key={cat}
+                                    to={`/search?q=${cat}`}
+                                    className="px-4 py-2 bg-gray-100 text-gray-700 rounded-full text-sm font-medium hover:bg-gray-200 transition-colors"
+                                >
+                                    {cat}
+                                </Link>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            )}
 
             {searchedQuery && (
-                <p className="text-gray-600 dark:text-gray-400 mb-6">
-                    Showing results for "<span className="font-medium">{searchedQuery}</span>"
-                </p>
+                <>
+                    <h1 className="text-2xl font-bold text-gray-900 mb-2">
+                        Search Results
+                    </h1>
+                    <p className="text-gray-600 mb-6">
+                        Showing results for "<span className="font-medium text-gray-900">{searchedQuery}</span>"
+                    </p>
+                </>
             )}
 
             {loading && (
                 <div className="flex items-center justify-center py-12">
                     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
-                    <span className="ml-3 text-gray-600 dark:text-gray-400">Searching...</span>
+                    <span className="ml-3 text-gray-600">Searching...</span>
                 </div>
             )}
 
             {error && (
-                <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4 mb-6">
-                    <p className="text-red-600 dark:text-red-400">{error}</p>
+                <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+                    <p className="text-red-600">{error}</p>
                 </div>
             )}
 
@@ -75,8 +159,8 @@ const Search = () => {
                     <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
-                    <h3 className="mt-4 text-lg font-medium text-gray-900 dark:text-white">No results found</h3>
-                    <p className="mt-2 text-gray-500 dark:text-gray-400">
+                    <h3 className="mt-4 text-lg font-medium text-gray-900">No results found</h3>
+                    <p className="mt-2 text-gray-500">
                         Try different keywords or check your spelling.
                     </p>
                 </div>
@@ -88,31 +172,31 @@ const Search = () => {
                         <Link
                             key={post._id}
                             to={`/posts/${post._id}`}
-                            className="block bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-5 hover:shadow-md transition-shadow"
+                            className="block bg-white rounded-xl shadow-sm border border-gray-200 p-5 hover:shadow-md hover:border-indigo-200 transition-all"
                         >
                             <div className="flex items-start justify-between">
                                 <div className="flex-1">
-                                    <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-2 line-clamp-2">
+                                    <h2 className="text-lg font-semibold text-gray-900 mb-2 line-clamp-2">
                                         {post.title}
                                     </h2>
-                                    <p className="text-gray-600 dark:text-gray-400 text-sm line-clamp-3 mb-3">
+                                    <p className="text-gray-600 text-sm line-clamp-3 mb-3">
                                         {post.content}
                                     </p>
-                                    <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
+                                    <div className="flex items-center gap-4 text-sm text-gray-500">
                                         <span className="flex items-center gap-1">
                                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                                             </svg>
                                             {post.author?.name || 'Unknown'}
                                         </span>
-                                        <span className="px-2 py-0.5 bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 rounded-full text-xs">
+                                        <span className="px-2 py-0.5 bg-indigo-100 text-indigo-700 rounded-full text-xs">
                                             {post.department}
                                         </span>
                                         <span>{formatDate(post.createdAt)}</span>
                                     </div>
                                 </div>
                                 <div className="ml-4 flex flex-col items-end">
-                                    <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300">
+                                    <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700">
                                         {Math.round(post.similarity * 100)}% match
                                     </span>
                                     <div className="mt-2 flex items-center gap-3 text-sm text-gray-500">

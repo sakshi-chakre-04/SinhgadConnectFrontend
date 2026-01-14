@@ -197,14 +197,22 @@ export default function Notifications() {
               ))}
             </div>
           ) : (
-            <div className="text-center py-12">
-              <div className="text-gray-400 mb-4">
-                <svg className="w-16 h-16 mx-auto" fill="currentColor" viewBox="0 0 20 20">
+            <div className="text-center py-16">
+              <div className="w-20 h-20 mx-auto mb-4 bg-indigo-100 rounded-full flex items-center justify-center">
+                <svg className="w-10 h-10 text-indigo-500" fill="currentColor" viewBox="0 0 20 20">
                   <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold text-gray-800 mb-2">No notifications yet</h3>
-              <p className="text-gray-600">You'll see notifications here when someone interacts with your posts</p>
+              <h3 className="text-xl font-semibold text-gray-800 mb-2">You're all caught up! 🎉</h3>
+              <p className="text-gray-500 mb-6 max-w-sm mx-auto">
+                Check out the latest posts to get notified when someone replies to your questions!
+              </p>
+              <button
+                onClick={() => window.location.href = '/dashboard'}
+                className="px-5 py-2.5 bg-indigo-600 text-white font-medium rounded-lg hover:bg-indigo-700 transition-colors"
+              >
+                Explore Posts
+              </button>
             </div>
           )}
         </div>

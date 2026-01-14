@@ -74,9 +74,27 @@ const PostsContainer = () => {
   if (loading) {
     return (
       <PageWrapper>
-        <div className="flex items-center justify-center py-12">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-500"></div>
-          <p className="ml-4 text-gray-600">Loading posts...</p>
+        {/* Skeleton Post Cards */}
+        <div className="space-y-4">
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="bg-white rounded-xl p-6 shadow animate-pulse">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-11 h-11 bg-gray-200 rounded-full"></div>
+                <div className="flex-1">
+                  <div className="h-4 bg-gray-200 rounded w-1/4 mb-2"></div>
+                  <div className="h-3 bg-gray-200 rounded w-1/3"></div>
+                </div>
+              </div>
+              <div className="h-5 bg-gray-200 rounded w-3/4 mb-3"></div>
+              <div className="h-4 bg-gray-200 rounded w-full mb-2"></div>
+              <div className="h-4 bg-gray-200 rounded w-5/6 mb-4"></div>
+              <div className="flex gap-2">
+                <div className="h-6 bg-gray-200 rounded-full w-16"></div>
+                <div className="h-6 bg-gray-200 rounded-full w-16"></div>
+                <div className="h-6 bg-gray-200 rounded-full w-20"></div>
+              </div>
+            </div>
+          ))}
         </div>
       </PageWrapper>
     );
@@ -84,27 +102,26 @@ const PostsContainer = () => {
 
   return (
     <PageWrapper>
-      {/* Header */}
-      <div className="bg-white rounded-xl shadow-lg p-8 mb-6">
-        <h1 className="text-3xl font-bold text-gray-800 mb-2">SinhgadConnect Posts</h1>
-        <p className="text-gray-600">Discover what's happening in your college community</p>
-      </div>
+      {/* Compact Header with Inline Filters */}
+      <div className="glass-panel rounded-xl p-4 mb-4">
+        <div className="flex flex-col md:flex-row md:items-center gap-3">
+          <h1 className="text-lg font-bold text-gray-800 flex-shrink-0">All Posts</h1>
 
-      {/* Filters and Sort */}
-      <div className="bg-white rounded-lg shadow p-6 mb-6">
-        <div className="flex flex-col md:flex-row gap-4">
-          <div className="flex-1">
-            <label className="block text-sm font-medium text-gray-700 mb-2">Filter by Department:</label>
-            <select value={filter} onChange={(e) => setFilter(e.target.value)} className={SELECT_CLASS}>
+          <div className="flex flex-1 gap-2 md:justify-end">
+            <select
+              value={filter}
+              onChange={(e) => setFilter(e.target.value)}
+              className="px-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-gray-50"
+            >
               {DEPARTMENTS.map(({ value, label }) => (
                 <option key={value} value={value}>{label}</option>
               ))}
             </select>
-          </div>
-
-          <div className="flex-1">
-            <label className="block text-sm font-medium text-gray-700 mb-2">Sort by:</label>
-            <select value={sortBy} onChange={(e) => setSortBy(e.target.value)} className={SELECT_CLASS}>
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
+              className="px-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-gray-50"
+            >
               {SORT_OPTIONS.map(({ value, label }) => (
                 <option key={value} value={value}>{label}</option>
               ))}

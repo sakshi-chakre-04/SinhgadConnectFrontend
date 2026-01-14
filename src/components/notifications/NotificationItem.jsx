@@ -1,8 +1,18 @@
 import { Link } from 'react-router-dom';
 
+// Get notification icon based on type
+const getNotificationIcon = (type) => {
+  switch (type) {
+    case 'like': return '❤️';
+    case 'comment': return '💬';
+    case 'milestone': return '🎉';
+    default: return '🔔';
+  }
+};
+
 const NotificationItem = ({ notification, onMarkAsRead, onClose }) => (
   <Link
-    to={notification.post ? `/post/${notification.post._id}` : '#'}
+    to={notification.post?._id ? `/posts/${notification.post._id}` : (notification.post ? `/posts/${notification.post}` : '#')}
     onClick={() => {
       if (!notification.read) onMarkAsRead(notification._id);
       onClose();
@@ -11,7 +21,7 @@ const NotificationItem = ({ notification, onMarkAsRead, onClose }) => (
   >
     <div className="flex items-start">
       <div className="flex-shrink-0 pt-1">
-        {notification.type === 'like' ? '❤️' : '💬'}
+        {getNotificationIcon(notification.type)}
       </div>
       <div className="ml-3 flex-1">
         <p className="text-sm text-gray-800">
