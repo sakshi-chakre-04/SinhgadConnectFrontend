@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import { selectUser } from '../../features/auth/authSlice';
@@ -14,6 +14,7 @@ import {
   VALIDATION_RULES,
   buildPostData
 } from './constants';
+import FileUpload from './FileUpload';
 
 const ASKQues = ({ isOpen, onClose, onPostCreated }) => {
   const user = useSelector(selectUser);
@@ -26,6 +27,8 @@ const ASKQues = ({ isOpen, onClose, onPostCreated }) => {
       department: user?.department || 'General'
     }
   });
+
+  const [attachments, setAttachments] = useState([]);
 
   const selectedType = watch('postType');
 
@@ -40,8 +43,12 @@ const ASKQues = ({ isOpen, onClose, onPostCreated }) => {
   // Form submission handler
   const onSubmit = async (formData) => {
     try {
-      const postData = buildPostData(formData, user);
+      const postData = {
+        ...buildPostData(formData, user),
+        attachments
+      };
       await submitPost(postData);
+      setAttachments([]);
     } catch (error) {
       console.error('Error creating post:', error.message);
     }
@@ -56,6 +63,7 @@ const ASKQues = ({ isOpen, onClose, onPostCreated }) => {
         postType: DEFAULT_POST_TYPE,
         department: user?.department || 'General'
       });
+      setAttachments([]);
     }
   }, [isOpen, reset, user?.department]);
 
@@ -92,8 +100,8 @@ const ASKQues = ({ isOpen, onClose, onPostCreated }) => {
                   <label
                     key={key}
                     className={`flex items-center justify-center p-3 border-2 rounded-lg cursor-pointer transition-all ${selectedType === value
-                        ? 'border-indigo-500 bg-indigo-50 text-indigo-700'
-                        : 'border-gray-200 hover:border-gray-300'
+                      ? 'border-indigo-500 bg-indigo-50 text-indigo-700'
+                      : 'border-gray-200 hover:border-gray-300'
                       }`}
                   >
                     <input
@@ -164,6 +172,9 @@ const ASKQues = ({ isOpen, onClose, onPostCreated }) => {
                 <p className="mt-1 text-sm text-red-500">{errors.department.message}</p>
               )}
             </div>
+
+            {/* File Attachments */}
+            <FileUpload onFilesUploaded={setAttachments} maxFiles={5} />
 
             {/* Footer */}
             <FormFooter

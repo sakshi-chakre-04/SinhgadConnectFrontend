@@ -88,6 +88,45 @@ const PostItem = ({ post, show, onToggleComments, onVote, onCommentCountUpdate, 
           </div>
         )}
 
+        {/* Attachments */}
+        {post.attachments?.length > 0 && (
+          <div className="mb-4">
+            <div className="flex flex-wrap gap-2">
+              {post.attachments.map((file, index) => (
+                file.type === 'image' ? (
+                  <a
+                    key={index}
+                    href={file.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block"
+                  >
+                    <img
+                      src={file.url}
+                      alt={file.filename}
+                      className="h-24 w-24 object-cover rounded-lg hover:opacity-80 transition-opacity"
+                    />
+                  </a>
+                ) : (
+                  <a
+                    key={index}
+                    href={file.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 px-3 py-2 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+                  >
+                    <span>{file.type === 'pdf' ? '📄' : '📎'}</span>
+                    <span className="text-sm text-gray-700 max-w-[150px] truncate">
+                      {file.filename}
+                    </span>
+                    <span className="text-xs text-indigo-500">⬇</span>
+                  </a>
+                )
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Actions */}
         <div className="flex items-center justify-between pt-4 border-t border-gray-100">
           <div className="flex items-center space-x-4">
