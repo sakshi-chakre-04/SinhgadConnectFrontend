@@ -81,12 +81,23 @@ const PostDetail = () => {
         return (
             <div className="min-h-screen bg-gray-50 p-6">
                 <div className="max-w-4xl mx-auto">
-                    <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
-                        {error || 'Post not found'}
+                    <div className="bg-white rounded-2xl shadow-lg p-8 text-center">
+                        <div className="text-6xl mb-4">🗑️</div>
+                        <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                            {error === 'Post not found' ? 'Post Deleted' : 'Post Not Found'}
+                        </h2>
+                        <p className="text-gray-600 mb-6">
+                            {error === 'Post not found'
+                                ? 'This post has been deleted by its author.'
+                                : error || 'The post you\'re looking for doesn\'t exist.'}
+                        </p>
+                        <Link
+                            to="/"
+                            className="inline-flex items-center px-6 py-3 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition-colors font-medium"
+                        >
+                            ← Back to Dashboard
+                        </Link>
                     </div>
-                    <Link to="/posts" className="text-indigo-600 hover:underline">
-                        ← Back to posts
-                    </Link>
                 </div>
             </div>
         );
@@ -138,8 +149,8 @@ const PostDetail = () => {
                                 <button
                                     onClick={() => handleVote('upvote')}
                                     className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-colors ${post.userVote === 1
-                                            ? 'bg-green-100 text-green-600'
-                                            : 'text-gray-500 hover:bg-gray-100'
+                                        ? 'bg-green-100 text-green-600'
+                                        : 'text-gray-500 hover:bg-gray-100'
                                         }`}
                                 >
                                     <span className="text-xl">▲</span>
@@ -149,8 +160,8 @@ const PostDetail = () => {
                                 <button
                                     onClick={() => handleVote('downvote')}
                                     className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-colors ${post.userVote === -1
-                                            ? 'bg-red-100 text-red-600'
-                                            : 'text-gray-500 hover:bg-gray-100'
+                                        ? 'bg-red-100 text-red-600'
+                                        : 'text-gray-500 hover:bg-gray-100'
                                         }`}
                                 >
                                     <span className="text-xl">▼</span>

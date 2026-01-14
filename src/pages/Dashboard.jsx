@@ -24,9 +24,9 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="space-y-8">
-      {/* Futuristic Hero Section */}
-      <div className="relative overflow-hidden rounded-3xl p-8 text-white shadow-2xl hover-glow transition-all duration-500 group">
+    <div className="space-y-6">
+      {/* Futuristic Hero Section - Compact Version */}
+      <div className="relative overflow-hidden rounded-3xl p-6 text-white shadow-2xl hover-glow transition-all duration-500 group">
         {/* Animated Gradient Background */}
         <div className="absolute inset-0 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500 animate-gradient-x"></div>
 
@@ -35,30 +35,30 @@ const Dashboard = () => {
         <div className="absolute -top-24 -right-24 w-64 h-64 bg-white/20 blur-3xl rounded-full group-hover:scale-110 transition-transform duration-700"></div>
         <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-blue-500/30 blur-3xl rounded-full group-hover:scale-110 transition-transform duration-700"></div>
 
-        <div className="relative z-10 flex flex-col gap-6">
+        <div className="relative z-10 flex flex-col gap-4">
           <div>
-            <div className="inline-flex items-center px-3 py-1 rounded-full bg-white/20 backdrop-blur-md border border-white/20 text-xs font-medium mb-3">
+            <div className="inline-flex items-center px-3 py-1 rounded-full bg-white/20 backdrop-blur-md border border-white/20 text-xs font-medium mb-2">
               <span className="animate-pulse mr-2">✨</span> Welcome to the future of learning
             </div>
-            <h1 className="text-4xl font-bold tracking-tight mb-2">
+            <h1 className="text-3xl font-bold tracking-tight mb-1">
               {getGreeting()}, {user?.name?.split(' ')[0]}!
             </h1>
-            <p className="text-indigo-100 font-medium text-lg">
+            <p className="text-indigo-100 font-medium text-base">
               {user?.department} • Year {user?.year}
             </p>
           </div>
 
-          <div className="flex flex-wrap gap-4 mt-2">
+          <div className="flex flex-wrap gap-3 mt-1">
             <button
               onClick={() => openModal()}
-              className="inline-flex items-center gap-2 px-6 py-3 bg-white text-indigo-600 font-bold rounded-xl hover:bg-white/90 hover:scale-105 transition-all shadow-lg hover:shadow-indigo-500/30 group/btn"
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-white text-indigo-600 font-bold rounded-xl hover:bg-white/90 hover:scale-105 transition-all shadow-lg hover:shadow-indigo-500/30 group/btn text-sm"
             >
               <PlusCircleIcon className="w-5 h-5 group-hover/btn:rotate-90 transition-transform" />
               Ask Question
             </button>
             <button
               onClick={() => navigate('/search')}
-              className="inline-flex items-center gap-2 px-6 py-3 bg-white/10 backdrop-blur-md border border-white/20 text-white font-bold rounded-xl hover:bg-white/20 hover:scale-105 transition-all shadow-lg"
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-white/10 backdrop-blur-md border border-white/20 text-white font-bold rounded-xl hover:bg-white/20 hover:scale-105 transition-all shadow-lg text-sm"
             >
               <FireIcon className="w-5 h-5" />
               Trending
@@ -68,7 +68,40 @@ const Dashboard = () => {
       </div>
 
       {/* Feed Section - Increased top margin for separation */}
-      <div className="pt-4">
+      <div className="pt-6 text-2xl font-bold text-gray-900 flex items-center gap-2">
+      </div>
+
+      {/* Search Bar Section */}
+      <div className="relative w-full mb-6 z-20">
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            const query = e.target.search.value;
+            if (query.trim()) navigate(`/search?q=${encodeURIComponent(query)}`);
+          }}
+          className="relative group"
+        >
+          <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-2xl blur opacity-25 group-hover:opacity-40 transition duration-1000"></div>
+          <div className="relative flex items-center bg-white/90 backdrop-blur-xl border border-white/40 rounded-2xl shadow-lg p-2 transition-all duration-300 focus-within:ring-2 focus-within:ring-indigo-500/20 focus-within:scale-[1.01]">
+            <div className="pl-4 text-gray-400">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6">
+                <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+              </svg>
+            </div>
+            <input
+              type="text"
+              name="search"
+              placeholder="Search specific placement topics like 'TCS', 'Interview Tip'..."
+              className="w-full bg-transparent border-none focus:ring-0 text-gray-800 placeholder-gray-500 text-lg py-3 px-4"
+            />
+            <button type="submit" className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-xl font-medium transition-colors shadow-lg shadow-indigo-500/20">
+              Search
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <div>
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-bold text-gray-900 flex items-center gap-2">
             <SparklesIcon className="w-5 h-5 text-indigo-500" />

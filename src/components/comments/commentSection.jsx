@@ -25,9 +25,9 @@ const CommentSection = ({ postId, onCommentCountUpdate }) => {
     try {
       setLoading(true);
       setError('');
-      
+
       const response = await commentsAPI.getComments(postId);
-      
+
       // Handle different response formats
       let commentsList = [];
       if (Array.isArray(response)) {
@@ -37,7 +37,7 @@ const CommentSection = ({ postId, onCommentCountUpdate }) => {
       } else if (response?.data && Array.isArray(response.data)) {
         commentsList = response.data;
       }
-      
+
       setComments(commentsList);
       if (onCommentCountUpdate) {
         onCommentCountUpdate(commentsList.length);
@@ -63,15 +63,15 @@ const CommentSection = ({ postId, onCommentCountUpdate }) => {
     try {
       setIsSubmitting(true);
       const toastId = toast.loading('Posting comment...');
-      
+
       const response = await commentsAPI.createComment(postId, data.content);
-      
+
       if (response?.commentCount && onCommentCountUpdate) {
         onCommentCountUpdate(response.commentCount);
       }
-      
+
       await loadComments();
-      
+
       toast.update(toastId, {
         render: 'Comment posted successfully!',
         type: 'success',
@@ -103,13 +103,18 @@ const CommentSection = ({ postId, onCommentCountUpdate }) => {
     }
   };
 
+  const handleDelete = async (commentId) => {
+    // Reload comments after deletion
+    await loadComments();
+  };
+
   if (loading) return <div className="text-center py-4 text-gray-500">Loading comments...</div>;
   if (error) return <div className="text-center py-4 text-red-500">{error}</div>;
 
   return (
     <div className="mt-4">
       <CommentForm onSubmit={handleSubmit} user={user} isSubmitting={isSubmitting} />
-      
+
       <div className="space-y-4">
         {comments.length > 0 ? (
           comments.map(comment => (
@@ -118,6 +123,7 @@ const CommentSection = ({ postId, onCommentCountUpdate }) => {
               comment={comment}
               user={user}
               onVote={handleVote}
+              onDelete={handleDelete}
             />
           ))
         ) : (

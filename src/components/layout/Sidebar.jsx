@@ -18,7 +18,6 @@ import {
 
 const navigation = [
     { name: 'Home', href: '/dashboard', icon: HomeIcon, activeIcon: HomeIconSolid },
-    { name: 'Search', href: '/search', icon: MagnifyingGlassIcon, activeIcon: MagnifyingGlassIconSolid },
     { name: 'Notifications', href: '/notifications', icon: BellIcon, activeIcon: BellIconSolid },
     { name: 'Community', href: '/community', icon: ChatBubbleLeftRightIcon, activeIcon: ChatBubbleLeftRightIconSolid },
     { name: 'Profile', href: '/profile', icon: UserIcon, activeIcon: UserIconSolid },

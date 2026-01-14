@@ -53,19 +53,25 @@ const NotificationItem = ({ notification, onMarkAsRead }) => {
 
   return (
     <div
-      className={`p-4 border-b hover:bg-gray-50 cursor-pointer transition-colors ${!isRead ? 'bg-blue-50' : ''}`}
+      className={`p-5 transition-all duration-300 cursor-pointer border-l-4 hover:pl-6 ${!isRead
+          ? 'bg-indigo-50/30 border-indigo-500'
+          : 'bg-transparent border-transparent hover:bg-gray-50/50'
+        }`}
       onClick={handleClick}
     >
-      <div className="flex items-start">
-        <div className="text-xl mr-3">{getNotificationIcon()}</div>
+      <div className="flex items-start gap-4">
+        <div className="text-2xl mt-1 filter drop-shadow-sm">{getNotificationIcon()}</div>
         <div className="flex-1">
-          <p className="text-gray-800">{getNotificationMessage()}</p>
-          <p className="text-sm text-gray-500 mt-1">
+          <p className={`text-gray-900 leading-snug ${!isRead ? 'font-semibold' : 'font-medium'}`}>
+            {getNotificationMessage()}
+          </p>
+          <p className="text-sm text-gray-500 mt-1.5 font-medium flex items-center gap-1">
+            <span className="w-1.5 h-1.5 rounded-full bg-gray-300"></span>
             {new Date(notification.createdAt).toLocaleString()}
           </p>
         </div>
         {!isRead && (
-          <div className="w-2 h-2 bg-blue-500 rounded-full ml-2 mt-1"></div>
+          <div className="w-2.5 h-2.5 bg-indigo-500 rounded-full mt-2 animate-pulse shadow-lg shadow-indigo-500/40"></div>
         )}
       </div>
     </div>
@@ -127,21 +133,13 @@ export default function Notifications() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 p-6">
-        <div className="max-w-4xl mx-auto">
-          <div className="bg-white rounded-xl shadow-lg p-8">
-            <div className="flex justify-between items-center mb-6">
-              <h1 className="text-3xl font-bold text-gray-800">Notifications</h1>
-              <div className="animate-pulse h-6 w-24 bg-gray-200 rounded"></div>
-            </div>
-            <div className="space-y-4">
-              {[...Array(3)].map((_, i) => (
-                <div key={i} className="p-4 border rounded-lg animate-pulse">
-                  <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
-                  <div className="h-3 bg-gray-200 rounded w-1/2"></div>
-                </div>
-              ))}
-            </div>
+      <div className="max-w-4xl mx-auto pt-6">
+        <div className="glass-panel p-8 rounded-3xl animate-pulse">
+          <div className="h-8 bg-gray-200/50 rounded w-48 mb-6"></div>
+          <div className="space-y-4">
+            {[...Array(3)].map((_, i) => (
+              <div key={i} className="h-20 bg-gray-100/30 rounded-xl"></div>
+            ))}
           </div>
         </div>
       </div>
@@ -150,72 +148,72 @@ export default function Notifications() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-50 p-6">
-        <div className="max-w-4xl mx-auto">
-          <div className="bg-white rounded-xl shadow-lg p-8">
-            <h1 className="text-3xl font-bold text-gray-800 mb-4">Notifications</h1>
-            <div className="text-center py-12 text-red-500">
-              {error}
-            </div>
-          </div>
+      <div className="max-w-4xl mx-auto pt-6">
+        <div className="glass-panel p-8 rounded-3xl text-center text-red-500">
+          <h1 className="text-3xl font-bold text-gray-800 mb-4">Notifications</h1>
+          {error}
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <div className="max-w-4xl mx-auto">
-        <div className="bg-white rounded-xl shadow-lg overflow-hidden">
-          <div className="p-6 border-b">
-            <div className="flex justify-between items-center">
-              <h1 className="text-3xl font-bold text-gray-800">Notifications</h1>
-              {unreadCount > 0 && (
-                <button
-                  onClick={handleMarkAllAsRead}
-                  className="text-sm text-blue-600 hover:text-blue-800"
-                >
-                  Mark all as read
-                </button>
-              )}
+    <div className="max-w-4xl mx-auto pt-6 pb-20">
+      <div className="glass-panel rounded-3xl overflow-hidden shadow-2xl">
+        <div className="p-8 border-b border-white/20">
+          <div className="flex justify-between items-center">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600">
+                <span className="text-xl">🔔</span>
+              </div>
+              <h1 className="text-3xl font-bold text-gray-900">Notifications</h1>
             </div>
+
             {unreadCount > 0 && (
-              <p className="text-sm text-gray-600 mt-1">
-                {unreadCount} unread {unreadCount === 1 ? 'notification' : 'notifications'}
-              </p>
+              <button
+                onClick={handleMarkAllAsRead}
+                className="px-4 py-2 text-sm font-medium text-indigo-600 bg-indigo-50 hover:bg-indigo-100 rounded-lg transition-colors"
+              >
+                Mark all read
+              </button>
             )}
           </div>
-
-          {notifications.length > 0 ? (
-            <div className="divide-y">
-              {notifications.map(notification => (
-                <NotificationItem
-                  key={notification._id}
-                  notification={notification}
-                  onMarkAsRead={handleMarkAsRead}
-                />
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-16">
-              <div className="w-20 h-20 mx-auto mb-4 bg-indigo-100 rounded-full flex items-center justify-center">
-                <svg className="w-10 h-10 text-indigo-500" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
-                </svg>
-              </div>
-              <h3 className="text-xl font-semibold text-gray-800 mb-2">You're all caught up! 🎉</h3>
-              <p className="text-gray-500 mb-6 max-w-sm mx-auto">
-                Check out the latest posts to get notified when someone replies to your questions!
-              </p>
-              <button
-                onClick={() => window.location.href = '/dashboard'}
-                className="px-5 py-2.5 bg-indigo-600 text-white font-medium rounded-lg hover:bg-indigo-700 transition-colors"
-              >
-                Explore Posts
-              </button>
-            </div>
+          {unreadCount > 0 && (
+            <p className="text-sm text-gray-500 mt-2 ml-14">
+              You have {unreadCount} unread {unreadCount === 1 ? 'notification' : 'notifications'}
+            </p>
           )}
         </div>
+
+        {notifications.length > 0 ? (
+          <div className="divide-y divide-gray-100/50">
+            {notifications.map(notification => (
+              <NotificationItem
+                key={notification._id}
+                notification={notification}
+                onMarkAsRead={handleMarkAsRead}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-20">
+            <div className="w-24 h-24 mx-auto mb-6 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-full flex items-center justify-center shadow-inner">
+              <svg className="w-12 h-12 text-indigo-500/80" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+              </svg>
+            </div>
+            <h3 className="text-2xl font-bold text-gray-900 mb-2">All caught up! 🎉</h3>
+            <p className="text-gray-500 mb-8 max-w-sm mx-auto text-lg">
+              Check back later for updates on your posts and discussions.
+            </p>
+            <button
+              onClick={() => window.location.href = '/dashboard'}
+              className="px-8 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold rounded-xl shadow-lg hover:shadow-indigo-500/30 hover:scale-105 transition-all"
+            >
+              Explore Feed
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

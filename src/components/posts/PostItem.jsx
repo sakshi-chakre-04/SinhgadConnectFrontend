@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { selectUser, selectToken } from '../../features/auth/authSlice';
 import CommentSection from '../comments/CommentSection';
 import { formatRelativeDate } from './utils/date';
 import {
   ChevronUpIcon,
   ChevronDownIcon,
   ChatBubbleLeftIcon,
-  ArrowTopRightOnSquareIcon
+  ArrowTopRightOnSquareIcon,
+  TrashIcon
 } from '@heroicons/react/24/outline';
 import { ChatBubbleLeftIcon as ChatBubbleLeftIconSolid } from '@heroicons/react/24/solid';
 
@@ -48,6 +51,37 @@ const SentimentBadge = ({ sentiment }) => {
 
 const PostItem = ({ post, show, onToggleComments, onVote, onCommentCountUpdate, onSuccessRefresh }) => {
   const [showFullContent, setShowFullContent] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const currentUser = useSelector(selectUser);
+  const token = useSelector(selectToken);
+  const navigate = useNavigate();
+
+  // Get user and author IDs as strings for reliable comparison
+  const currentUserId = currentUser?._id || currentUser?.id || '';
+  const postAuthorId = post.author?._id || post.author?.id || '';
+  const isAuthor = currentUserId && postAuthorId && String(currentUserId) === String(postAuthorId);
+
+  const handleDelete = async () => {
+    setIsDeleting(true);
+    try {
+      const response = await fetch(`http://localhost:5000/api/posts/${post._id}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      const data = await response.json();
+      if (data.success) {
+        setShowDeleteModal(false);
+        if (onSuccessRefresh) onSuccessRefresh();
+      } else {
+        alert(data.message || 'Failed to delete post');
+      }
+    } catch (error) {
+      alert('Failed to delete post. Please try again.');
+    } finally {
+      setIsDeleting(false);
+    }
+  };
 
   const postTypeConfig = POST_TYPE_CONFIG[post.postType] || POST_TYPE_CONFIG.discussion;
   const hasLongContent = post.content?.length > 300;
@@ -90,11 +124,20 @@ const PostItem = ({ post, show, onToggleComments, onVote, onCommentCountUpdate, 
           </div>
         </div>
 
-        {/* Badges */}
+        {/* Badges & Delete */}
         <div className="flex items-center gap-2">
           <span className={`tag ${postTypeConfig.className}`}>
             {postTypeConfig.icon} {postTypeConfig.label}
           </span>
+          {isAuthor && (
+            <button
+              onClick={() => setShowDeleteModal(true)}
+              className="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+              title="Delete post"
+            >
+              <TrashIcon className="w-5 h-5" />
+            </button>
+          )}
         </div>
       </div>
 
@@ -235,6 +278,32 @@ const PostItem = ({ post, show, onToggleComments, onVote, onCommentCountUpdate, 
             onCommentCountUpdate={(count) => onCommentCountUpdate(post._id, count)}
             onSuccessRefresh={onSuccessRefresh}
           />
+        </div>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {showDeleteModal && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl p-6 max-w-sm w-full shadow-2xl">
+            <h3 className="text-lg font-bold text-gray-900 mb-2">Delete Post?</h3>
+            <p className="text-gray-600 mb-6">This action cannot be undone. All comments on this post will also be deleted.</p>
+            <div className="flex gap-3">
+              <button
+                onClick={() => setShowDeleteModal(false)}
+                className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 transition-colors"
+                disabled={isDeleting}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleDelete}
+                disabled={isDeleting}
+                className="flex-1 px-4 py-2 bg-red-500 text-white rounded-xl hover:bg-red-600 transition-colors disabled:opacity-50"
+              >
+                {isDeleting ? 'Deleting...' : 'Delete'}
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </article>
