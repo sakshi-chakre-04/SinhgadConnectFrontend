@@ -4,7 +4,20 @@ import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { selectToken } from '../../features/auth/authSlice';
 import { formatDate } from './utils/dateFormatter';
-import { TrashIcon } from '@heroicons/react/24/outline';
+import { TrashIcon, ChevronUpIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
+import { ChevronUpIcon as ChevronUpIconSolid, ChevronDownIcon as ChevronDownIconSolid } from '@heroicons/react/24/solid';
+
+const getAvatarGradient = (name) => {
+  const gradients = [
+    'from-pink-500 to-rose-500',
+    'from-indigo-500 to-blue-500',
+    'from-violet-500 to-purple-500',
+    'from-emerald-500 to-teal-500',
+    'from-amber-500 to-orange-500'
+  ];
+  const index = name?.charCodeAt(0) % gradients.length || 0;
+  return gradients[index];
+};
 
 const CommentItem = ({ comment, user, onVote, onDelete }) => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -37,51 +50,69 @@ const CommentItem = ({ comment, user, onVote, onDelete }) => {
 
   return (
     <>
-      <div className="border-b pb-4">
+      <div className="group relative bg-white/40 hover:bg-white/60 backdrop-blur-sm rounded-2xl p-4 border border-white/50 shadow-sm transition-all mb-3 animate-fadeIn">
         <div className="flex justify-between items-start gap-3">
-          <div className="flex-1">
-            <div className="flex items-center gap-2">
-              <span className="font-semibold">
+          {/* Avatar */}
+          <div className="flex-shrink-0 mt-1">
+            <div className={`w-10 h-10 rounded-full bg-gradient-to-br ${getAvatarGradient(comment?.author?.name)} flex items-center justify-center text-white font-bold shadow-md`}>
+              {comment?.author?.name?.charAt(0).toUpperCase() || 'U'}
+            </div>
+          </div>
+
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2 mb-1">
+              <span className="font-semibold text-gray-900 truncate">
                 {comment?.author?.name || 'Anonymous'}
               </span>
-              <span className="text-sm text-gray-500">
+              <span className="text-gray-300 mx-1">•</span>
+              <span className="text-xs text-gray-500 font-medium">
                 {formatDate(comment?.createdAt)}
               </span>
             </div>
-            <p className="mt-2 text-gray-700">{comment?.content}</p>
-          </div>
 
-          <div className="flex items-center gap-2">
-            {[
-              { type: 'upvote', icon: '▲', color: 'green' },
-              { type: 'downvote', icon: '▼', color: 'red' }
-            ].map(({ type, icon, color }) => {
-              const votes = type === 'upvote' ? comment?.upvotes : comment?.downvotes;
-              const hasVoted = votes?.includes(user?._id);
-              return (
+            <p className="text-gray-700 leading-relaxed whitespace-pre-wrap text-sm">
+              {comment?.content}
+            </p>
+
+            <div className="flex items-center gap-4 mt-3">
+              <div className="flex items-center gap-1 bg-white/50 rounded-lg p-1 border border-white/40">
+                {[
+                  { type: 'upvote', Icon: ChevronUpIcon, SolidIcon: ChevronUpIconSolid, color: 'text-green-600', activeBg: 'bg-green-50' },
+                  { type: 'downvote', Icon: ChevronDownIcon, SolidIcon: ChevronDownIconSolid, color: 'text-red-500', activeBg: 'bg-red-50' }
+                ].map(({ type, Icon, SolidIcon, color, activeBg }) => {
+                  const votes = type === 'upvote' ? comment?.upvotes : comment?.downvotes;
+                  const hasVoted = votes?.includes(user?._id);
+                  const VoteIcon = hasVoted ? SolidIcon : Icon;
+
+                  return (
+                    <button
+                      key={type}
+                      onClick={() => comment?._id && onVote(comment._id, type)}
+                      disabled={!user}
+                      className={`p-1.5 rounded-md transition-all flex items-center gap-1 ${hasVoted
+                        ? `${color} ${activeBg}`
+                        : 'text-gray-400 hover:text-gray-600 hover:bg-white'
+                        } disabled:opacity-50`}
+                    >
+                      <VoteIcon className="w-4 h-4" strokeWidth={2.5} />
+                      <span className={`text-xs font-bold ${hasVoted ? color : 'text-gray-500'}`}>
+                        {votes?.length || 0}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {isAuthor && (
                 <button
-                  key={type}
-                  onClick={() => comment?._id && onVote(comment._id, type)}
-                  disabled={!user}
-                  className={`p-1 transition-colors ${hasVoted
-                    ? `text-${color}-500`
-                    : 'text-gray-500 hover:text-gray-700'
-                    } disabled:opacity-50 disabled:cursor-not-allowed`}
+                  onClick={() => setShowDeleteModal(true)}
+                  className="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors ml-auto opacity-0 group-hover:opacity-100"
+                  title="Delete comment"
                 >
-                  {icon} {votes?.length || 0}
+                  <TrashIcon className="w-4 h-4" />
                 </button>
-              );
-            })}
-
-            {isAuthor && (
-              <button
-                onClick={() => setShowDeleteModal(true)}
-                className="p-1 text-gray-400 hover:text-red-500 transition-colors"
-                title="Delete comment"
-              >
-                <TrashIcon className="w-4 h-4" />
-              </button>
-            )}
+              )}
+            </div>
           </div>
         </div>
       </div>

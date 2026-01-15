@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { selectUser, selectToken } from '../features/auth/authSlice';
+import { useSelector, useDispatch } from 'react-redux';
+import { selectUser, selectToken, logout } from '../features/auth/authSlice';
 import {
   PencilIcon,
   DocumentTextIcon,
@@ -10,7 +10,8 @@ import {
   EnvelopeIcon,
   AcademicCapIcon,
   BuildingOfficeIcon,
-  CalendarIcon
+  CalendarIcon,
+  ArrowRightOnRectangleIcon
 } from '@heroicons/react/24/outline';
 import { api } from '../services/api/api';
 
@@ -30,7 +31,13 @@ const getAvatarGradient = (name) => {
 const Profile = () => {
   const user = useSelector(selectUser);
   const token = useSelector(selectToken);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const handleSignOut = () => {
+    dispatch(logout());
+    navigate('/login');
+  };
 
   const [userData, setUserData] = useState(null);
   const [activeTab, setActiveTab] = useState('posts');
@@ -114,8 +121,8 @@ const Profile = () => {
             {userData?.name?.charAt(0).toUpperCase() || 'U'}
           </div>
 
-          {/* Edit Button - top right */}
-          <div className="flex justify-end pt-3">
+          {/* Edit & Sign Out Buttons - top right */}
+          <div className="flex justify-end pt-3 gap-2">
             <Link
               to="/edit-profile"
               className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 transition-colors shadow-sm"
@@ -123,6 +130,13 @@ const Profile = () => {
               <PencilIcon className="w-4 h-4" />
               Edit Profile
             </Link>
+            <button
+              onClick={handleSignOut}
+              className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 text-gray-500 rounded-xl hover:bg-red-50 hover:text-red-500 hover:border-red-200 transition-colors shadow-sm"
+            >
+              <ArrowRightOnRectangleIcon className="w-4 h-4" />
+              Sign Out
+            </button>
           </div>
 
           {/* User Info */}

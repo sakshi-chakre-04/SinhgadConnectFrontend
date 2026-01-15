@@ -6,19 +6,22 @@ import {
     BellIcon,
     UserIcon,
     ChatBubbleLeftRightIcon,
-    PlusCircleIcon
+    PlusCircleIcon,
+    FireIcon
 } from '@heroicons/react/24/outline';
 import {
     HomeIcon as HomeIconSolid,
     MagnifyingGlassIcon as MagnifyingGlassIconSolid,
     BellIcon as BellIconSolid,
     UserIcon as UserIconSolid,
-    ChatBubbleLeftRightIcon as ChatBubbleLeftRightIconSolid
+    ChatBubbleLeftRightIcon as ChatBubbleLeftRightIconSolid,
+    FireIcon as FireIconSolid
 } from '@heroicons/react/24/solid';
 
 const navigation = [
     { name: 'Home', href: '/dashboard', icon: HomeIcon, activeIcon: HomeIconSolid },
     { name: 'Notifications', href: '/notifications', icon: BellIcon, activeIcon: BellIconSolid },
+    { name: 'Trending', href: '/trending', icon: FireIcon, activeIcon: FireIconSolid },
     { name: 'Community', href: '/community', icon: ChatBubbleLeftRightIcon, activeIcon: ChatBubbleLeftRightIconSolid },
     { name: 'Profile', href: '/profile', icon: UserIcon, activeIcon: UserIconSolid },
 ];
@@ -62,7 +65,7 @@ const Sidebar = ({ onCreatePost }) => {
                 })}
             </div>
 
-            {/* Create Post Button (Moved from duplicate) */}
+            {/* Create Post Button */}
             <button
                 onClick={() => onCreatePost('Create Post')}
                 className="mt-4 flex items-center justify-center gap-2 w-full py-3.5 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all"

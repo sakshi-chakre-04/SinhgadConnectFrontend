@@ -1,4 +1,13 @@
 import React, { useCallback, useState } from 'react';
+import CustomSelect from '../common/CustomSelect';
+import {
+  ChatBubbleLeftIcon,
+  HandThumbUpIcon,
+  HandThumbDownIcon,
+  ChevronDownIcon,
+  FunnelIcon,
+  ArrowsUpDownIcon
+} from '@heroicons/react/24/outline';
 import { useSelector } from 'react-redux';
 import { selectToken } from '../../features/auth/authSlice';
 import PostsList from './PostsList';
@@ -107,25 +116,26 @@ const PostsContainer = () => {
         <div className="flex flex-col md:flex-row md:items-center gap-3">
           <h1 className="text-lg font-bold text-gray-800 flex-shrink-0">All Posts</h1>
 
-          <div className="flex flex-1 gap-2 md:justify-end">
-            <select
-              value={filter}
-              onChange={(e) => setFilter(e.target.value)}
-              className="px-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-gray-50"
-            >
-              {DEPARTMENTS.map(({ value, label }) => (
-                <option key={value} value={value}>{label}</option>
-              ))}
-            </select>
-            <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
-              className="px-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-gray-50"
-            >
-              {SORT_OPTIONS.map(({ value, label }) => (
-                <option key={value} value={value}>{label}</option>
-              ))}
-            </select>
+          <div className="flex flex-1 gap-3 md:justify-end">
+            <div className="w-full md:w-auto">
+              <CustomSelect
+                value={filter}
+                onChange={(e) => setFilter(e.target.value)}
+                options={DEPARTMENTS}
+                icon={FunnelIcon}
+                placeholder="Filter by Department"
+              />
+            </div>
+
+            <div className="w-full md:w-auto">
+              <CustomSelect
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+                options={SORT_OPTIONS}
+                icon={ArrowsUpDownIcon}
+                placeholder="Sort by"
+              />
+            </div>
           </div>
         </div>
       </div>

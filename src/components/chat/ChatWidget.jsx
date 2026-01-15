@@ -3,6 +3,138 @@ import { PaperAirplaneIcon, SparklesIcon, XMarkIcon } from '@heroicons/react/24/
 import { useSelector } from 'react-redux';
 import { selectToken } from '../../features/auth/authSlice';
 
+// Polished product-style markdown renderer
+const renderMarkdown = (text) => {
+    if (!text) return null;
+
+    const lines = text.split('\n');
+    const sections = [];
+    let currentSection = null;
+    let currentItems = [];
+
+    const flushItems = () => {
+        if (currentItems.length > 0) {
+            sections.push({ type: 'items', items: [...currentItems] });
+            currentItems = [];
+        }
+    };
+
+    const flushSection = () => {
+        flushItems();
+        if (currentSection) {
+            sections.push(currentSection);
+            currentSection = null;
+        }
+    };
+
+    lines.forEach((line) => {
+        const trimmed = line.trim();
+
+        // Main headers (##) - create visual section cards
+        if (trimmed.startsWith('## ')) {
+            flushSection();
+            currentSection = { type: 'header', title: trimmed.slice(3), level: 2 };
+        }
+        // Subheaders (### or ####) - create styled labels
+        else if (trimmed.startsWith('#### ')) {
+            flushItems();
+            sections.push({ type: 'subheader', title: trimmed.slice(5), level: 4 });
+        }
+        else if (trimmed.startsWith('### ')) {
+            flushItems();
+            sections.push({ type: 'subheader', title: trimmed.slice(4), level: 3 });
+        }
+        // Bullet points
+        else if (trimmed.startsWith('- ') || trimmed.startsWith('• ')) {
+            currentItems.push({ type: 'bullet', content: trimmed.slice(2) });
+        }
+        // Numbered lists
+        else if (/^\d+\.\s/.test(trimmed)) {
+            const match = trimmed.match(/^(\d+)\.\s(.*)/);
+            if (match) {
+                currentItems.push({ type: 'numbered', num: match[1], content: match[2] });
+            }
+        }
+        // Regular text
+        else if (trimmed) {
+            currentItems.push({ type: 'text', content: trimmed });
+        }
+    });
+
+    flushSection();
+    flushItems();
+
+    // Render sections with proper styling
+    return (
+        <div className="space-y-3">
+            {sections.map((section, idx) => {
+                if (section.type === 'header') {
+                    return (
+                        <div key={idx} className="flex items-center gap-2 py-1.5 border-b border-indigo-100">
+                            <div className="w-1 h-4 bg-gradient-to-b from-indigo-500 to-violet-500 rounded-full"></div>
+                            <h3 className="font-bold text-gray-900 text-sm">{section.title}</h3>
+                        </div>
+                    );
+                }
+
+                if (section.type === 'subheader') {
+                    return (
+                        <div key={idx} className="pt-2">
+                            <span className="text-[10px] font-bold uppercase tracking-widest text-indigo-600 bg-indigo-50 px-2 py-1 rounded">
+                                {section.title}
+                            </span>
+                        </div>
+                    );
+                }
+
+                if (section.type === 'items') {
+                    return (
+                        <div key={idx} className="space-y-2 pl-1">
+                            {section.items.map((item, iIdx) => {
+                                if (item.type === 'bullet') {
+                                    return (
+                                        <div key={iIdx} className="flex items-start gap-2.5 py-1 px-2 bg-gray-50/80 rounded-lg">
+                                            <span className="w-1.5 h-1.5 mt-1.5 bg-indigo-500 rounded-full flex-shrink-0"></span>
+                                            <span className="text-gray-700 text-sm leading-relaxed">{formatInlineMarkdown(item.content)}</span>
+                                        </div>
+                                    );
+                                }
+                                if (item.type === 'numbered') {
+                                    return (
+                                        <div key={iIdx} className="flex items-start gap-2.5 py-1.5 px-2 bg-gradient-to-r from-indigo-50/50 to-transparent rounded-lg">
+                                            <span className="w-5 h-5 bg-indigo-100 text-indigo-700 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">
+                                                {item.num}
+                                            </span>
+                                            <span className="text-gray-700 text-sm leading-relaxed pt-0.5">{formatInlineMarkdown(item.content)}</span>
+                                        </div>
+                                    );
+                                }
+                                return (
+                                    <p key={iIdx} className="text-gray-600 text-sm leading-relaxed py-0.5">{formatInlineMarkdown(item.content)}</p>
+                                );
+                            })}
+                        </div>
+                    );
+                }
+
+                return null;
+            })}
+        </div>
+    );
+};
+
+// Handle inline markdown (bold, emoji indicators)
+const formatInlineMarkdown = (text) => {
+    if (!text) return text;
+    const parts = text.split(/(\*\*[^*]+\*\*)/g);
+    return parts.map((part, i) => {
+        if (part.startsWith('**') && part.endsWith('**')) {
+            return <strong key={i} className="font-semibold text-gray-900">{part.slice(2, -2)}</strong>;
+        }
+        return part;
+    });
+};
+
 const ChatWidget = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [messages, setMessages] = useState([
@@ -125,7 +257,12 @@ const ChatWidget = () => {
                                             ? 'bg-indigo-600 text-white rounded-2xl rounded-br-sm'
                                             : 'bg-white text-gray-800 rounded-2xl rounded-bl-sm shadow-sm border border-gray-100'
                                         }`}>
-                                        <p className="whitespace-pre-wrap">{msg.content}</p>
+                                        <div className="prose prose-sm max-w-none">
+                                            {msg.role === 'user'
+                                                ? <p className="whitespace-pre-wrap m-0">{msg.content}</p>
+                                                : renderMarkdown(msg.content)
+                                            }
+                                        </div>
 
                                         {/* Sources */}
                                         {msg.sources && msg.sources.length > 0 && msg.role === 'assistant' && (
