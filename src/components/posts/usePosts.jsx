@@ -18,7 +18,7 @@ export function usePosts({ filter, sortBy }) {
       });
       if (filter !== 'all') params.append('department', filter);
 
-      const res = await fetch(`http://localhost:5000/api/posts?${params}`);
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'https://sinhgadconnectbackend.onrender.com/api'}/posts?${params}`);
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || 'Failed to fetch posts');
       if (!ignore) setPosts(data.posts || []);
@@ -34,7 +34,7 @@ export function usePosts({ filter, sortBy }) {
   }, [filter, sortBy]);
 
   useEffect(() => {
-    let cleanup = () => {};
+    let cleanup = () => { };
     fetchPosts().then((c) => {
       if (typeof c === 'function') cleanup = c;
     });

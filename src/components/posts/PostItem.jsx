@@ -65,7 +65,7 @@ const PostItem = ({ post, show, onToggleComments, onVote, onCommentCountUpdate, 
   const handleDelete = async () => {
     setIsDeleting(true);
     try {
-      const response = await fetch(`http://localhost:5000/api/posts/${post._id}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://sinhgadconnectbackend.onrender.com/api'}/posts/${post._id}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       });

@@ -14,7 +14,7 @@ export const SocketProvider = ({ children }) => {
     useEffect(() => {
         // Only connect if user is logged in
         if (user?._id) {
-            const newSocket = io('http://localhost:5000', {
+            const newSocket = io(import.meta.env.VITE_SOCKET_URL || 'https://sinhgadconnectbackend.onrender.com', {
                 withCredentials: true,
                 transports: ['websocket', 'polling']
             });

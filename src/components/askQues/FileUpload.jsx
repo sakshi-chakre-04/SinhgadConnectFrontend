@@ -21,7 +21,7 @@ const FileUpload = ({ onFilesUploaded, maxFiles = 5 }) => {
                 const formData = new FormData();
                 formData.append('file', file);
 
-                const response = await fetch('http://localhost:5000/api/upload', {
+                const response = await fetch((import.meta.env.VITE_API_URL || 'https://sinhgadconnectbackend.onrender.com/api') + '/upload', {
                     method: 'POST',
                     headers: {
                         'Authorization': `Bearer ${localStorage.getItem('token')}`

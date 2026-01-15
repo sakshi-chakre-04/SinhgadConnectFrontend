@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:5000/api';
+// Use environment variable or default to production Render URL
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://sinhgadconnectbackend.onrender.com/api';
 
 // Create axios instance with default config
 const api = axios.create({
@@ -20,9 +21,9 @@ export const injectStore = (_store) => {
 };
 
 // Helper to get token
-const getToken = () => 
-  store?.getState()?.auth?.token || 
-  localStorage.getItem('token') || 
+const getToken = () =>
+  store?.getState()?.auth?.token ||
+  localStorage.getItem('token') ||
   sessionStorage.getItem('token');
 
 // Helper to clear auth data
@@ -39,7 +40,7 @@ api.interceptors.request.use(
     // Public endpoints that don't require auth
     const publicEndpoints = ['/auth/login', '/auth/register'];
     const isPublic = publicEndpoints.some(endpoint => config.url.includes(endpoint));
-    
+
     if (!isPublic) {
       // All other endpoints require the token
       const token = getToken();
@@ -47,7 +48,7 @@ api.interceptors.request.use(
         config.headers.Authorization = `Bearer ${token}`;
       }
     }
-    
+
     return config;
   },
   (error) => Promise.reject(error)
@@ -59,19 +60,19 @@ api.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
-    
+
     // Handle 401 Unauthorized
     if (error.response?.status === 401 && !originalRequest._retry && !originalRequest.url.includes('/auth/')) {
       originalRequest._retry = true;
-      
+
       // Clear auth and redirect to login
       clearAuthData();
-      
+
       if (!window.location.pathname.includes('/login')) {
         window.location.href = `/login?returnUrl=${encodeURIComponent(window.location.pathname)}`;
       }
     }
-    
+
     return Promise.reject(error);
   }
 );

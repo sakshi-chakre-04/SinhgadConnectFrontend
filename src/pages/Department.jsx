@@ -51,7 +51,7 @@ const Department = () => {
       return;
     }
     try {
-      const response = await fetch(`http://localhost:5000/api/posts/${postId}/vote`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://sinhgadconnectbackend.onrender.com/api'}/posts/${postId}/vote`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,

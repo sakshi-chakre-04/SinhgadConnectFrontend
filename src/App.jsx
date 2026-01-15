@@ -5,7 +5,7 @@ import { store } from './store/store';
 import { injectStore } from './services/api/api';
 import { useModal } from './hooks/useModal';
 import ProtectedRoute from './components/ProtectedRoute';
-import Login from './pages/login';
+import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import Navbar from './components/navbar';
