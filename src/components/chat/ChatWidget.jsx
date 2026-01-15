@@ -35,7 +35,7 @@ const renderMarkdown = (text) => {
             flushSection();
             currentSection = { type: 'header', title: trimmed.slice(3), level: 2 };
         }
-        // Subheaders (### or ####) - create styled labels
+        // Subheaders (### or ####) - create styled label
         else if (trimmed.startsWith('#### ')) {
             flushItems();
             sections.push({ type: 'subheader', title: trimmed.slice(5), level: 4 });
