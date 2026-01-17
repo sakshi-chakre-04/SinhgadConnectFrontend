@@ -12,7 +12,7 @@ const hallOfFameVideos = [
         role: 'Analyst',
         year: '2026',
         department: 'Computer',
-        videoId: 'https://youtu.be/uBMUfPphCIY?si=5-87tNJYYP5_oN2i', // Replace with actual YouTube video ID
+        videoId: 'uBMUfPphCIY?si=5-87tNJYYP5_oN2i', // Replace with actual YouTube video ID
         thumbnail: null // Will auto-generate from video ID
     },
     {
@@ -22,7 +22,7 @@ const hallOfFameVideos = [
         role: 'Graduate Engineer Trainee',
         year: '2026',
         department: 'ENTC',
-        videoId: 'https://youtu.be/UfZbxHGCx5U?si=-FxYmfb__JmbAF8R', // Replace with actual YouTube video ID
+        videoId: 'UfZbxHGCx5U?si=-FxYmfb__JmbAF8R', // Replace with actual YouTube video ID
         thumbnail: null
     },
     {
@@ -120,8 +120,8 @@ const HallOfFame = () => {
                         key={year}
                         onClick={() => setFilterYear(year)}
                         className={`px-4 py-2 rounded-xl text-sm font-medium whitespace-nowrap transition-all ${filterYear === year
-                                ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-lg shadow-orange-500/20'
-                                : 'bg-white border border-gray-200 text-gray-600 hover:border-orange-300 hover:text-orange-600'
+                            ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-lg shadow-orange-500/20'
+                            : 'bg-white border border-gray-200 text-gray-600 hover:border-orange-300 hover:text-orange-600'
                             }`}
                     >
                         {year === 'all' ? 'All Years' : `Batch ${year}`}
