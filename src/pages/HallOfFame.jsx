@@ -7,22 +7,22 @@ import { TrophyIcon as TrophyIconSolid } from '@heroicons/react/24/solid';
 const hallOfFameVideos = [
     {
         id: 1,
-        name: 'Rahul Sharma',
-        company: 'TCS',
-        role: 'Software Developer',
-        year: '2024',
+        name: 'Sarah Khambatta',
+        company: 'BNY Mellon',
+        role: 'Analyst',
+        year: '2026',
         department: 'Computer',
-        videoId: 'dQw4w9WgXcQ', // Replace with actual YouTube video ID
+        videoId: 'https://youtu.be/uBMUfPphCIY?si=5-87tNJYYP5_oN2i', // Replace with actual YouTube video ID
         thumbnail: null // Will auto-generate from video ID
     },
     {
         id: 2,
-        name: 'Priya Patel',
-        company: 'Infosys',
-        role: 'System Engineer',
-        year: '2024',
-        department: 'IT',
-        videoId: 'dQw4w9WgXcQ', // Replace with actual YouTube video ID
+        name: 'Ananya Mohan',
+        company: 'LTIMindtree',
+        role: 'Graduate Engineer Trainee',
+        year: '2026',
+        department: 'ENTC',
+        videoId: 'https://youtu.be/UfZbxHGCx5U?si=-FxYmfb__JmbAF8R', // Replace with actual YouTube video ID
         thumbnail: null
     },
     {
