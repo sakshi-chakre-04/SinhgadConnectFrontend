@@ -37,8 +37,16 @@ const hallOfFameVideos = [
     }
 ];
 
+// Helper to extract clean YouTube video ID (removes query params like ?si=...)
+const getCleanVideoId = (videoId) => {
+    if (!videoId) return '';
+    // Remove any query parameters
+    return videoId.split('?')[0].split('&')[0];
+};
+
 const VideoCard = ({ video, onPlay }) => {
-    const thumbnailUrl = video.thumbnail || `https://img.youtube.com/vi/${video.videoId}/maxresdefault.jpg`;
+    const cleanId = getCleanVideoId(video.videoId);
+    const thumbnailUrl = video.thumbnail || `https://img.youtube.com/vi/${cleanId}/maxresdefault.jpg`;
 
     return (
         <div className="group bg-white/80 backdrop-blur-sm rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-white/50 hover:-translate-y-1">
@@ -52,7 +60,7 @@ const VideoCard = ({ video, onPlay }) => {
                     alt={`${video.name}'s success story`}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     onError={(e) => {
-                        e.target.src = `https://img.youtube.com/vi/${video.videoId}/hqdefault.jpg`;
+                        e.target.src = `https://img.youtube.com/vi/${cleanId}/hqdefault.jpg`;
                     }}
                 />
                 {/* Play Button Overlay */}
@@ -177,7 +185,7 @@ const HallOfFame = () => {
                         <iframe
                             width="100%"
                             height="100%"
-                            src={`https://www.youtube.com/embed/${selectedVideo.videoId}?autoplay=1`}
+                            src={`https://www.youtube.com/embed/${getCleanVideoId(selectedVideo.videoId)}?autoplay=1`}
                             title={`${selectedVideo.name}'s Success Story`}
                             frameBorder="0"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
