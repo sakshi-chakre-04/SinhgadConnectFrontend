@@ -7,7 +7,8 @@ import {
     UserIcon,
     ChatBubbleLeftRightIcon,
     PlusCircleIcon,
-    FireIcon
+    FireIcon,
+    TrophyIcon
 } from '@heroicons/react/24/outline';
 import {
     HomeIcon as HomeIconSolid,
@@ -15,13 +16,15 @@ import {
     BellIcon as BellIconSolid,
     UserIcon as UserIconSolid,
     ChatBubbleLeftRightIcon as ChatBubbleLeftRightIconSolid,
-    FireIcon as FireIconSolid
+    FireIcon as FireIconSolid,
+    TrophyIcon as TrophyIconSolid
 } from '@heroicons/react/24/solid';
 
 const navigation = [
     { name: 'Home', href: '/dashboard', icon: HomeIcon, activeIcon: HomeIconSolid },
     { name: 'Notifications', href: '/notifications', icon: BellIcon, activeIcon: BellIconSolid },
     { name: 'Trending', href: '/trending', icon: FireIcon, activeIcon: FireIconSolid },
+    { name: 'Hall of Fame', href: '/hall-of-fame', icon: TrophyIcon, activeIcon: TrophyIconSolid },
     { name: 'Community', href: '/community', icon: ChatBubbleLeftRightIcon, activeIcon: ChatBubbleLeftRightIconSolid },
     { name: 'Profile', href: '/profile', icon: UserIcon, activeIcon: UserIconSolid },
 ];
