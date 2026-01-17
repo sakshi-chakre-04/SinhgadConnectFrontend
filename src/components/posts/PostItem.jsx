@@ -9,9 +9,10 @@ import {
   ChevronDownIcon,
   ChatBubbleLeftIcon,
   ArrowTopRightOnSquareIcon,
-  TrashIcon
+  TrashIcon,
+  SparklesIcon
 } from '@heroicons/react/24/outline';
-import { ChatBubbleLeftIcon as ChatBubbleLeftIconSolid } from '@heroicons/react/24/solid';
+import { ChatBubbleLeftIcon as ChatBubbleLeftIconSolid, SparklesIcon as SparklesIconSolid } from '@heroicons/react/24/solid';
 
 // Post type configuration
 const POST_TYPE_CONFIG = {
@@ -53,6 +54,9 @@ const PostItem = ({ post, show, onToggleComments, onVote, onCommentCountUpdate, 
   const [showFullContent, setShowFullContent] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [aiSummary, setAiSummary] = useState(post.aiSummary || '');
+  const [showSummary, setShowSummary] = useState(false);
+  const [isSummarizing, setIsSummarizing] = useState(false);
   const currentUser = useSelector(selectUser);
   const token = useSelector(selectToken);
   const navigate = useNavigate();
@@ -80,6 +84,36 @@ const PostItem = ({ post, show, onToggleComments, onVote, onCommentCountUpdate, 
       alert('Failed to delete post. Please try again.');
     } finally {
       setIsDeleting(false);
+    }
+  };
+
+  const handleSummarize = async () => {
+    if (aiSummary) {
+      setShowSummary(!showSummary);
+      return;
+    }
+
+    setIsSummarizing(true);
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://sinhgadconnectbackend.onrender.com/api'}/posts/${post._id}/summarize`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      const data = await response.json();
+      if (data.success) {
+        setAiSummary(data.summary);
+        setShowSummary(true);
+      } else {
+        alert(data.message || 'Failed to generate summary');
+      }
+    } catch (error) {
+      console.error('Summary error:', error);
+      alert('Failed to generate summary. Please try again.');
+    } finally {
+      setIsSummarizing(false);
     }
   };
 
@@ -257,6 +291,28 @@ const PostItem = ({ post, show, onToggleComments, onVote, onCommentCountUpdate, 
             )}
             <span className="font-medium">{post.commentCount || 0}</span>
           </button>
+
+          {/* AI Summarize */}
+          <button
+            onClick={handleSummarize}
+            disabled={isSummarizing}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-all ml-2 ${showSummary
+              ? 'bg-violet-100 text-violet-600'
+              : 'hover:bg-[var(--bg-secondary)] text-[var(--text-muted)]'
+              } ${isSummarizing ? 'opacity-60 cursor-wait' : ''}`}
+            title={aiSummary ? (showSummary ? 'Hide summary' : 'Show summary') : 'Generate AI summary'}
+          >
+            {isSummarizing ? (
+              <div className="w-5 h-5 border-2 border-violet-400 border-t-transparent rounded-full animate-spin" />
+            ) : showSummary ? (
+              <SparklesIconSolid className="w-5 h-5" />
+            ) : (
+              <SparklesIcon className="w-5 h-5" />
+            )}
+            <span className="font-medium text-sm">
+              {isSummarizing ? 'Summarizing...' : (aiSummary ? (showSummary ? 'Hide' : 'Summary') : 'Summarize')}
+            </span>
+          </button>
         </div>
 
         {/* Score */}
@@ -269,6 +325,19 @@ const PostItem = ({ post, show, onToggleComments, onVote, onCommentCountUpdate, 
           </span>
         </div>
       </div>
+
+      {/* AI Summary Display */}
+      {showSummary && aiSummary && (
+        <div className="mt-4 p-4 bg-gradient-to-r from-violet-50 to-indigo-50 rounded-xl border border-violet-100">
+          <div className="flex items-start gap-2">
+            <SparklesIconSolid className="w-5 h-5 text-violet-500 flex-shrink-0 mt-0.5" />
+            <div>
+              <span className="text-xs font-semibold text-violet-600 uppercase tracking-wide">AI Summary</span>
+              <p className="text-sm text-gray-700 mt-1 leading-relaxed">{aiSummary}</p>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Comment Section */}
       {show && (
