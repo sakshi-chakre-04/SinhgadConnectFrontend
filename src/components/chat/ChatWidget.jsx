@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { PaperAirplaneIcon, SparklesIcon, XMarkIcon } from '@heroicons/react/24/solid';
 import { useSelector } from 'react-redux';
 import { selectToken } from '../../features/auth/authSlice';
@@ -269,15 +270,14 @@ const ChatWidget = () => {
                                             <div className="mt-2 pt-2 border-t border-gray-100">
                                                 <div className="flex flex-wrap gap-1">
                                                     {msg.sources.slice(0, 3).map((source, sIdx) => (
-                                                        <a
+                                                        <Link
                                                             key={sIdx}
-                                                            href={source.id ? `/posts/${source.id}` : '#'}
+                                                            to={source.id ? `/posts/${source.id}` : '#'}
+                                                            onClick={() => setIsOpen(false)}
                                                             className="text-[10px] px-2 py-0.5 bg-indigo-50 text-indigo-600 rounded-full hover:bg-indigo-100 transition-colors"
-                                                            target="_blank"
-                                                            rel="noopener noreferrer"
                                                         >
                                                             {source.title.length > 20 ? source.title.substring(0, 20) + '...' : source.title}
-                                                        </a>
+                                                        </Link>
                                                     ))}
                                                 </div>
                                             </div>
