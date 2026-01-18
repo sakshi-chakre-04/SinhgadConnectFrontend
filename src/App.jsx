@@ -25,6 +25,7 @@ import ASKQues from './components/askQues/ASKQues';
 import EditProfile from './pages/EditProfile';
 import Trending from './pages/Trending';
 import HallOfFame from './pages/HallOfFame';
+import Resources from './pages/Resources';
 import ChatWidget from './components/chat/ChatWidget';
 import { SocketProvider } from './context/SocketContext';
 
@@ -117,6 +118,7 @@ function App() {
                 <Route path="/edit-profile" element={<AuthenticatedLayout><EditProfile /></AuthenticatedLayout>} />
                 <Route path="/trending" element={<AuthenticatedLayout><Trending /></AuthenticatedLayout>} />
                 <Route path="/hall-of-fame" element={<AuthenticatedLayout><HallOfFame /></AuthenticatedLayout>} />
+                <Route path="/resources" element={<AuthenticatedLayout><Resources /></AuthenticatedLayout>} />
                 <Route path="/settings" element={<AuthenticatedLayout><Settings /></AuthenticatedLayout>} />
                 <Route
                   path="/create-post"
