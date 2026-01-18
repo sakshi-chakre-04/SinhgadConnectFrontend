@@ -173,8 +173,8 @@ const Resources = () => {
                                 key={section.id}
                                 onClick={() => setActiveSection(section.id)}
                                 className={`flex items-center gap-2 px-5 py-3 rounded-xl font-medium whitespace-nowrap transition-all ${activeSection === section.id
-                                        ? `bg-gradient-to-r ${section.gradient} text-white shadow-lg`
-                                        : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'
+                                    ? `bg-gradient-to-r ${section.gradient} text-white shadow-lg`
+                                    : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'
                                     }`}
                             >
                                 <Icon className="w-5 h-5" />
@@ -224,90 +224,128 @@ const Resources = () => {
                         </div>
                     </div>
 
-                    {/* Show content only if dept and year selected */}
+                    {/* Year Syllabus - shown when year is selected */}
+                    {selectedYear && (
+                        <a
+                            href={academicResources.syllabus[selectedYear]?.url || '#'}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="block bg-gradient-to-r from-green-50 to-emerald-50 rounded-2xl p-5 border border-green-100 hover:shadow-md hover:border-green-200 transition-all group"
+                        >
+                            <div className="flex items-center gap-4">
+                                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-green-500 to-emerald-500 flex items-center justify-center">
+                                    <ClipboardDocumentListIcon className="w-6 h-6 text-white" />
+                                </div>
+                                <div className="flex-1">
+                                    <h3 className="font-semibold text-gray-800 group-hover:text-green-600 transition-colors">
+                                        {selectedYear === 'FE' ? 'First Year' : selectedYear === 'SE' ? 'Second Year' : selectedYear === 'TE' ? 'Third Year' : 'Final Year'} Complete Syllabus
+                                    </h3>
+                                    <p className="text-sm text-gray-500">SPPU Official Syllabus PDF</p>
+                                </div>
+                                <ArrowTopRightOnSquareIcon className="w-5 h-5 text-gray-400 group-hover:text-green-500" />
+                            </div>
+                        </a>
+                    )}
+
+                    {/* Subject Selection - shown when both dept and year selected */}
                     {selectedDept && selectedYear && (
-                        <>
-                            {/* Notes Section */}
-                            <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
-                                <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
-                                    <DocumentTextIcon className="w-5 h-5 text-blue-600" />
-                                    Subject Notes
-                                </h3>
-                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                                    {getSubjects().map((subject, idx) => (
-                                        <button
-                                            key={idx}
-                                            onClick={() => setSelectedSubject(subject)}
-                                            className={`p-4 rounded-xl border text-left transition-all ${selectedSubject === subject
-                                                    ? 'border-indigo-500 bg-indigo-50 text-indigo-700'
-                                                    : 'border-gray-200 hover:border-indigo-300 hover:bg-gray-50'
-                                                }`}
-                                        >
-                                            <p className="font-medium text-sm">{subject}</p>
-                                            <p className="text-xs text-gray-500 mt-1">Click for notes</p>
-                                        </button>
-                                    ))}
+                        <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
+                            <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                                <BookOpenIcon className="w-5 h-5 text-indigo-600" />
+                                Choose Subject
+                            </h3>
+                            <div className="flex flex-wrap gap-2">
+                                {getSubjects().map((subject, idx) => (
+                                    <button
+                                        key={idx}
+                                        onClick={() => setSelectedSubject(subject)}
+                                        className={`px-4 py-2.5 rounded-xl font-medium text-sm transition-all ${selectedSubject === subject
+                                                ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/30'
+                                                : 'bg-gray-100 text-gray-700 hover:bg-indigo-100 hover:text-indigo-700'
+                                            }`}
+                                    >
+                                        {subject}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Subject Resources - shown when subject is selected */}
+                    {selectedSubject && (
+                        <div className="space-y-4">
+                            <h3 className="text-lg font-semibold text-gray-800 flex items-center gap-2 px-1">
+                                📚 Resources for <span className="text-indigo-600">{selectedSubject}</span>
+                            </h3>
+
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                {/* Notes Card */}
+                                <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-md hover:border-blue-200 transition-all group cursor-pointer">
+                                    <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center mb-4 shadow-lg shadow-blue-500/30">
+                                        <DocumentTextIcon className="w-7 h-7 text-white" />
+                                    </div>
+                                    <h4 className="font-semibold text-gray-800 mb-1 group-hover:text-blue-600 transition-colors">Notes</h4>
+                                    <p className="text-sm text-gray-500 mb-4">Lecture notes & study material</p>
+                                    {academicResources.notes[selectedSubject] ? (
+                                        <a href={academicResources.notes[selectedSubject][0]?.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-blue-600 text-sm font-medium hover:underline">
+                                            View Notes <ArrowTopRightOnSquareIcon className="w-4 h-4" />
+                                        </a>
+                                    ) : (
+                                        <span className="text-xs text-amber-600 bg-amber-50 px-2 py-1 rounded-lg">Coming Soon</span>
+                                    )}
                                 </div>
 
-                                {selectedSubject && (
-                                    <div className="mt-4 p-4 bg-amber-50 border border-amber-200 rounded-xl">
-                                        <p className="text-sm text-amber-700">
-                                            <strong>📚 {selectedSubject}</strong> - Notes coming soon! Add your Google Drive links in the code.
-                                        </p>
-                                    </div>
-                                )}
-                            </div>
-
-                            {/* Syllabus & PYQ */}
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <a
-                                    href={academicResources.syllabus[selectedYear]?.url || '#'}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-md hover:border-indigo-200 transition-all group"
-                                >
-                                    <div className="flex items-center gap-4">
-                                        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-green-500 to-emerald-500 flex items-center justify-center">
-                                            <ClipboardDocumentListIcon className="w-6 h-6 text-white" />
-                                        </div>
-                                        <div className="flex-1">
-                                            <h3 className="font-semibold text-gray-800 group-hover:text-indigo-600 transition-colors">
-                                                {selectedYear} Syllabus
-                                            </h3>
-                                            <p className="text-sm text-gray-500">SPPU Official Syllabus</p>
-                                        </div>
-                                        <ArrowTopRightOnSquareIcon className="w-5 h-5 text-gray-400 group-hover:text-indigo-500" />
-                                    </div>
-                                </a>
-
+                                {/* PYQ Card */}
                                 <a
                                     href={academicResources.pyq.url}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-md hover:border-indigo-200 transition-all group"
+                                    className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-md hover:border-orange-200 transition-all group"
                                 >
-                                    <div className="flex items-center gap-4">
-                                        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center">
-                                            <DocumentTextIcon className="w-6 h-6 text-white" />
-                                        </div>
-                                        <div className="flex-1">
-                                            <h3 className="font-semibold text-gray-800 group-hover:text-indigo-600 transition-colors">
-                                                Previous Year Questions
-                                            </h3>
-                                            <p className="text-sm text-gray-500">PYQs for all subjects</p>
-                                        </div>
-                                        <ArrowTopRightOnSquareIcon className="w-5 h-5 text-gray-400 group-hover:text-indigo-500" />
+                                    <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center mb-4 shadow-lg shadow-orange-500/30">
+                                        <ClipboardDocumentListIcon className="w-7 h-7 text-white" />
                                     </div>
+                                    <h4 className="font-semibold text-gray-800 mb-1 group-hover:text-orange-600 transition-colors">Previous Year Papers</h4>
+                                    <p className="text-sm text-gray-500 mb-4">Past exam questions</p>
+                                    <span className="inline-flex items-center gap-1 text-orange-600 text-sm font-medium">
+                                        View PYQs <ArrowTopRightOnSquareIcon className="w-4 h-4" />
+                                    </span>
+                                </a>
+
+                                {/* Video Lectures Card */}
+                                <a
+                                    href={`https://www.youtube.com/results?search_query=${encodeURIComponent(selectedSubject + ' SPPU lectures')}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-md hover:border-red-200 transition-all group"
+                                >
+                                    <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-red-500 to-pink-500 flex items-center justify-center mb-4 shadow-lg shadow-red-500/30">
+                                        <svg className="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+                                        </svg>
+                                    </div>
+                                    <h4 className="font-semibold text-gray-800 mb-1 group-hover:text-red-600 transition-colors">Video Lectures</h4>
+                                    <p className="text-sm text-gray-500 mb-4">YouTube tutorials</p>
+                                    <span className="inline-flex items-center gap-1 text-red-600 text-sm font-medium">
+                                        Search Videos <ArrowTopRightOnSquareIcon className="w-4 h-4" />
+                                    </span>
                                 </a>
                             </div>
-                        </>
+                        </div>
                     )}
 
                     {/* Prompt if not selected */}
                     {(!selectedDept || !selectedYear) && (
                         <div className="text-center py-12 bg-white rounded-2xl border border-gray-100">
                             <AcademicCapIcon className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                            <p className="text-gray-500 text-lg">Select your department and year to view resources</p>
+                            <p className="text-gray-500 text-lg">Select your department and year to view subjects</p>
+                        </div>
+                    )}
+
+                    {/* Prompt to select subject */}
+                    {selectedDept && selectedYear && !selectedSubject && (
+                        <div className="text-center py-8 bg-gradient-to-r from-indigo-50 to-violet-50 rounded-2xl border border-indigo-100">
+                            <p className="text-indigo-600">👆 Select a subject above to see Notes, PYQs & Videos</p>
                         </div>
                     )}
                 </div>
@@ -329,8 +367,8 @@ const Resources = () => {
                                     key={tab.id}
                                     onClick={() => setPlacementTab(tab.id)}
                                     className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-medium text-sm whitespace-nowrap transition-all ${placementTab === tab.id
-                                            ? 'bg-violet-600 text-white'
-                                            : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'
+                                        ? 'bg-violet-600 text-white'
+                                        : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'
                                         }`}
                                 >
                                     <Icon className="w-4 h-4" />
