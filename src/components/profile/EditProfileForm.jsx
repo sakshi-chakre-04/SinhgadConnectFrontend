@@ -1,8 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { XMarkIcon, PlusIcon } from '@heroicons/react/24/outline';
 import { selectUser, selectToken, updateUserProfile } from '../../features/auth/authSlice';
 import InputField from './InputField';
 import SelectField from './SelectField';
@@ -17,6 +18,10 @@ const EditProfileForm = () => {
   const token = useSelector(selectToken);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  // Skills state
+  const [skills, setSkills] = useState(user?.skills || []);
+  const [skillInput, setSkillInput] = useState('');
 
   const methods = useForm({
     defaultValues: {
@@ -36,7 +41,30 @@ const EditProfileForm = () => {
       year: user?.year || '',
       bio: user?.bio || '',
     });
+    setSkills(user?.skills || []);
   }, [user, reset]);
+
+  // Add a skill
+  const addSkill = () => {
+    const trimmed = skillInput.trim();
+    if (trimmed && !skills.includes(trimmed) && skills.length < 10) {
+      setSkills([...skills, trimmed]);
+      setSkillInput('');
+    }
+  };
+
+  // Remove a skill
+  const removeSkill = (skillToRemove) => {
+    setSkills(skills.filter(skill => skill !== skillToRemove));
+  };
+
+  // Handle enter key in skill input
+  const handleSkillKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      addSkill();
+    }
+  };
 
   if (!user || !token) {
     return (
@@ -57,7 +85,7 @@ const EditProfileForm = () => {
   const onSubmit = async (data) => {
     try {
       const toastId = toast.loading('Updating profile...');
-      await dispatch(updateUserProfile(data)).unwrap();
+      await dispatch(updateUserProfile({ ...data, skills })).unwrap();
       toast.update(toastId, {
         render: 'Profile updated successfully!',
         type: 'success',
@@ -70,6 +98,9 @@ const EditProfileForm = () => {
       toast.error(error || 'Failed to update profile');
     }
   };
+
+  // Check if form has changes (including skills)
+  const hasChanges = isDirty || JSON.stringify(skills) !== JSON.stringify(user?.skills || []);
 
   return (
     <FormProvider {...methods}>
@@ -113,6 +144,60 @@ const EditProfileForm = () => {
                 hint="A short introduction (max 500 characters)"
               />
             </div>
+
+            {/* Skills Input Section */}
+            <div className="sm:col-span-6">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Skills & Interests
+              </label>
+
+              {/* Skills Tags */}
+              <div className="flex flex-wrap gap-2 mb-3">
+                {skills.map((skill, idx) => (
+                  <span
+                    key={idx}
+                    className="inline-flex items-center gap-1 px-3 py-1.5 bg-indigo-50 text-indigo-700 rounded-full text-sm font-medium group"
+                  >
+                    {skill}
+                    <button
+                      type="button"
+                      onClick={() => removeSkill(skill)}
+                      className="w-4 h-4 rounded-full hover:bg-indigo-200 flex items-center justify-center transition-colors"
+                    >
+                      <XMarkIcon className="w-3 h-3" />
+                    </button>
+                  </span>
+                ))}
+              </div>
+
+              {/* Add Skill Input */}
+              {skills.length < 10 && (
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={skillInput}
+                    onChange={(e) => setSkillInput(e.target.value.slice(0, 30))}
+                    onKeyDown={handleSkillKeyDown}
+                    placeholder="Type a skill and press Enter"
+                    className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-sm"
+                    maxLength={30}
+                  />
+                  <button
+                    type="button"
+                    onClick={addSkill}
+                    disabled={!skillInput.trim()}
+                    className="px-4 py-2 bg-indigo-100 text-indigo-700 rounded-lg hover:bg-indigo-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-1"
+                  >
+                    <PlusIcon className="w-4 h-4" />
+                    Add
+                  </button>
+                </div>
+              )}
+
+              <p className="mt-2 text-xs text-gray-500">
+                {skills.length}/10 skills added. Press Enter or click Add to add a skill.
+              </p>
+            </div>
           </div>
         </div>
 
@@ -126,10 +211,10 @@ const EditProfileForm = () => {
           </button>
           <button
             type="submit"
-            disabled={isSubmitting || !isDirty}
-            className={`px-6 py-2.5 rounded-xl font-medium text-white shadow-lg shadow-indigo-500/20 transition-all transform active:scale-95 ${isSubmitting || !isDirty
-                ? 'bg-gray-300 cursor-not-allowed shadow-none'
-                : 'bg-gradient-to-r from-indigo-600 to-violet-600 hover:shadow-indigo-500/40 hover:-translate-y-0.5'
+            disabled={isSubmitting || !hasChanges}
+            className={`px-6 py-2.5 rounded-xl font-medium text-white shadow-lg shadow-indigo-500/20 transition-all transform active:scale-95 ${isSubmitting || !hasChanges
+              ? 'bg-gray-300 cursor-not-allowed shadow-none'
+              : 'bg-gradient-to-r from-indigo-600 to-violet-600 hover:shadow-indigo-500/40 hover:-translate-y-0.5'
               }`}
           >
             {isSubmitting ? (
