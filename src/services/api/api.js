@@ -11,7 +11,7 @@ const api = axios.create({
     'Content-Type': 'application/json',
     'Accept': 'application/json',
   },
-  timeout: 10000,
+  timeout: 30000, // Increased to 30s for cold start
 });
 
 let store;
@@ -55,11 +55,36 @@ api.interceptors.request.use(
 );
 
 
-// Add response interceptor
+// Add response interceptor with retry logic for cold start
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
+
+    // Retry on timeout (cold start) - max 2 retries
+    if (
+      (error.code === 'ECONNABORTED' || error.message?.includes('timeout')) &&
+      !originalRequest._retryCount
+    ) {
+      originalRequest._retryCount = 1;
+      console.log('Server waking up, retrying...');
+
+      // Wait 2 seconds before retry
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      return api(originalRequest);
+    }
+
+    // Second retry if first also timed out
+    if (
+      (error.code === 'ECONNABORTED' || error.message?.includes('timeout')) &&
+      originalRequest._retryCount === 1
+    ) {
+      originalRequest._retryCount = 2;
+      console.log('Server still waking up, retrying once more...');
+
+      await new Promise(resolve => setTimeout(resolve, 3000));
+      return api(originalRequest);
+    }
 
     // Handle 401 Unauthorized
     if (error.response?.status === 401 && !originalRequest._retry && !originalRequest.url.includes('/auth/')) {
@@ -78,3 +103,4 @@ api.interceptors.response.use(
 );
 
 export { api };
+
