@@ -58,7 +58,7 @@ const MobileTopNav = () => {
                             <div className="w-8 h-8 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-lg flex items-center justify-center">
                                 <span className="text-white font-bold text-sm">S</span>
                             </div>
-                            <span className="font-bold text-base bg-gradient-to-r from-red-500 via-yellow-500 via-green-500 via-blue-500 via-indigo-500 to-purple-500 bg-clip-text text-transparent bg-[length:200%_100%] animate-rainbow-slide">
+                            <span className="font-bold text-lg bg-gradient-to-r from-red-500 via-yellow-500 via-green-500 via-blue-500 via-indigo-500 to-purple-500 bg-clip-text text-transparent bg-[length:200%_100%] animate-rainbow-slide">
                                 SinhgadConnect
                             </span>
                         </div>
@@ -80,10 +80,10 @@ const MobileTopNav = () => {
                         </NavLink>
                         <button
                             onClick={handleCreatePost}
-                            className="w-10 h-10 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg flex items-center justify-center shadow-md hover:shadow-lg active:scale-95 transition-all"
+                            className="w-10 h-10 flex items-center justify-center text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
                             aria-label="Create Post"
                         >
-                            <PlusIcon className="w-6 h-6" />
+                            <PlusIcon className="w-7 h-7" />
                         </button>
                     </div>
                 </div>
