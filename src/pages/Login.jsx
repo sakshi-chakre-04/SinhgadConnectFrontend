@@ -82,14 +82,14 @@ const Login = () => {
   const [showPassword, setShowPassword] = React.useState(false);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-500 to-purple-600 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br p-4" style={{ background: 'linear-gradient(135deg, #B8ADE0 0%, #D4DBEE 50%, #E8C9DB 100%)' }}>
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="bg-white p-8 rounded-xl shadow-2xl w-full max-w-md"
         noValidate
       >
         <h2 className="text-center text-2xl font-bold text-gray-800 mb-2">Welcome Back</h2>
-        <p className="text-center text-gray-600 mb-6">Please login to continue.</p>
+        <p className="text-center mb-6" style={{ color: 'var(--gray-purple)' }}>Please login to continue.</p>
 
         {/* Server Waking Up Message */}
         {isWakingUp && (
@@ -128,8 +128,10 @@ const Login = () => {
             type="email"
             {...register('email', { validate: validateEmail })}
             placeholder="Enter your @sinhgad.edu email"
-            className={`w-full px-3 py-2 border-2 rounded-lg focus:outline-none transition-colors ${errors.email ? 'border-red-500' : 'border-gray-200 focus:border-indigo-500'
-              }`}
+            className={`w-full px-3 py-2 border-2 rounded-lg focus:outline-none transition-colors ${errors.email ? 'border-red-500' : 'border-gray-200'}`}
+            style={!errors.email ? { borderColor: 'var(--lavender-light)' } : {}}
+            onFocus={(e) => !errors.email && (e.target.style.borderColor = 'var(--lavender-main)')}
+            onBlur={(e) => !errors.email && (e.target.style.borderColor = 'var(--lavender-light)')}
           />
           {errors.email && (
             <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
@@ -147,8 +149,10 @@ const Login = () => {
               type={showPassword ? 'text' : 'password'}
               {...register('password', { required: 'Password is required' })}
               placeholder="Enter your password"
-              className={`w-full px-3 py-2 border-2 rounded-lg focus:outline-none transition-colors pr-10 ${errors.password ? 'border-red-500' : 'border-gray-200 focus:border-indigo-500'
-                }`}
+              className={`w-full px-3 py-2 border-2 rounded-lg focus:outline-none transition-colors pr-10 ${errors.password ? 'border-red-500' : 'border-gray-200'}`}
+              style={!errors.password ? { borderColor: 'var(--lavender-light)' } : {}}
+              onFocus={(e) => !errors.password && (e.target.style.borderColor = 'var(--lavender-main)')}
+              onBlur={(e) => !errors.password && (e.target.style.borderColor = 'var(--lavender-light)')}
             />
             <button
               type="button"
@@ -165,7 +169,7 @@ const Login = () => {
 
         {/* Remember Me */}
         <div className="flex items-center justify-between mb-6">
-          <label className="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
+          <label className="flex items-center gap-2 text-sm cursor-pointer" style={{ color: 'var(--gray-purple)' }}>
             <input
               type="checkbox"
               {...register('rememberMe')}
@@ -173,7 +177,7 @@ const Login = () => {
             />
             Remember me
           </label>
-          <Link to="/forgot-password" className="text-sm text-indigo-500 hover:underline">
+          <Link to="/forgot-password" className="text-sm hover:underline" style={{ color: 'var(--lavender-main)' }}>
             Forgot password?
           </Link>
         </div>
@@ -182,15 +186,18 @@ const Login = () => {
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full bg-gradient-to-r from-indigo-500 to-purple-600 text-white py-3 rounded-lg font-semibold hover:-translate-y-0.5 transition-transform disabled:opacity-60 disabled:cursor-not-allowed"
+          className="w-full text-white py-3 rounded-lg font-semibold hover:-translate-y-0.5 transition-all disabled:opacity-60 disabled:cursor-not-allowed"
+          style={{ backgroundColor: 'var(--yellow-accent)' }}
+          onMouseEnter={(e) => !isLoading && (e.target.style.backgroundColor = 'var(--lavender-main)')}
+          onMouseLeave={(e) => !isLoading && (e.target.style.backgroundColor = 'var(--yellow-accent)')}
         >
           {isLoading ? 'Logging in...' : 'Login'}
         </button>
 
         {/* Registration Link */}
-        <div className="text-center mt-4 text-gray-600">
+        <div className="text-center mt-4" style={{ color: 'var(--gray-purple)' }}>
           Don't have an account?{' '}
-          <Link to="/register" className="text-indigo-500 font-medium hover:underline">
+          <Link to="/register" className="font-medium hover:underline" style={{ color: 'var(--lavender-main)' }}>
             Sign up
           </Link>
         </div>
