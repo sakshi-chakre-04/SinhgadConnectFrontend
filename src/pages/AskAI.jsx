@@ -272,9 +272,9 @@ const AskAI = () => {
     // Chat View
     if (isInChat) {
         return (
-            <div className="min-h-screen flex flex-col -mx-4 lg:-mx-8 -mt-4 lg:-mt-4 -mb-24 lg:-mb-8 bg-gray-50">
+            <div className="fixed inset-0 z-50 flex flex-col bg-gray-50">
                 {/* Header */}
-                <div className="sticky top-0 z-10 bg-white/95 backdrop-blur-sm border-b border-gray-200 px-4 py-3 flex items-center gap-3 shadow-sm">
+                <div className="flex-shrink-0 bg-white/95 backdrop-blur-sm border-b border-gray-200 px-4 py-3 flex items-center gap-3 shadow-sm">
                     <button
                         onClick={handleBack}
                         className="w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors"
@@ -346,8 +346,8 @@ const AskAI = () => {
                     <div ref={messagesEndRef} />
                 </div>
 
-                {/* Input */}
-                <div className="sticky bottom-0 p-4 bg-white border-t border-gray-200">
+                {/* Input - Fixed at bottom with safe area */}
+                <div className="flex-shrink-0 p-4 pb-6 bg-white border-t border-gray-200 safe-area-pb">
                     <form onSubmit={handleSubmit} className="flex gap-3">
                         <input
                             ref={inputRef}
