@@ -12,6 +12,7 @@ import Navbar from './components/navbar';
 import Sidebar from './components/layout/Sidebar';
 import RightSidebar from './components/layout/RightSidebar';
 import MobileNav from './components/layout/MobileNav';
+import MobileTopNav from './components/layout/MobileTopNav';
 import Posts from './components/posts/PostContainer';
 import Community from './pages/Community';
 import Notifications from './pages/Notifications';
@@ -58,8 +59,11 @@ const AuthenticatedLayout = ({ children }) => {
       {/* Left Sidebar */}
       <Sidebar onCreatePost={openModal} />
 
+      {/* Mobile Top Navigation */}
+      <MobileTopNav />
+
       {/* Main Content Area */}
-      <main className="lg:ml-[var(--sidebar-width)] xl:mr-[var(--right-sidebar-width)] min-h-screen pt-4 pb-24 lg:pb-8 px-4 lg:px-8">
+      <main className="lg:ml-[var(--sidebar-width)] xl:mr-[var(--right-sidebar-width)] min-h-screen pt-16 lg:pt-4 pb-24 lg:pb-8 px-4 lg:px-8">
         <div className="max-w-3xl mx-auto">
           {children}
         </div>
@@ -68,7 +72,7 @@ const AuthenticatedLayout = ({ children }) => {
       {/* Right Sidebar */}
       <RightSidebar />
 
-      {/* Mobile Navigation */}
+      {/* Mobile Bottom Navigation */}
       <MobileNav />
 
       {/* Global Post Creation Modal */}

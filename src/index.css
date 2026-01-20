@@ -427,12 +427,40 @@ body {
     }
 }
 
+@keyframes slideInLeft {
+    from {
+        transform: translateX(-100%);
+    }
+
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes rainbow-slide {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    100% {
+        background-position: 100% 50%;
+    }
+}
+
 .animate-fadeIn {
     animation: fadeIn 0.3s ease-out;
 }
 
 .animate-slideIn {
     animation: slideIn 0.3s ease-out;
+}
+
+.animate-slideInLeft {
+    animation: slideInLeft 0.3s ease-out;
+}
+
+.animate-rainbow-slide {
+    animation: rainbow-slide 3s linear infinite;
 }
 
 .animate-pulse {
