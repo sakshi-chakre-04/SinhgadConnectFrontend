@@ -42,6 +42,48 @@ const MobileTopNav = () => {
 
     return (
         <>
+            {/* Rainbow Gradient Animation */}
+            <style>{`
+                @keyframes rainbow-gradient {
+                    0% { background-position: 0% 50%; }
+                    50% { background-position: 100% 50%; }
+                    100% { background-position: 0% 50%; }
+                }
+                .rainbow-text {
+                    background: linear-gradient(
+                        90deg,
+                        #ef4444,
+                        #f97316,
+                        #eab308,
+                        #22c55e,
+                        #06b6d4,
+                        #3b82f6,
+                        #8b5cf6,
+                        #ec4899,
+                        #ef4444
+                    );
+                    background-size: 200% 200%;
+                    animation: rainbow-gradient 3s ease infinite;
+                    -webkit-background-clip: text;
+                    background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                }
+                .rainbow-bg {
+                    background: linear-gradient(
+                        135deg,
+                        #ef4444,
+                        #f97316,
+                        #eab308,
+                        #22c55e,
+                        #06b6d4,
+                        #3b82f6,
+                        #8b5cf6,
+                        #ec4899
+                    );
+                    background-size: 200% 200%;
+                    animation: rainbow-gradient 3s ease infinite;
+                }
+            `}</style>
             {/* Top Navigation Bar - Mobile Only */}
             <nav className="lg:hidden fixed top-0 left-0 right-0 bg-white border-b border-gray-200 z-40 safe-area-pt">
                 <div className="flex items-center justify-between h-14 px-4">
@@ -55,10 +97,10 @@ const MobileTopNav = () => {
                             <Bars3Icon className="w-6 h-6" />
                         </button>
                         <div className="flex items-center gap-2">
-                            <div className="w-8 h-8 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-lg flex items-center justify-center">
+                            <div className="w-8 h-8 rainbow-bg rounded-lg flex items-center justify-center">
                                 <span className="text-white font-bold text-sm">S</span>
                             </div>
-                            <span className="font-bold text-lg bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                            <span className="font-bold text-lg rainbow-text">
                                 SinhgadConnect
                             </span>
                         </div>
