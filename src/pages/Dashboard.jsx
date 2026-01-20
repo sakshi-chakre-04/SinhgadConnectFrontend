@@ -28,7 +28,7 @@ const Dashboard = () => {
       {/* Futuristic Hero Section - Compact Version */}
       <div className="relative overflow-hidden rounded-3xl p-6 text-white shadow-2xl hover-glow transition-all duration-500 group">
         {/* Animated Gradient Background */}
-        <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, #9185D6 0%, #BAF0E8 25%, #B8ADE0 40%, #D094B6 60%, #D4DBEE 80%, #F9D079 100%)' }}></div>
+        <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, #A599DB 0%, #BAF0E8 35%, #D5A8C5 65%, #F5D89E 100%)' }}></div>
 
         {/* Glass Overlay Patterns */}
         <div className="absolute inset-0 opacity-20 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] mix-blend-overlay"></div>

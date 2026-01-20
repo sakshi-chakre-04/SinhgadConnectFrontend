@@ -82,7 +82,7 @@ const Login = () => {
   const [showPassword, setShowPassword] = React.useState(false);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br p-4" style={{ background: 'linear-gradient(135deg, #B8ADE0 0%, #BAF0E8 25%, #D4DBEE 50%, #E8C9DB 75%, #F9D079 100%)' }}>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br p-4" style={{ background: 'linear-gradient(135deg, #C5BDE5 0%, #BAF0E8 30%, #D8C9E0 60%, #F5D89E 100%)' }}>
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="bg-white p-8 rounded-xl shadow-2xl w-full max-w-md"
