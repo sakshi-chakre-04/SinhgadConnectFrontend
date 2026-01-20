@@ -83,9 +83,9 @@ const renderMarkdown = (text) => {
             {sections.map((section, idx) => {
                 if (section.type === 'header') {
                     return (
-                        <div key={idx} className="flex items-center gap-2 py-1.5 border-b border-gray-700">
+                        <div key={idx} className="flex items-center gap-2 py-1.5 border-b border-indigo-100">
                             <div className="w-1 h-4 bg-gradient-to-b from-indigo-500 to-violet-500 rounded-full"></div>
-                            <h3 className="font-bold text-gray-100 text-sm">{section.title}</h3>
+                            <h3 className="font-bold text-gray-900 text-sm">{section.title}</h3>
                         </div>
                     );
                 }
@@ -93,7 +93,7 @@ const renderMarkdown = (text) => {
                 if (section.type === 'subheader') {
                     return (
                         <div key={idx} className="pt-2">
-                            <span className="text-[10px] font-bold uppercase tracking-widest text-indigo-400 bg-indigo-900/50 px-2 py-1 rounded">
+                            <span className="text-[10px] font-bold uppercase tracking-widest text-indigo-600 bg-indigo-50 px-2 py-1 rounded">
                                 {section.title}
                             </span>
                         </div>
@@ -106,24 +106,24 @@ const renderMarkdown = (text) => {
                             {section.items.map((item, iIdx) => {
                                 if (item.type === 'bullet') {
                                     return (
-                                        <div key={iIdx} className="flex items-start gap-2.5 py-1 px-2 bg-gray-800/50 rounded-lg">
+                                        <div key={iIdx} className="flex items-start gap-2.5 py-1 px-2 bg-gray-50 rounded-lg">
                                             <span className="w-1.5 h-1.5 mt-1.5 bg-indigo-500 rounded-full flex-shrink-0"></span>
-                                            <span className="text-gray-300 text-sm leading-relaxed">{formatInlineMarkdown(item.content)}</span>
+                                            <span className="text-gray-700 text-sm leading-relaxed">{formatInlineMarkdown(item.content)}</span>
                                         </div>
                                     );
                                 }
                                 if (item.type === 'numbered') {
                                     return (
-                                        <div key={iIdx} className="flex items-start gap-2.5 py-1.5 px-2 bg-gradient-to-r from-indigo-900/30 to-transparent rounded-lg">
-                                            <span className="w-5 h-5 bg-indigo-800 text-indigo-300 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">
+                                        <div key={iIdx} className="flex items-start gap-2.5 py-1.5 px-2 bg-gradient-to-r from-indigo-50 to-transparent rounded-lg">
+                                            <span className="w-5 h-5 bg-indigo-100 text-indigo-700 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">
                                                 {item.num}
                                             </span>
-                                            <span className="text-gray-300 text-sm leading-relaxed pt-0.5">{formatInlineMarkdown(item.content)}</span>
+                                            <span className="text-gray-700 text-sm leading-relaxed pt-0.5">{formatInlineMarkdown(item.content)}</span>
                                         </div>
                                     );
                                 }
                                 return (
-                                    <p key={iIdx} className="text-gray-400 text-sm leading-relaxed py-0.5">{formatInlineMarkdown(item.content)}</p>
+                                    <p key={iIdx} className="text-gray-600 text-sm leading-relaxed py-0.5">{formatInlineMarkdown(item.content)}</p>
                                 );
                             })}
                         </div>
@@ -142,7 +142,7 @@ const formatInlineMarkdown = (text) => {
     const parts = text.split(/(\*\*[^*]+\*\*)/g);
     return parts.map((part, i) => {
         if (part.startsWith('**') && part.endsWith('**')) {
-            return <strong key={i} className="font-semibold text-gray-100">{part.slice(2, -2)}</strong>;
+            return <strong key={i} className="font-semibold text-gray-900">{part.slice(2, -2)}</strong>;
         }
         return part;
     });
@@ -272,20 +272,26 @@ const AskAI = () => {
     // Chat View
     if (isInChat) {
         return (
-            <div className="min-h-screen bg-gray-900 flex flex-col -mx-4 lg:-mx-8 -mt-4 lg:-mt-4 -mb-24 lg:-mb-8">
+            <div className="min-h-screen flex flex-col -mx-4 lg:-mx-8 -mt-4 lg:-mt-4 -mb-24 lg:-mb-8 bg-gray-50">
                 {/* Header */}
-                <div className="sticky top-0 z-10 bg-gray-900/95 backdrop-blur-sm border-b border-gray-800 px-4 py-3 flex items-center gap-3">
+                <div className="sticky top-0 z-10 bg-white/95 backdrop-blur-sm border-b border-gray-200 px-4 py-3 flex items-center gap-3 shadow-sm">
                     <button
                         onClick={handleBack}
-                        className="w-10 h-10 rounded-full bg-gray-800 hover:bg-gray-700 flex items-center justify-center transition-colors"
+                        className="w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors"
                     >
-                        <ArrowLeftIcon className="w-5 h-5 text-gray-300" />
+                        <ArrowLeftIcon className="w-5 h-5 text-gray-600" />
                     </button>
                     <div className="flex items-center gap-2">
                         <div className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center">
                             <SparklesIcon className="w-4 h-4 text-white" />
                         </div>
-                        <span className="font-semibold text-white">SinhgadConnect AI</span>
+                        <div>
+                            <span className="font-semibold text-gray-900">SinhgadConnect AI</span>
+                            <p className="text-xs text-green-600 flex items-center gap-1">
+                                <span className="w-1.5 h-1.5 rounded-full bg-green-500"></span>
+                                Online
+                            </p>
+                        </div>
                     </div>
                 </div>
 
@@ -293,12 +299,12 @@ const AskAI = () => {
                 <div className="flex-1 overflow-y-auto p-4 space-y-4">
                     {messages.map((msg, idx) => (
                         <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                            <div className={`max-w-[90%] lg:max-w-[70%] px-4 py-3 text-sm leading-relaxed
+                            <div className={`max-w-[90%] lg:max-w-[70%] px-4 py-3 text-sm leading-relaxed shadow-sm
                                 ${msg.role === 'user'
-                                    ? 'bg-indigo-600 text-white rounded-2xl rounded-br-sm'
-                                    : 'bg-gray-800 text-gray-200 rounded-2xl rounded-bl-sm'
+                                    ? 'bg-gradient-to-r from-indigo-600 to-violet-600 text-white rounded-2xl rounded-br-sm'
+                                    : 'bg-white text-gray-800 rounded-2xl rounded-bl-sm border border-gray-100'
                                 }`}>
-                                <div className="prose prose-sm prose-invert max-w-none">
+                                <div className="prose prose-sm max-w-none">
                                     {msg.role === 'user'
                                         ? <p className="whitespace-pre-wrap m-0">{msg.content}</p>
                                         : renderMarkdown(msg.content)
@@ -307,14 +313,14 @@ const AskAI = () => {
 
                                 {/* Sources */}
                                 {msg.sources && msg.sources.length > 0 && msg.role === 'assistant' && (
-                                    <div className="mt-3 pt-3 border-t border-gray-700">
+                                    <div className="mt-3 pt-3 border-t border-gray-100">
                                         <p className="text-xs text-gray-500 mb-2">Related posts:</p>
                                         <div className="flex flex-wrap gap-2">
                                             {msg.sources.slice(0, 3).map((source, sIdx) => (
                                                 <Link
                                                     key={sIdx}
                                                     to={source.id ? `/posts/${source.id}` : '#'}
-                                                    className="text-xs px-3 py-1.5 bg-indigo-900/50 text-indigo-300 rounded-full hover:bg-indigo-800/50 transition-colors"
+                                                    className="text-xs px-3 py-1.5 bg-indigo-50 text-indigo-600 rounded-full hover:bg-indigo-100 transition-colors"
                                                 >
                                                     {source.title.length > 25 ? source.title.substring(0, 25) + '...' : source.title}
                                                 </Link>
@@ -328,11 +334,11 @@ const AskAI = () => {
 
                     {isLoading && (
                         <div className="flex justify-start">
-                            <div className="bg-gray-800 px-4 py-3 rounded-2xl rounded-bl-sm">
+                            <div className="bg-white px-4 py-3 rounded-2xl rounded-bl-sm shadow-sm border border-gray-100">
                                 <div className="flex gap-1.5">
-                                    <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
-                                    <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
-                                    <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+                                    <div className="w-2 h-2 bg-indigo-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+                                    <div className="w-2 h-2 bg-indigo-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+                                    <div className="w-2 h-2 bg-indigo-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
                                 </div>
                             </div>
                         </div>
@@ -341,7 +347,7 @@ const AskAI = () => {
                 </div>
 
                 {/* Input */}
-                <div className="sticky bottom-0 p-4 bg-gray-900 border-t border-gray-800">
+                <div className="sticky bottom-0 p-4 bg-white border-t border-gray-200">
                     <form onSubmit={handleSubmit} className="flex gap-3">
                         <input
                             ref={inputRef}
@@ -350,12 +356,12 @@ const AskAI = () => {
                             onChange={(e) => setInput(e.target.value)}
                             placeholder="Ask a follow-up..."
                             disabled={isLoading}
-                            className="flex-1 px-4 py-3 bg-gray-800 border border-gray-700 rounded-full text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                            className="flex-1 px-4 py-3 bg-gray-100 border border-gray-200 rounded-full text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent focus:bg-white transition-all"
                         />
                         <button
                             type="submit"
                             disabled={isLoading || !input.trim()}
-                            className="w-12 h-12 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center transition-colors"
+                            className="w-12 h-12 bg-gradient-to-r from-indigo-600 to-violet-600 text-white rounded-full hover:shadow-lg hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center transition-all"
                         >
                             <PaperAirplaneIcon className="w-5 h-5" />
                         </button>
@@ -365,39 +371,44 @@ const AskAI = () => {
         );
     }
 
-    // Home View (Reddit Answers style)
+    // Home View (matching app style)
     return (
-        <div className="min-h-screen bg-gray-900 flex flex-col -mx-4 lg:-mx-8 -mt-4 lg:-mt-4 -mb-24 lg:-mb-8">
+        <div className="min-h-screen flex flex-col">
             {/* Header */}
-            <div className="px-4 py-3 flex items-center justify-between border-b border-gray-800">
-                <div className="flex items-center gap-2">
-                    <SparklesIcon className="w-6 h-6 text-indigo-500" />
-                    <span className="font-bold text-white text-lg">SinhgadConnect AI</span>
+            <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center shadow-lg shadow-indigo-200">
+                        <SparklesIcon className="w-5 h-5 text-white" />
+                    </div>
+                    <div>
+                        <h1 className="text-xl font-bold text-gray-900">Ask AI</h1>
+                        <p className="text-xs text-gray-500">Powered by SinhgadConnect</p>
+                    </div>
                 </div>
                 <button
                     onClick={() => navigate(-1)}
-                    className="w-8 h-8 rounded-full bg-gray-800 hover:bg-gray-700 flex items-center justify-center transition-colors"
+                    className="w-9 h-9 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors"
                 >
-                    <XMarkIcon className="w-5 h-5 text-gray-400" />
+                    <XMarkIcon className="w-5 h-5 text-gray-500" />
                 </button>
             </div>
 
-            <div className="flex-1 overflow-y-auto px-4 py-6">
-                {/* Branding Section */}
-                <div className="text-center mb-8">
-                    <div className="w-20 h-20 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-indigo-500 via-violet-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/30">
-                        <SparklesIcon className="w-10 h-10 text-white" />
+            {/* Branding Card */}
+            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 mb-6">
+                <div className="text-center">
+                    <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-indigo-500 via-violet-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-200/50">
+                        <SparklesIcon className="w-8 h-8 text-white" />
                     </div>
-                    <h1 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-violet-400 mb-2">
+                    <h2 className="text-lg font-bold text-gray-900 mb-1">
                         SinhgadConnect AI
-                    </h1>
-                    <p className="text-gray-400 text-sm">
+                    </h2>
+                    <p className="text-gray-500 text-sm">
                         Real answers from your campus community
                     </p>
                 </div>
 
                 {/* Search Input */}
-                <form onSubmit={handleSubmit} className="mb-6">
+                <form onSubmit={handleSubmit} className="mt-6">
                     <div className="relative">
                         <input
                             ref={inputRef}
@@ -405,70 +416,77 @@ const AskAI = () => {
                             value={input}
                             onChange={(e) => setInput(e.target.value)}
                             placeholder="Ask a question..."
-                            className="w-full px-5 py-4 pr-14 bg-gray-800 border border-gray-700 rounded-full text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all text-base"
+                            className="w-full px-5 py-4 pr-14 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent focus:bg-white transition-all text-base"
                         />
                         <button
                             type="submit"
                             disabled={!input.trim()}
-                            className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center transition-colors"
+                            className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 bg-gradient-to-r from-indigo-600 to-violet-600 text-white rounded-lg hover:shadow-lg disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center transition-all"
                         >
                             <PaperAirplaneIcon className="w-5 h-5" />
                         </button>
                     </div>
                 </form>
+            </div>
 
-                {/* Suggestion Chips */}
-                <div className="mb-8 -mx-4 px-4">
-                    <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
-                        {SUGGESTION_CHIPS.map((chip, idx) => (
-                            <button
+            {/* Suggestion Chips */}
+            <div className="mb-6">
+                <h3 className="text-sm font-medium text-gray-700 mb-3 flex items-center gap-2">
+                    <span className="w-1 h-4 bg-gradient-to-b from-indigo-500 to-violet-500 rounded-full"></span>
+                    Popular topics
+                </h3>
+                <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide -mx-4 px-4">
+                    {SUGGESTION_CHIPS.map((chip, idx) => (
+                        <button
+                            key={idx}
+                            onClick={() => handleChipClick(chip.text)}
+                            className="flex-shrink-0 flex items-center gap-1.5 px-4 py-2.5 bg-white hover:bg-indigo-50 border border-gray-200 hover:border-indigo-200 rounded-full text-sm text-gray-700 hover:text-indigo-700 transition-all shadow-sm whitespace-nowrap"
+                        >
+                            <span>{chip.icon}</span>
+                            <span>{chip.text}</span>
+                        </button>
+                    ))}
+                </div>
+            </div>
+
+            {/* Recent Questions */}
+            {recentQuestions.length > 0 && (
+                <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
+                    <div className="flex items-center gap-2 mb-3">
+                        <ClockIcon className="w-4 h-4 text-gray-400" />
+                        <h3 className="text-sm font-medium text-gray-700">Recent</h3>
+                    </div>
+                    <div className="space-y-1">
+                        {recentQuestions.map((question, idx) => (
+                            <div
                                 key={idx}
-                                onClick={() => handleChipClick(chip.text)}
-                                className="flex-shrink-0 flex items-center gap-1.5 px-4 py-2 bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded-full text-sm text-gray-300 transition-colors whitespace-nowrap"
+                                onClick={() => handleRecentClick(question)}
+                                className="flex items-center justify-between px-3 py-2.5 hover:bg-gray-50 rounded-xl cursor-pointer group transition-colors"
                             >
-                                <span>{chip.icon}</span>
-                                <span>{chip.text}</span>
-                            </button>
+                                <span className="text-gray-600 text-sm truncate pr-4">{question}</span>
+                                <button
+                                    onClick={(e) => deleteRecentQuestion(question, e)}
+                                    className="flex-shrink-0 w-7 h-7 rounded-full hover:bg-gray-200 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                                >
+                                    <XMarkIcon className="w-4 h-4 text-gray-400" />
+                                </button>
+                            </div>
                         ))}
                     </div>
                 </div>
+            )}
 
-                {/* Recent Questions */}
-                {recentQuestions.length > 0 && (
-                    <div>
-                        <div className="flex items-center gap-2 mb-3">
-                            <ClockIcon className="w-4 h-4 text-gray-500" />
-                            <h2 className="text-sm font-medium text-gray-400">Recent</h2>
-                        </div>
-                        <div className="space-y-1">
-                            {recentQuestions.map((question, idx) => (
-                                <div
-                                    key={idx}
-                                    onClick={() => handleRecentClick(question)}
-                                    className="flex items-center justify-between px-4 py-3 bg-gray-800/50 hover:bg-gray-800 rounded-xl cursor-pointer group transition-colors"
-                                >
-                                    <span className="text-gray-300 text-sm truncate pr-4">{question}</span>
-                                    <button
-                                        onClick={(e) => deleteRecentQuestion(question, e)}
-                                        className="flex-shrink-0 w-8 h-8 rounded-full hover:bg-gray-700 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
-                                    >
-                                        <XMarkIcon className="w-4 h-4 text-gray-500" />
-                                    </button>
-                                </div>
-                            ))}
-                        </div>
+            {/* Empty State */}
+            {recentQuestions.length === 0 && (
+                <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 text-center">
+                    <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-indigo-50 flex items-center justify-center">
+                        <SparklesIcon className="w-6 h-6 text-indigo-500" />
                     </div>
-                )}
-
-                {/* Empty State */}
-                {recentQuestions.length === 0 && (
-                    <div className="text-center py-8">
-                        <p className="text-gray-500 text-sm">
-                            Ask anything about campus life, placements, academics, and more!
-                        </p>
-                    </div>
-                )}
-            </div>
+                    <p className="text-gray-500 text-sm">
+                        Ask anything about campus life, placements, academics, and more!
+                    </p>
+                </div>
+            )}
         </div>
     );
 };
