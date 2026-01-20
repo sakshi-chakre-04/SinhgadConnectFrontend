@@ -213,10 +213,10 @@ const ChatWidget = () => {
 
     return (
         <>
-            {/* Floating Action Button */}
+            {/* Floating Action Button - Sticky bottom-right on mobile */}
             <button
                 onClick={() => setIsOpen(true)}
-                className="fixed bottom-20 lg:bottom-6 right-4 lg:right-6 w-14 h-14 bg-gradient-to-br from-indigo-600 to-violet-600 text-white rounded-full shadow-lg shadow-indigo-500/30 hover:shadow-xl hover:scale-110 transition-all flex items-center justify-center z-40 group"
+                className="fixed bottom-20 right-4 lg:bottom-6 lg:right-6 w-14 h-14 bg-gradient-to-br from-indigo-600 to-violet-600 text-white rounded-full shadow-lg shadow-indigo-500/30 hover:shadow-xl hover:scale-110 transition-all flex items-center justify-center z-50 group"
                 aria-label="Open AI Assistant"
             >
                 <SparklesIcon className="w-6 h-6 group-hover:animate-pulse" />
@@ -224,7 +224,7 @@ const ChatWidget = () => {
 
             {/* Compact Chat Panel - Anchored to Bottom Right */}
             {isOpen && (
-                <div className="fixed top-4 bottom-24 right-4 lg:right-6 z-50 flex items-end animate-slideUp">
+                <div className="fixed top-4 bottom-20 lg:bottom-6 right-4 lg:right-6 z-50 flex items-end animate-slideUp">
                     <div className="w-[380px] max-h-full h-[480px] flex flex-col bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden">
 
                         {/* Compact Header */}
