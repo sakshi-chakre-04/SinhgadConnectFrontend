@@ -15,21 +15,22 @@ import {
 import { ChatBubbleLeftIcon as ChatBubbleLeftIconSolid, SparklesIcon as SparklesIconSolid } from '@heroicons/react/24/solid';
 
 // Post type configuration
+// Post type configuration
 const POST_TYPE_CONFIG = {
-  question: { icon: '❓', label: 'Question', className: 'tag-purple' },
-  discussion: { icon: '💬', label: 'Discussion', className: 'tag-blue' },
-  announcement: { icon: '📢', label: 'Announcement', className: 'tag-warning' },
-  resource: { icon: '📚', label: 'Resource', className: 'tag-success' },
+  question: { icon: '❓', label: 'Question', className: 'bg-[var(--cyan-soft)] text-white' },
+  discussion: { icon: '💬', label: 'Discussion', className: 'bg-[var(--lavender-main)] text-white' },
+  announcement: { icon: '📢', label: 'Announcement', className: 'bg-[var(--yellow-soft)] text-[var(--text-primary)]' },
+  resource: { icon: '📚', label: 'Resource', className: 'bg-[var(--pink-soft)] text-white' },
 };
 
 // Avatar gradient based on user ID
 const getAvatarGradient = (name) => {
   const gradients = [
-    'avatar-gradient-1',
-    'avatar-gradient-2',
-    'avatar-gradient-3',
-    'avatar-gradient-4',
-    'avatar-gradient-5'
+    'bg-gradient-to-br from-[var(--lavender-main)] to-[var(--pink-soft)]',
+    'bg-gradient-to-br from-[var(--cyan-soft)] to-[var(--lavender-light)]',
+    'bg-gradient-to-br from-[var(--yellow-soft)] to-[var(--yellow-accent)]',
+    'bg-gradient-to-br from-[var(--pink-soft)] to-[var(--yellow-soft)]',
+    'bg-gradient-to-br from-[var(--lavender-light)] to-[var(--lavender-main)]'
   ];
   const index = name?.charCodeAt(0) % gradients.length || 0;
   return gradients[index];
@@ -317,9 +318,9 @@ const PostItem = ({ post, show, onToggleComments, onVote, onCommentCountUpdate, 
 
         {/* Score */}
         <div className="flex items-center gap-2">
-          <span className={`text-sm font-medium px-2.5 py-1 rounded-full ${netScore > 0 ? 'bg-green-100 text-green-600' :
+          <span className={`text-sm font-medium px-2.5 py-1 rounded-full ${netScore > 0 ? 'bg-[var(--lavender-light)] text-[var(--lavender-main)]' :
             netScore < 0 ? 'bg-red-100 text-red-500' :
-              'bg-gray-100 text-gray-500'
+              'bg-gray-100 text-[var(--gray-purple)]'
             }`}>
             {netScore > 0 ? '+' : ''}{netScore} pts
           </span>

@@ -39,7 +39,7 @@ const MobileNav = () => {
                             key={item.name}
                             to={item.href}
                             className={`flex flex-col items-center justify-center flex-1 h-full transition-colors ${isActive
-                                ? 'text-indigo-600'
+                                ? 'text-[var(--lavender-main)]'
                                 : 'text-gray-500 hover:text-gray-700'
                                 }`}
                         >
