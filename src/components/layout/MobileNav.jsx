@@ -3,21 +3,24 @@ import { NavLink, useLocation } from 'react-router-dom';
 import {
     HomeIcon,
     FireIcon,
-    BellIcon,
-    UserIcon
+    UserGroupIcon,
+    TrophyIcon,
+    BookOpenIcon
 } from '@heroicons/react/24/outline';
 import {
     HomeIcon as HomeIconSolid,
     FireIcon as FireIconSolid,
-    BellIcon as BellIconSolid,
-    UserIcon as UserIconSolid
+    UserGroupIcon as UserGroupIconSolid,
+    TrophyIcon as TrophyIconSolid,
+    BookOpenIcon as BookOpenIconSolid
 } from '@heroicons/react/24/solid';
 
 const navigation = [
     { name: 'Home', href: '/dashboard', icon: HomeIcon, activeIcon: HomeIconSolid },
     { name: 'Trending', href: '/trending', icon: FireIcon, activeIcon: FireIconSolid },
-    { name: 'Notifications', href: '/notifications', icon: BellIcon, activeIcon: BellIconSolid },
-    { name: 'Profile', href: '/profile', icon: UserIcon, activeIcon: UserIconSolid },
+    { name: 'Community', href: '/community', icon: UserGroupIcon, activeIcon: UserGroupIconSolid },
+    { name: 'Hall of Fame', href: '/hall-of-fame', icon: TrophyIcon, activeIcon: TrophyIconSolid },
+    { name: 'Resources', href: '/resources', icon: BookOpenIcon, activeIcon: BookOpenIconSolid },
 ];
 
 const MobileNav = () => {
@@ -40,8 +43,8 @@ const MobileNav = () => {
                                 : 'text-gray-500 hover:text-gray-700'
                                 }`}
                         >
-                            <Icon className="w-6 h-6" />
-                            <span className="text-xs mt-1 font-medium">{item.name}</span>
+                            <Icon className="w-5 h-5" />
+                            <span className="text-[10px] mt-0.5 font-medium">{item.name}</span>
                         </NavLink>
                     );
                 })}
