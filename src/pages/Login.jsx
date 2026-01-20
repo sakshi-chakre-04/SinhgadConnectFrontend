@@ -3,7 +3,6 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginUser, clearError, selectAuthError, selectAuthLoading } from '../features/auth/authSlice';
-import { useTheme } from '../context/ThemeContext';
 
 // Email validation
 const validateEmail = (value) => {
@@ -21,7 +20,6 @@ const Login = () => {
   const isLoading = useSelector(selectAuthLoading);
   const [isWakingUp, setIsWakingUp] = useState(false);
   const [retryCount, setRetryCount] = useState(0);
-  const { isDarkMode } = useTheme();
 
   const {
     register,
@@ -84,24 +82,14 @@ const Login = () => {
   const [showPassword, setShowPassword] = React.useState(false);
 
   return (
-    <div
-      className="min-h-screen flex items-center justify-center bg-gradient-to-br p-4"
-      style={{
-        background: isDarkMode
-          ? 'linear-gradient(135deg, #0F090E 0%, #352438 50%, #0F090E 100%)'
-          : 'linear-gradient(135deg, #B8ADE0 0%, #D4DBEE 50%, #E8C9DB 100%)'
-      }}
-    >
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br p-4" style={{ background: 'linear-gradient(135deg, #B8ADE0 0%, #D4DBEE 50%, #E8C9DB 100%)' }}>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="p-8 rounded-xl shadow-2xl w-full max-w-md"
-        style={{
-          backgroundColor: isDarkMode ? '#352438' : 'white'
-        }}
+        className="bg-white p-8 rounded-xl shadow-2xl w-full max-w-md"
         noValidate
       >
-        <h2 className="text-center text-2xl font-bold mb-2" style={{ color: isDarkMode ? 'white' : '#1f2937' }}>Welcome Back</h2>
-        <p className="text-center mb-6" style={{ color: isDarkMode ? '#D4DBEE' : 'var(--gray-purple)' }}>Please login to continue.</p>
+        <h2 className="text-center text-2xl font-bold text-gray-800 mb-2">Welcome Back</h2>
+        <p className="text-center mb-6" style={{ color: 'var(--gray-purple)' }}>Please login to continue.</p>
 
         {/* Server Waking Up Message */}
         {isWakingUp && (
@@ -132,7 +120,7 @@ const Login = () => {
 
         {/* Email Field */}
         <div className="mb-4">
-          <label htmlFor="email" className="block font-medium mb-2" style={{ color: isDarkMode ? 'white' : '#374151' }}>
+          <label htmlFor="email" className="block text-gray-700 font-medium mb-2">
             Email
           </label>
           <input
@@ -141,14 +129,7 @@ const Login = () => {
             {...register('email', { validate: validateEmail })}
             placeholder="Enter your @sinhgad.edu email"
             className={`w-full px-3 py-2 border-2 rounded-lg focus:outline-none transition-colors ${errors.email ? 'border-red-500' : 'border-gray-200'}`}
-            style={!errors.email ? {
-              borderColor: 'var(--lavender-light)',
-              backgroundColor: isDarkMode ? '#0F090E' : 'white',
-              color: isDarkMode ? 'white' : 'black'
-            } : {
-              backgroundColor: isDarkMode ? '#0F090E' : 'white',
-              color: isDarkMode ? 'white' : 'black'
-            }}
+            style={!errors.email ? { borderColor: 'var(--lavender-light)' } : {}}
             onFocus={(e) => !errors.email && (e.target.style.borderColor = 'var(--lavender-main)')}
             onBlur={(e) => !errors.email && (e.target.style.borderColor = 'var(--lavender-light)')}
           />
@@ -159,7 +140,7 @@ const Login = () => {
 
         {/* Password Field */}
         <div className="mb-4">
-          <label htmlFor="password" className="block font-medium mb-2" style={{ color: isDarkMode ? 'white' : '#374151' }}>
+          <label htmlFor="password" className="block text-gray-700 font-medium mb-2">
             Password
           </label>
           <div className="relative">
@@ -169,14 +150,7 @@ const Login = () => {
               {...register('password', { required: 'Password is required' })}
               placeholder="Enter your password"
               className={`w-full px-3 py-2 border-2 rounded-lg focus:outline-none transition-colors pr-10 ${errors.password ? 'border-red-500' : 'border-gray-200'}`}
-              style={!errors.password ? {
-                borderColor: 'var(--lavender-light)',
-                backgroundColor: isDarkMode ? '#0F090E' : 'white',
-                color: isDarkMode ? 'white' : 'black'
-              } : {
-                backgroundColor: isDarkMode ? '#0F090E' : 'white',
-                color: isDarkMode ? 'white' : 'black'
-              }}
+              style={!errors.password ? { borderColor: 'var(--lavender-light)' } : {}}
               onFocus={(e) => !errors.password && (e.target.style.borderColor = 'var(--lavender-main)')}
               onBlur={(e) => !errors.password && (e.target.style.borderColor = 'var(--lavender-light)')}
             />
@@ -195,7 +169,7 @@ const Login = () => {
 
         {/* Remember Me */}
         <div className="flex items-center justify-between mb-6">
-          <label className="flex items-center gap-2 text-sm cursor-pointer" style={{ color: isDarkMode ? '#D4DBEE' : 'var(--gray-purple)' }}>
+          <label className="flex items-center gap-2 text-sm cursor-pointer" style={{ color: 'var(--gray-purple)' }}>
             <input
               type="checkbox"
               {...register('rememberMe')}
@@ -221,7 +195,7 @@ const Login = () => {
         </button>
 
         {/* Registration Link */}
-        <div className="text-center mt-4" style={{ color: isDarkMode ? '#D4DBEE' : 'var(--gray-purple)' }}>
+        <div className="text-center mt-4" style={{ color: 'var(--gray-purple)' }}>
           Don't have an account?{' '}
           <Link to="/register" className="font-medium hover:underline" style={{ color: 'var(--lavender-main)' }}>
             Sign up

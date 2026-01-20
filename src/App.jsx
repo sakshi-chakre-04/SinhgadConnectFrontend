@@ -30,7 +30,6 @@ import Resources from './pages/Resources';
 import AskAI from './pages/AskAI';
 import AskAIButton from './components/chat/AskAIButton';
 import { SocketProvider } from './context/SocketContext';
-import { ThemeProvider } from './context/ThemeContext';
 
 // Layout wrapper for authenticated routes
 const AuthenticatedLayout = ({ children }) => {
@@ -105,57 +104,55 @@ injectStore(store);
 function App() {
   return (
     <Provider store={store}>
-      <ThemeProvider>
-        <SocketProvider>
-          <Router>
-            <div className="App">
-              <Routes>
-                {/* Public routes */}
-                <Route path="/login" element={<Login />} />
-                <Route path="/register" element={<Register />} />
+      <SocketProvider>
+        <Router>
+          <div className="App">
+            <Routes>
+              {/* Public routes */}
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
 
-                {/* Protected routes - all wrapped by ProtectedRoute */}
-                <Route element={<ProtectedRoute />}>
-                  <Route path="/dashboard" element={<AuthenticatedLayout><Dashboard /></AuthenticatedLayout>} />
-                  <Route path="/posts" element={<AuthenticatedLayout><Posts /></AuthenticatedLayout>} />
-                  <Route path="/posts/:id" element={<AuthenticatedLayout><PostDetail /></AuthenticatedLayout>} />
-                  <Route path="/community" element={<AuthenticatedLayout><Community /></AuthenticatedLayout>} />
-                  <Route path="/notifications" element={<AuthenticatedLayout><Notifications /></AuthenticatedLayout>} />
-                  <Route path="/profile" element={<AuthenticatedLayout><Profile /></AuthenticatedLayout>} />
-                  <Route path="/edit-profile" element={<AuthenticatedLayout><EditProfile /></AuthenticatedLayout>} />
-                  <Route path="/trending" element={<AuthenticatedLayout><Trending /></AuthenticatedLayout>} />
-                  <Route path="/hall-of-fame" element={<AuthenticatedLayout><HallOfFame /></AuthenticatedLayout>} />
-                  <Route path="/resources" element={<AuthenticatedLayout><Resources /></AuthenticatedLayout>} />
-                  <Route path="/ask-ai" element={<AuthenticatedLayout><AskAI /></AuthenticatedLayout>} />
-                  <Route path="/settings" element={<AuthenticatedLayout><Settings /></AuthenticatedLayout>} />
-                  <Route
-                    path="/create-post"
-                    element={<AuthenticatedLayout><Dashboard initialModalOpen={true} /></AuthenticatedLayout>}
-                  />
-                  <Route
-                    path="/department/:departmentName"
-                    element={<AuthenticatedLayout><Department /></AuthenticatedLayout>}
-                  />
-                  <Route
-                    path="/search"
-                    element={<AuthenticatedLayout><Search /></AuthenticatedLayout>}
-                  />
-                  <Route
-                    path="/user/:userId"
-                    element={<AuthenticatedLayout><UserProfile /></AuthenticatedLayout>}
-                  />
-                </Route>
+              {/* Protected routes - all wrapped by ProtectedRoute */}
+              <Route element={<ProtectedRoute />}>
+                <Route path="/dashboard" element={<AuthenticatedLayout><Dashboard /></AuthenticatedLayout>} />
+                <Route path="/posts" element={<AuthenticatedLayout><Posts /></AuthenticatedLayout>} />
+                <Route path="/posts/:id" element={<AuthenticatedLayout><PostDetail /></AuthenticatedLayout>} />
+                <Route path="/community" element={<AuthenticatedLayout><Community /></AuthenticatedLayout>} />
+                <Route path="/notifications" element={<AuthenticatedLayout><Notifications /></AuthenticatedLayout>} />
+                <Route path="/profile" element={<AuthenticatedLayout><Profile /></AuthenticatedLayout>} />
+                <Route path="/edit-profile" element={<AuthenticatedLayout><EditProfile /></AuthenticatedLayout>} />
+                <Route path="/trending" element={<AuthenticatedLayout><Trending /></AuthenticatedLayout>} />
+                <Route path="/hall-of-fame" element={<AuthenticatedLayout><HallOfFame /></AuthenticatedLayout>} />
+                <Route path="/resources" element={<AuthenticatedLayout><Resources /></AuthenticatedLayout>} />
+                <Route path="/ask-ai" element={<AuthenticatedLayout><AskAI /></AuthenticatedLayout>} />
+                <Route path="/settings" element={<AuthenticatedLayout><Settings /></AuthenticatedLayout>} />
+                <Route
+                  path="/create-post"
+                  element={<AuthenticatedLayout><Dashboard initialModalOpen={true} /></AuthenticatedLayout>}
+                />
+                <Route
+                  path="/department/:departmentName"
+                  element={<AuthenticatedLayout><Department /></AuthenticatedLayout>}
+                />
+                <Route
+                  path="/search"
+                  element={<AuthenticatedLayout><Search /></AuthenticatedLayout>}
+                />
+                <Route
+                  path="/user/:userId"
+                  element={<AuthenticatedLayout><UserProfile /></AuthenticatedLayout>}
+                />
+              </Route>
 
-                {/* Redirect root to dashboard */}
-                <Route path="/" element={<Navigate to="/dashboard" replace />} />
+              {/* Redirect root to dashboard */}
+              <Route path="/" element={<Navigate to="/dashboard" replace />} />
 
-                {/* Catch all - redirect to dashboard */}
-                <Route path="*" element={<Navigate to="/dashboard" replace />} />
-              </Routes>
-            </div>
-          </Router>
-        </SocketProvider>
-      </ThemeProvider>
+              {/* Catch all - redirect to dashboard */}
+              <Route path="*" element={<Navigate to="/dashboard" replace />} />
+            </Routes>
+          </div>
+        </Router>
+      </SocketProvider>
     </Provider>
   );
 }
