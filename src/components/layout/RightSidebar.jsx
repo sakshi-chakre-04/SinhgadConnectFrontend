@@ -9,6 +9,7 @@ import {
     SparklesIcon
 } from '@heroicons/react/24/outline';
 import { api } from '../../services/api/api';
+import { useTheme } from '../../context/ThemeContext';
 
 const trendingTopics = [
     'PlacementSeason',
@@ -22,6 +23,7 @@ const trendingTopics = [
 
 const RightSidebar = () => {
     const user = useSelector(selectUser);
+    const { isDarkMode } = useTheme();
     const [stats, setStats] = useState({
         totalPosts: 0,
         totalComments: 0,
@@ -57,7 +59,7 @@ const RightSidebar = () => {
         <aside className="right-sidebar hidden xl:block">
             {/* Quick Stats */}
             <div className="stats-card mb-6">
-                <h3 className="font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                <h3 className="font-semibold mb-4 flex items-center gap-2" style={{ color: isDarkMode ? 'white' : '#1f2937' }}>
                     <SparklesIcon className="w-5 h-5 text-primary-500" />
                     Quick Stats
                 </h3>
@@ -68,7 +70,7 @@ const RightSidebar = () => {
                             <DocumentTextIcon className="w-5 h-5 text-indigo-600" />
                         </div>
                         <div>
-                            <p className="text-2xl font-bold text-gray-900">{stats.totalPosts}</p>
+                            <p className="text-2xl font-bold" style={{ color: isDarkMode ? 'white' : '#1f2937' }}>{stats.totalPosts}</p>
                             <p className="text-xs text-gray-500">Posts</p>
                         </div>
                     </div>
@@ -78,7 +80,7 @@ const RightSidebar = () => {
                             <ChatBubbleLeftIcon className="w-5 h-5 text-green-600" />
                         </div>
                         <div>
-                            <p className="text-2xl font-bold text-gray-900">{stats.totalComments}</p>
+                            <p className="text-2xl font-bold" style={{ color: isDarkMode ? 'white' : '#1f2937' }}>{stats.totalComments}</p>
                             <p className="text-xs text-gray-500">Comments</p>
                         </div>
                     </div>
@@ -88,7 +90,7 @@ const RightSidebar = () => {
                             <HandThumbUpIcon className="w-5 h-5 text-orange-500" />
                         </div>
                         <div>
-                            <p className="text-2xl font-bold text-gray-900">{stats.totalUpvotes}</p>
+                            <p className="text-2xl font-bold" style={{ color: isDarkMode ? 'white' : '#1f2937' }}>{stats.totalUpvotes}</p>
                             <p className="text-xs text-gray-500">Upvotes</p>
                         </div>
                     </div>
@@ -97,7 +99,7 @@ const RightSidebar = () => {
 
             {/* Trending Topics */}
             <div className="card-flat p-4">
-                <h3 className="font-semibold text-gray-800 mb-4">🔥 Trending Topics</h3>
+                <h3 className="font-semibold mb-4" style={{ color: isDarkMode ? 'white' : '#1f2937' }}>🔥 Trending Topics</h3>
                 <div className="space-y-1">
                     {trendingTopics.map((topic) => (
                         <Link

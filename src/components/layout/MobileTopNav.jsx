@@ -13,6 +13,7 @@ import {
     ArrowRightOnRectangleIcon
 } from '@heroicons/react/24/outline';
 import { BellIcon as BellIconSolid } from '@heroicons/react/24/solid';
+import { useTheme } from '../../context/ThemeContext';
 
 const MobileTopNav = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -20,6 +21,7 @@ const MobileTopNav = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const user = useSelector(selectUser);
+    const { isDarkMode } = useTheme();
 
     const menuItems = [
         { name: 'Profile', href: '/profile', icon: UserIcon },
@@ -65,13 +67,22 @@ const MobileTopNav = () => {
                 }
             `}</style>
             {/* Top Navigation Bar - Mobile Only */}
-            <nav className="lg:hidden fixed top-0 left-0 right-0 bg-white border-b border-gray-200 z-40 safe-area-pt">
+            <nav
+                className="lg:hidden fixed top-0 left-0 right-0 border-b z-40 safe-area-pt"
+                style={{
+                    backgroundColor: isDarkMode ? 'var(--bg-plum)' : 'white',
+                    borderColor: isDarkMode ? 'var(--border)' : '#e5e7eb'
+                }}
+            >
                 <div className="flex items-center justify-between h-14 px-4">
                     {/* Left Side: Hamburger + Logo */}
                     <div className="flex items-center gap-2">
                         <button
                             onClick={() => setIsMenuOpen(true)}
-                            className="w-10 h-10 flex items-center justify-center text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+                            className="w-10 h-10 flex items-center justify-center rounded-lg transition-colors"
+                            style={{ color: isDarkMode ? 'white' : '#374151' }}
+                            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = isDarkMode ? 'rgba(145, 133, 214, 0.2)' : '#f3f4f6'}
+                            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
                             aria-label="Open Menu"
                         >
                             <Bars3Icon className="w-6 h-6" />
@@ -102,7 +113,10 @@ const MobileTopNav = () => {
                         </NavLink>
                         <button
                             onClick={handleCreatePost}
-                            className="w-10 h-10 flex items-center justify-center text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+                            className="w-10 h-10 flex items-center justify-center rounded-lg transition-colors"
+                            style={{ color: isDarkMode ? 'white' : '#374151' }}
+                            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = isDarkMode ? 'rgba(145, 133, 214, 0.2)' : '#f3f4f6'}
+                            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
                             aria-label="Create Post"
                         >
                             <PlusIcon className="w-7 h-7" />
@@ -121,7 +135,10 @@ const MobileTopNav = () => {
                     />
 
                     {/* Menu Drawer */}
-                    <div className="lg:hidden fixed top-0 left-0 bottom-0 w-72 bg-white z-50 shadow-2xl animate-slideInLeft">
+                    <div
+                        className="lg:hidden fixed top-0 left-0 bottom-0 w-72 z-50 shadow-2xl animate-slideInLeft"
+                        style={{ backgroundColor: isDarkMode ? 'var(--bg-plum)' : 'white' }}
+                    >
                         {/* Menu Header with User Info */}
                         <div className="p-4 border-b border-gray-200 bg-gradient-to-br from-indigo-50 to-purple-50">
                             <div className="flex items-center justify-between mb-3">
@@ -132,7 +149,7 @@ const MobileTopNav = () => {
                                         </span>
                                     </div>
                                     <div>
-                                        <h2 className="font-bold text-gray-900">{user?.name || 'User'}</h2>
+                                        <h2 className="font-bold" style={{ color: isDarkMode ? 'white' : '#1f2937' }}>{user?.name || 'User'}</h2>
                                         <p className="text-xs text-gray-500">{user?.email || ''}</p>
                                     </div>
                                 </div>
@@ -170,7 +187,12 @@ const MobileTopNav = () => {
                             {/* Logout Button */}
                             <button
                                 onClick={handleLogout}
-                                className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-100 transition-all"
+                                className="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all"
+                                style={{
+                                    color: isDarkMode ? '#D4DBEE' : '#374151'
+                                }}
+                                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = isDarkMode ? 'rgba(145, 133, 214, 0.2)' : '#f3f4f6'}
+                                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
                             >
                                 <ArrowRightOnRectangleIcon className="w-5 h-5" />
                                 <span className="font-medium">Logout</span>
