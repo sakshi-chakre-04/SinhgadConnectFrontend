@@ -27,7 +27,8 @@ import EditProfile from './pages/EditProfile';
 import Trending from './pages/Trending';
 import HallOfFame from './pages/HallOfFame';
 import Resources from './pages/Resources';
-import ChatWidget from './components/chat/ChatWidget';
+import AskAI from './pages/AskAI';
+import AskAIButton from './components/chat/AskAIButton';
 import { SocketProvider } from './context/SocketContext';
 
 // Layout wrapper for authenticated routes
@@ -75,6 +76,9 @@ const AuthenticatedLayout = ({ children }) => {
       {/* Mobile Bottom Navigation */}
       <MobileNav />
 
+      {/* Floating AI Button (desktop) */}
+      <AskAIButton />
+
       {/* Global Post Creation Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 z-[1000]" onClick={(e) => {
@@ -90,9 +94,6 @@ const AuthenticatedLayout = ({ children }) => {
           </div>
         </div>
       )}
-
-      {/* AI Chat Widget */}
-      <ChatWidget />
     </div>
   );
 };
@@ -123,6 +124,7 @@ function App() {
                 <Route path="/trending" element={<AuthenticatedLayout><Trending /></AuthenticatedLayout>} />
                 <Route path="/hall-of-fame" element={<AuthenticatedLayout><HallOfFame /></AuthenticatedLayout>} />
                 <Route path="/resources" element={<AuthenticatedLayout><Resources /></AuthenticatedLayout>} />
+                <Route path="/ask-ai" element={<AuthenticatedLayout><AskAI /></AuthenticatedLayout>} />
                 <Route path="/settings" element={<AuthenticatedLayout><Settings /></AuthenticatedLayout>} />
                 <Route
                   path="/create-post"
