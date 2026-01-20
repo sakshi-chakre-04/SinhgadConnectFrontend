@@ -1,17 +1,14 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { selectUser } from '../features/auth/authSlice';
 import { ArrowLeftIcon, SunIcon, MoonIcon } from '@heroicons/react/24/outline';
+import { useTheme } from '../context/ThemeContext';
 
 const Settings = () => {
   const user = useSelector(selectUser);
   const navigate = useNavigate();
-  const [isDarkMode, setIsDarkMode] = useState(false);
-
-  const handleToggle = () => {
-    setIsDarkMode(!isDarkMode);
-  };
+  const { isDarkMode, toggleTheme } = useTheme();
 
   return (
     <div className="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
@@ -36,7 +33,7 @@ const Settings = () => {
 
             {/* Theme Toggle */}
             <button
-              onClick={handleToggle}
+              onClick={toggleTheme}
               className="flex items-center justify-between w-full px-4 py-3 rounded-xl transition-all hover:bg-gray-50"
             >
               <div className="flex items-center gap-3">

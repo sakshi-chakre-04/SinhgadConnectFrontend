@@ -10,11 +10,13 @@ import {
   FireIcon
 } from '@heroicons/react/24/outline';
 import PostContainer from '../components/posts/PostContainer';
+import { useTheme } from '../context/ThemeContext';
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const user = useSelector(selectUser);
   const { openModal } = useModal();
+  const { isDarkMode } = useTheme();
 
   const getGreeting = () => {
     const hour = new Date().getHours();
@@ -28,7 +30,14 @@ const Dashboard = () => {
       {/* Futuristic Hero Section - Compact Version */}
       <div className="relative overflow-hidden rounded-3xl p-6 text-white shadow-2xl hover-glow transition-all duration-500 group">
         {/* Animated Gradient Background */}
-        <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, #9185D6 0%, #B8ADE0 35%, #D094B6 70%, #D4DBEE 100%)' }}></div>
+        <div
+          className="absolute inset-0"
+          style={{
+            background: isDarkMode
+              ? 'linear-gradient(135deg, #0F090E 0%, #352438 50%, #0F090E 100%)'
+              : 'linear-gradient(135deg, #9185D6 0%, #B8ADE0 35%, #D094B6 70%, #D4DBEE 100%)'
+          }}
+        ></div>
 
         {/* Glass Overlay Patterns */}
         <div className="absolute inset-0 opacity-20 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] mix-blend-overlay"></div>
