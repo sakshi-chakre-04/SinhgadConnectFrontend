@@ -429,23 +429,37 @@ const AskAI = () => {
                 </form>
             </div>
 
-            {/* Suggestion Chips */}
+            {/* Suggestion Chips - Marquee */}
             <div className="mb-6">
                 <h3 className="text-sm font-medium text-gray-700 mb-3 flex items-center gap-2">
                     <span className="w-1 h-4 bg-gradient-to-b from-indigo-500 to-violet-500 rounded-full"></span>
                     Popular topics
                 </h3>
-                <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide -mx-4 px-4">
-                    {SUGGESTION_CHIPS.map((chip, idx) => (
-                        <button
-                            key={idx}
-                            onClick={() => handleChipClick(chip.text)}
-                            className="flex-shrink-0 flex items-center gap-1.5 px-4 py-2.5 bg-white hover:bg-indigo-50 border border-gray-200 hover:border-indigo-200 rounded-full text-sm text-gray-700 hover:text-indigo-700 transition-all shadow-sm whitespace-nowrap"
-                        >
-                            <span>{chip.icon}</span>
-                            <span>{chip.text}</span>
-                        </button>
-                    ))}
+                <div className="overflow-hidden -mx-4">
+                    <div className="flex gap-3 animate-marquee hover:pause-animation">
+                        {/* First set of chips */}
+                        {SUGGESTION_CHIPS.map((chip, idx) => (
+                            <button
+                                key={`first-${idx}`}
+                                onClick={() => handleChipClick(chip.text)}
+                                className="flex-shrink-0 flex items-center gap-1.5 px-4 py-2.5 bg-white hover:bg-indigo-50 border border-gray-200 hover:border-indigo-200 rounded-full text-sm text-gray-700 hover:text-indigo-700 transition-all shadow-sm whitespace-nowrap"
+                            >
+                                <span>{chip.icon}</span>
+                                <span>{chip.text}</span>
+                            </button>
+                        ))}
+                        {/* Duplicate set for seamless loop */}
+                        {SUGGESTION_CHIPS.map((chip, idx) => (
+                            <button
+                                key={`second-${idx}`}
+                                onClick={() => handleChipClick(chip.text)}
+                                className="flex-shrink-0 flex items-center gap-1.5 px-4 py-2.5 bg-white hover:bg-indigo-50 border border-gray-200 hover:border-indigo-200 rounded-full text-sm text-gray-700 hover:text-indigo-700 transition-all shadow-sm whitespace-nowrap"
+                            >
+                                <span>{chip.icon}</span>
+                                <span>{chip.text}</span>
+                            </button>
+                        ))}
+                    </div>
                 </div>
             </div>
 
