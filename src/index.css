@@ -437,6 +437,16 @@ body {
     }
 }
 
+@keyframes rainbow-slide {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    100% {
+        background-position: 100% 50%;
+    }
+}
+
 .animate-fadeIn {
     animation: fadeIn 0.3s ease-out;
 }
@@ -447,6 +457,10 @@ body {
 
 .animate-slideInLeft {
     animation: slideInLeft 0.3s ease-out;
+}
+
+.animate-rainbow-slide {
+    animation: rainbow-slide 3s linear infinite;
 }
 
 .animate-pulse {
