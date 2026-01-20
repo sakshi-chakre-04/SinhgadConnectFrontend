@@ -42,13 +42,8 @@ const MobileTopNav = () => {
 
     return (
         <>
-            {/* Rainbow Gradient Animation */}
+            {/* Static Rainbow Gradient */}
             <style>{`
-                @keyframes rainbow-gradient {
-                    0% { background-position: 0% 50%; }
-                    50% { background-position: 100% 50%; }
-                    100% { background-position: 0% 50%; }
-                }
                 .rainbow-text {
                     background: linear-gradient(
                         90deg,
@@ -59,11 +54,8 @@ const MobileTopNav = () => {
                         #06b6d4,
                         #3b82f6,
                         #8b5cf6,
-                        #ec4899,
-                        #ef4444
+                        #ec4899
                     );
-                    background-size: 200% 200%;
-                    animation: rainbow-gradient 3s ease infinite;
                     -webkit-background-clip: text;
                     background-clip: text;
                     -webkit-text-fill-color: transparent;
@@ -80,8 +72,6 @@ const MobileTopNav = () => {
                         #8b5cf6,
                         #ec4899
                     );
-                    background-size: 200% 200%;
-                    animation: rainbow-gradient 3s ease infinite;
                 }
             `}</style>
             {/* Top Navigation Bar - Mobile Only */}
