@@ -9,7 +9,8 @@ import {
     PlusCircleIcon,
     ChartBarIcon,
     TrophyIcon,
-    BookOpenIcon
+    BookOpenIcon,
+    SparklesIcon
 } from '@heroicons/react/24/outline';
 import {
     HomeIcon as HomeIconSolid,
@@ -19,12 +20,14 @@ import {
     ChatBubbleLeftRightIcon as ChatBubbleLeftRightIconSolid,
     ChartBarIcon as ChartBarIconSolid,
     TrophyIcon as TrophyIconSolid,
-    BookOpenIcon as BookOpenIconSolid
+    BookOpenIcon as BookOpenIconSolid,
+    SparklesIcon as SparklesIconSolid
 } from '@heroicons/react/24/solid';
 
 const navigation = [
     { name: 'Home', href: '/dashboard', icon: HomeIcon, activeIcon: HomeIconSolid },
     { name: 'Notifications', href: '/notifications', icon: BellIcon, activeIcon: BellIconSolid },
+    { name: 'Ask AI', href: '/ask-ai', icon: SparklesIcon, activeIcon: SparklesIconSolid },
     { name: 'Leaderboard', href: '/leaderboard', icon: ChartBarIcon, activeIcon: ChartBarIconSolid },
     { name: 'Hall of Fame', href: '/hall-of-fame', icon: TrophyIcon, activeIcon: TrophyIconSolid },
     { name: 'Resources', href: '/resources', icon: BookOpenIcon, activeIcon: BookOpenIconSolid },
