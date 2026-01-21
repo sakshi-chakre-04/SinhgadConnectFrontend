@@ -375,22 +375,14 @@ const AskAI = () => {
     return (
         <div className="min-h-screen flex flex-col">
             {/* Header */}
-            <div className="flex items-center justify-between mb-6">
-                <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center shadow-lg shadow-indigo-200">
-                        <SparklesIcon className="w-5 h-5 text-white" />
-                    </div>
-                    <div>
-                        <h1 className="text-xl font-bold text-gray-900">Ask AI</h1>
-                        <p className="text-xs text-gray-500">Powered by SinhgadConnect</p>
-                    </div>
+            <div className="flex items-center gap-3 mb-6">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center shadow-lg shadow-indigo-200">
+                    <SparklesIcon className="w-5 h-5 text-white" />
                 </div>
-                <button
-                    onClick={() => navigate(-1)}
-                    className="w-9 h-9 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors"
-                >
-                    <XMarkIcon className="w-5 h-5 text-gray-500" />
-                </button>
+                <div>
+                    <h1 className="text-xl font-bold text-gray-900">Ask AI</h1>
+                    <p className="text-xs text-gray-500">Powered by SinhgadConnect</p>
+                </div>
             </div>
 
             {/* Branding Card */}
