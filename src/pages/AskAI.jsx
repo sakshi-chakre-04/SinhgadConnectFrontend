@@ -371,141 +371,181 @@ const AskAI = () => {
         );
     }
 
-    // Home View - Redesigned with vibrant visuals
+    // Home View - FUTURISTIC DESIGN
+    // Inspired by: Apple Vision Pro (spatial glass), Nothing OS (dot patterns), 
+    // Raycast (command palette), Linear (ultra-clean), Glassmorphism 2.0
     return (
-        <div className="min-h-screen flex flex-col -mx-4 lg:-mx-8 -mt-16 lg:-mt-4">
-            {/* Hero Section with Gradient */}
-            <div className="relative overflow-hidden bg-gradient-to-br from-indigo-600 via-violet-600 to-purple-700 px-6 pt-20 lg:pt-12 pb-16">
-                {/* Animated background orbs */}
-                <div className="absolute top-0 left-0 w-72 h-72 bg-white/10 rounded-full -translate-x-1/2 -translate-y-1/2 blur-3xl animate-pulse"></div>
-                <div className="absolute top-1/2 right-0 w-96 h-96 bg-purple-400/20 rounded-full translate-x-1/2 blur-3xl"></div>
-                <div className="absolute bottom-0 left-1/3 w-64 h-64 bg-indigo-400/20 rounded-full translate-y-1/2 blur-2xl"></div>
+        <div className="min-h-screen flex flex-col -mx-4 lg:-mx-8 -mt-16 lg:-mt-4 relative overflow-hidden">
+            {/* === SPATIAL BACKGROUND === */}
+            {/* Why: Creates depth and atmosphere like visionOS spatial environments */}
+            <div className="fixed inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
+                {/* Ambient glow orbs - Creates spatial depth like Vision Pro */}
+                <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-violet-500/20 rounded-full blur-[120px] animate-pulse" style={{ animationDuration: '4s' }} />
+                <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-cyan-500/15 rounded-full blur-[100px] animate-pulse" style={{ animationDuration: '6s' }} />
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-fuchsia-500/10 rounded-full blur-[150px]" />
 
-                {/* Floating sparkles */}
-                <div className="absolute top-8 right-8 text-white/30 animate-bounce" style={{ animationDelay: '0s' }}>✦</div>
-                <div className="absolute top-16 left-12 text-white/20 animate-bounce text-2xl" style={{ animationDelay: '0.5s' }}>✧</div>
-                <div className="absolute bottom-12 right-16 text-white/25 animate-bounce" style={{ animationDelay: '1s' }}>✦</div>
-
-                <div className="relative z-10 max-w-2xl mx-auto text-center">
-                    {/* Glowing AI icon */}
-                    <div className="relative inline-block mb-6">
-                        <div className="absolute inset-0 bg-white/30 rounded-3xl blur-xl animate-pulse"></div>
-                        <div className="relative w-20 h-20 rounded-3xl bg-white/20 backdrop-blur-sm border border-white/30 flex items-center justify-center shadow-2xl">
-                            <SparklesIcon className="w-10 h-10 text-white" />
-                        </div>
-                    </div>
-
-                    <h1 className="text-3xl lg:text-4xl font-bold text-white mb-3">
-                        Ask AI Anything
-                    </h1>
-                    <p className="text-white/70 text-lg mb-8">
-                        Get instant answers from your campus community
-                    </p>
-
-                    {/* Glowing Search Input */}
-                    <form onSubmit={handleSubmit} className="relative">
-                        <div className="absolute -inset-1 bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 rounded-2xl blur opacity-30"></div>
-                        <div className="relative bg-white rounded-xl shadow-2xl">
-                            <input
-                                ref={inputRef}
-                                type="text"
-                                value={input}
-                                onChange={(e) => setInput(e.target.value)}
-                                placeholder="What would you like to know?"
-                                className="w-full px-6 py-5 pr-16 bg-transparent text-gray-900 placeholder-gray-400 focus:outline-none text-lg rounded-xl"
-                            />
-                            <button
-                                type="submit"
-                                disabled={!input.trim()}
-                                className="absolute right-2 top-1/2 -translate-y-1/2 w-12 h-12 bg-gradient-to-r from-indigo-600 to-violet-600 text-white rounded-xl hover:shadow-lg hover:scale-105 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center transition-all"
-                            >
-                                <PaperAirplaneIcon className="w-5 h-5" />
-                            </button>
-                        </div>
-                    </form>
-                </div>
+                {/* Nothing OS inspired dot matrix grid */}
+                <div className="absolute inset-0 opacity-[0.03]" style={{
+                    backgroundImage: 'radial-gradient(circle, white 1px, transparent 1px)',
+                    backgroundSize: '24px 24px'
+                }} />
             </div>
 
-            {/* Content Section */}
-            <div className="flex-1 px-4 lg:px-8 -mt-6 relative z-10">
-                {/* Suggestion Chips */}
-                <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-5 shadow-lg border border-white/50 mb-6">
-                    <h3 className="text-sm font-semibold text-gray-800 mb-4 flex items-center gap-2">
-                        <span className="w-6 h-6 rounded-lg bg-gradient-to-br from-indigo-500 to-violet-500 flex items-center justify-center">
-                            <span className="text-white text-xs">💡</span>
-                        </span>
-                        Popular Topics
-                    </h3>
-                    <div className="overflow-hidden -mx-1">
-                        <div className="flex gap-3 animate-marquee hover:pause-animation">
-                            {SUGGESTION_CHIPS.map((chip, idx) => (
+            {/* === MAIN CONTENT === */}
+            <div className="relative z-10 flex flex-col min-h-screen px-4 lg:px-8 pt-20 lg:pt-8 pb-8">
+
+                {/* === HERO SECTION === */}
+                <div className="flex-1 flex flex-col items-center justify-center max-w-2xl mx-auto w-full">
+
+                    {/* AI PRESENCE INDICATOR */}
+                    {/* Why: Like Humane AI Pin's ambient presence - the AI feels alive */}
+                    <div className="relative mb-8">
+                        {/* Breathing ring - Shows AI is "listening" */}
+                        <div className="absolute inset-0 rounded-full bg-gradient-to-r from-violet-500 via-fuchsia-500 to-cyan-500 blur-xl opacity-60 animate-pulse" style={{ animationDuration: '3s' }} />
+                        <div className="absolute -inset-2 rounded-full border border-white/10 animate-ping" style={{ animationDuration: '3s' }} />
+
+                        {/* Core orb - Glassmorphism 2.0 with layered depth */}
+                        <div className="relative w-24 h-24 rounded-full bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-2xl border border-white/20 flex items-center justify-center shadow-2xl">
+                            <SparklesIcon className="w-10 h-10 text-white/90" />
+                        </div>
+                    </div>
+
+                    {/* TITLE - Linear-inspired ultra-clean typography */}
+                    <h1 className="text-4xl lg:text-5xl font-light text-white/90 tracking-tight mb-2 text-center">
+                        Ask <span className="font-semibold bg-gradient-to-r from-violet-400 via-fuchsia-400 to-cyan-400 bg-clip-text text-transparent">anything</span>
+                    </h1>
+                    <p className="text-white/40 text-sm tracking-widest uppercase mb-10">
+                        Campus Intelligence • Powered by AI
+                    </p>
+
+                    {/* === COMMAND PALETTE INPUT === */}
+                    {/* Why: Raycast-inspired - keyboard-first, minimal chrome, feels powerful */}
+                    <form onSubmit={handleSubmit} className="w-full mb-8">
+                        <div className="relative group">
+                            {/* Glow effect on focus/hover */}
+                            <div className="absolute -inset-0.5 bg-gradient-to-r from-violet-500 via-fuchsia-500 to-cyan-500 rounded-2xl blur opacity-0 group-hover:opacity-30 group-focus-within:opacity-50 transition-all duration-500" />
+
+                            {/* Input container - Frosted glass */}
+                            <div className="relative bg-white/5 backdrop-blur-2xl rounded-2xl border border-white/10 overflow-hidden">
+                                {/* Command prefix - Like Raycast */}
+                                <div className="absolute left-5 top-1/2 -translate-y-1/2 flex items-center gap-2 text-white/30">
+                                    <span className="text-lg">⌘</span>
+                                </div>
+
+                                <input
+                                    ref={inputRef}
+                                    type="text"
+                                    value={input}
+                                    onChange={(e) => setInput(e.target.value)}
+                                    placeholder="What would you like to know?"
+                                    className="w-full pl-14 pr-16 py-5 bg-transparent text-white placeholder-white/30 focus:outline-none text-lg font-light"
+                                />
+
+                                {/* Submit button - Minimal, only visible when typed */}
                                 <button
-                                    key={`first-${idx}`}
-                                    onClick={() => handleChipClick(chip.text)}
-                                    className="flex-shrink-0 flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-gray-50 to-gray-100 hover:from-indigo-50 hover:to-violet-50 border border-gray-200 hover:border-indigo-300 rounded-full text-sm text-gray-700 hover:text-indigo-700 transition-all shadow-sm whitespace-nowrap group"
+                                    type="submit"
+                                    disabled={!input.trim()}
+                                    className={`absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 ${input.trim()
+                                            ? 'bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white shadow-lg shadow-violet-500/30'
+                                            : 'bg-white/5 text-white/20'
+                                        }`}
                                 >
-                                    <span className="text-base">{chip.icon}</span>
-                                    <span className="font-medium">{chip.text}</span>
+                                    <PaperAirplaneIcon className="w-5 h-5" />
                                 </button>
-                            ))}
-                            {SUGGESTION_CHIPS.map((chip, idx) => (
+                            </div>
+
+                            {/* Keyboard hint - Raycast style */}
+                            <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-2 text-white/20 text-xs">
+                                <kbd className="px-1.5 py-0.5 bg-white/5 rounded border border-white/10 font-mono">↵</kbd>
+                                <span>to search</span>
+                            </div>
+                        </div>
+                    </form>
+
+                    {/* === SUGGESTION CHIPS === */}
+                    {/* Why: Nothing OS inspired - minimal, monochrome, reveals on interaction */}
+                    <div className="w-full mt-8">
+                        <div className="flex items-center justify-center gap-3 mb-4">
+                            {/* Dot indicator like Nothing OS */}
+                            <div className="flex gap-1">
+                                <div className="w-1 h-1 rounded-full bg-violet-400" />
+                                <div className="w-1 h-1 rounded-full bg-fuchsia-400" />
+                                <div className="w-1 h-1 rounded-full bg-cyan-400" />
+                            </div>
+                            <span className="text-white/30 text-xs uppercase tracking-[0.2em]">Explore</span>
+                        </div>
+
+                        <div className="flex flex-wrap justify-center gap-2">
+                            {SUGGESTION_CHIPS.slice(0, 6).map((chip, idx) => (
                                 <button
-                                    key={`second-${idx}`}
+                                    key={idx}
                                     onClick={() => handleChipClick(chip.text)}
-                                    className="flex-shrink-0 flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-gray-50 to-gray-100 hover:from-indigo-50 hover:to-violet-50 border border-gray-200 hover:border-indigo-300 rounded-full text-sm text-gray-700 hover:text-indigo-700 transition-all shadow-sm whitespace-nowrap group"
+                                    className="group px-4 py-2 bg-white/[0.03] hover:bg-white/[0.08] backdrop-blur border border-white/[0.06] hover:border-white/20 rounded-full text-white/50 hover:text-white/90 text-sm transition-all duration-300 flex items-center gap-2"
                                 >
-                                    <span className="text-base">{chip.icon}</span>
-                                    <span className="font-medium">{chip.text}</span>
+                                    <span className="opacity-60 group-hover:opacity-100 transition-opacity">{chip.icon}</span>
+                                    <span className="font-light">{chip.text}</span>
                                 </button>
                             ))}
                         </div>
                     </div>
                 </div>
 
-                {/* Recent Questions */}
+                {/* === RECENT QUESTIONS - SPATIAL CARDS === */}
+                {/* Why: Vision Pro inspired floating panels with depth layers */}
                 {recentQuestions.length > 0 && (
-                    <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-5 shadow-lg border border-white/50">
-                        <div className="flex items-center gap-2 mb-4">
-                            <span className="w-6 h-6 rounded-lg bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center">
-                                <ClockIcon className="w-3.5 h-3.5 text-white" />
-                            </span>
-                            <h3 className="text-sm font-semibold text-gray-800">Recent Questions</h3>
+                    <div className="mt-auto pt-8">
+                        <div className="flex items-center gap-2 mb-4 justify-center">
+                            <div className="w-6 h-[1px] bg-gradient-to-r from-transparent to-white/20" />
+                            <ClockIcon className="w-3 h-3 text-white/30" />
+                            <span className="text-white/30 text-xs uppercase tracking-[0.15em]">Recent</span>
+                            <div className="w-6 h-[1px] bg-gradient-to-l from-transparent to-white/20" />
                         </div>
-                        <div className="space-y-2">
-                            {recentQuestions.map((question, idx) => (
+
+                        <div className="flex flex-col gap-2 max-w-lg mx-auto">
+                            {recentQuestions.slice(0, 3).map((question, idx) => (
                                 <div
                                     key={idx}
                                     onClick={() => handleRecentClick(question)}
-                                    className="flex items-center justify-between px-4 py-3 bg-gradient-to-r from-gray-50 to-transparent hover:from-indigo-50 hover:to-violet-50/50 rounded-xl cursor-pointer group transition-all border border-transparent hover:border-indigo-100"
+                                    className="group relative overflow-hidden"
                                 >
-                                    <span className="text-gray-700 text-sm truncate pr-4 group-hover:text-indigo-700 transition-colors">{question}</span>
-                                    <button
-                                        onClick={(e) => deleteRecentQuestion(question, e)}
-                                        className="flex-shrink-0 w-7 h-7 rounded-full hover:bg-red-100 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all"
-                                    >
-                                        <XMarkIcon className="w-4 h-4 text-gray-400 group-hover:text-red-500" />
-                                    </button>
+                                    {/* Hover glow */}
+                                    <div className="absolute inset-0 bg-gradient-to-r from-violet-500/0 via-fuchsia-500/10 to-cyan-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-xl" />
+
+                                    <div className="relative flex items-center justify-between px-5 py-4 bg-white/[0.02] hover:bg-white/[0.05] backdrop-blur border border-white/[0.05] hover:border-white/10 rounded-xl cursor-pointer transition-all duration-300">
+                                        <span className="text-white/50 group-hover:text-white/80 text-sm font-light truncate pr-4 transition-colors">
+                                            {question}
+                                        </span>
+                                        <button
+                                            onClick={(e) => deleteRecentQuestion(question, e)}
+                                            className="flex-shrink-0 w-6 h-6 rounded-lg flex items-center justify-center opacity-0 group-hover:opacity-100 hover:bg-red-500/20 transition-all"
+                                        >
+                                            <XMarkIcon className="w-3.5 h-3.5 text-white/30 hover:text-red-400" />
+                                        </button>
+                                    </div>
                                 </div>
                             ))}
                         </div>
                     </div>
                 )}
 
-                {/* Empty State - When no recent questions */}
+                {/* === EMPTY STATE === */}
                 {recentQuestions.length === 0 && (
-                    <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-lg border border-white/50 text-center">
-                        <div className="relative inline-block mb-4">
-                            <div className="absolute inset-0 bg-indigo-200 rounded-2xl blur-lg animate-pulse"></div>
-                            <div className="relative w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center">
-                                <SparklesIcon className="w-8 h-8 text-white" />
-                            </div>
+                    <div className="mt-auto pt-8 flex flex-col items-center">
+                        {/* Minimal status indicator */}
+                        <div className="flex items-center gap-3 px-4 py-2 bg-white/[0.02] rounded-full border border-white/[0.05]">
+                            <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                            <span className="text-white/30 text-xs uppercase tracking-wider">Ready</span>
                         </div>
-                        <h3 className="font-semibold text-gray-900 mb-2">Ready to help!</h3>
-                        <p className="text-gray-500 text-sm max-w-xs mx-auto">
-                            Ask about placements, academics, campus life, or anything else about Sinhgad!
-                        </p>
                     </div>
                 )}
+            </div>
+
+            {/* === AMBIENT CORNER ACCENTS - Nothing OS glyph style === */}
+            <div className="fixed top-6 left-6 text-white/10 text-2xl pointer-events-none">⌘</div>
+            <div className="fixed bottom-6 right-6 flex gap-1 pointer-events-none">
+                <div className="w-2 h-2 rounded-full bg-violet-400/30" />
+                <div className="w-2 h-2 rounded-full bg-fuchsia-400/30" />
+                <div className="w-2 h-2 rounded-full bg-cyan-400/30" />
             </div>
         </div>
     );
