@@ -24,7 +24,7 @@ import Search from './pages/Search';
 import PostDetail from './pages/PostDetail';
 import ASKQues from './components/askQues/ASKQues';
 import EditProfile from './pages/EditProfile';
-import Trending from './pages/Trending';
+import Leaderboard from './pages/Leaderboard';
 import HallOfFame from './pages/HallOfFame';
 import Resources from './pages/Resources';
 import AskAI from './pages/AskAI';
@@ -118,7 +118,7 @@ function App() {
                 <Route path="/notifications" element={<AuthenticatedLayout><Notifications /></AuthenticatedLayout>} />
                 <Route path="/profile" element={<AuthenticatedLayout><Profile /></AuthenticatedLayout>} />
                 <Route path="/edit-profile" element={<AuthenticatedLayout><EditProfile /></AuthenticatedLayout>} />
-                <Route path="/trending" element={<AuthenticatedLayout><Trending /></AuthenticatedLayout>} />
+                <Route path="/leaderboard" element={<AuthenticatedLayout><Leaderboard /></AuthenticatedLayout>} />
                 <Route path="/hall-of-fame" element={<AuthenticatedLayout><HallOfFame /></AuthenticatedLayout>} />
                 <Route path="/resources" element={<AuthenticatedLayout><Resources /></AuthenticatedLayout>} />
                 <Route path="/ask-ai" element={<AuthenticatedLayout><AskAI /></AuthenticatedLayout>} />
