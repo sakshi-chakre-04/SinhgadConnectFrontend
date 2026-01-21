@@ -371,22 +371,22 @@ const AskAI = () => {
         );
     }
 
-    // Home View - FUTURISTIC DESIGN
-    // Inspired by: Apple Vision Pro (spatial glass), Nothing OS (dot patterns), 
-    // Raycast (command palette), Linear (ultra-clean), Glassmorphism 2.0
+    // Home View - FUTURISTIC DESIGN (LIGHT MODE)
+    // Inspired by: Apple Vision Pro, Nothing OS, Raycast, Linear, Glassmorphism 2.0
+    // Same design language as dark mode but adapted for light theme
     return (
         <div className="min-h-screen flex flex-col -mx-4 lg:-mx-8 -mt-16 lg:-mt-4 relative overflow-hidden">
-            {/* === SPATIAL BACKGROUND === */}
-            {/* Why: Creates depth and atmosphere like visionOS spatial environments */}
-            <div className="fixed inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
-                {/* Ambient glow orbs - Creates spatial depth like Vision Pro */}
-                <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-violet-500/20 rounded-full blur-[120px] animate-pulse" style={{ animationDuration: '4s' }} />
-                <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-cyan-500/15 rounded-full blur-[100px] animate-pulse" style={{ animationDuration: '6s' }} />
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-fuchsia-500/10 rounded-full blur-[150px]" />
+            {/* === SPATIAL BACKGROUND (LIGHT) === */}
+            {/* Why: Creates depth like visionOS but in light mode */}
+            <div className="fixed inset-0 bg-gradient-to-br from-slate-50 via-white to-violet-50/30">
+                {/* Ambient glow orbs - Soft pastel tones for light mode */}
+                <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-violet-200/40 rounded-full blur-[120px] animate-pulse" style={{ animationDuration: '4s' }} />
+                <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-cyan-200/30 rounded-full blur-[100px] animate-pulse" style={{ animationDuration: '6s' }} />
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-fuchsia-100/40 rounded-full blur-[150px]" />
 
-                {/* Nothing OS inspired dot matrix grid */}
+                {/* Dot matrix grid - Light version */}
                 <div className="absolute inset-0 opacity-[0.03]" style={{
-                    backgroundImage: 'radial-gradient(circle, white 1px, transparent 1px)',
+                    backgroundImage: 'radial-gradient(circle, #6366f1 1px, transparent 1px)',
                     backgroundSize: '24px 24px'
                 }} />
             </div>
@@ -398,37 +398,39 @@ const AskAI = () => {
                 <div className="flex-1 flex flex-col items-center justify-center max-w-2xl mx-auto w-full">
 
                     {/* AI PRESENCE INDICATOR */}
-                    {/* Why: Like Humane AI Pin's ambient presence - the AI feels alive */}
+                    {/* Why: Humane AI Pin inspired - the AI feels alive */}
                     <div className="relative mb-8">
                         {/* Breathing ring - Shows AI is "listening" */}
-                        <div className="absolute inset-0 rounded-full bg-gradient-to-r from-violet-500 via-fuchsia-500 to-cyan-500 blur-xl opacity-60 animate-pulse" style={{ animationDuration: '3s' }} />
-                        <div className="absolute -inset-2 rounded-full border border-white/10 animate-ping" style={{ animationDuration: '3s' }} />
+                        <div className="absolute inset-0 rounded-full bg-gradient-to-r from-violet-400 via-fuchsia-400 to-cyan-400 blur-xl opacity-40 animate-pulse" style={{ animationDuration: '3s' }} />
+                        <div className="absolute -inset-3 rounded-full border border-violet-200/50 animate-ping" style={{ animationDuration: '3s' }} />
 
-                        {/* Core orb - Glassmorphism 2.0 with layered depth */}
-                        <div className="relative w-24 h-24 rounded-full bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-2xl border border-white/20 flex items-center justify-center shadow-2xl">
-                            <SparklesIcon className="w-10 h-10 text-white/90" />
+                        {/* Core orb - Glassmorphism light */}
+                        <div className="relative w-24 h-24 rounded-full bg-white/80 backdrop-blur-2xl border border-white shadow-xl shadow-violet-200/50 flex items-center justify-center">
+                            <div className="w-20 h-20 rounded-full bg-gradient-to-br from-violet-500 via-fuchsia-500 to-indigo-600 flex items-center justify-center shadow-lg">
+                                <SparklesIcon className="w-10 h-10 text-white" />
+                            </div>
                         </div>
                     </div>
 
                     {/* TITLE - Linear-inspired ultra-clean typography */}
-                    <h1 className="text-4xl lg:text-5xl font-light text-white/90 tracking-tight mb-2 text-center">
-                        Ask <span className="font-semibold bg-gradient-to-r from-violet-400 via-fuchsia-400 to-cyan-400 bg-clip-text text-transparent">anything</span>
+                    <h1 className="text-4xl lg:text-5xl font-light text-gray-800 tracking-tight mb-2 text-center">
+                        Ask <span className="font-semibold bg-gradient-to-r from-violet-600 via-fuchsia-600 to-indigo-600 bg-clip-text text-transparent">anything</span>
                     </h1>
-                    <p className="text-white/40 text-sm tracking-widest uppercase mb-10">
+                    <p className="text-gray-400 text-sm tracking-widest uppercase mb-10">
                         Campus Intelligence • Powered by AI
                     </p>
 
                     {/* === COMMAND PALETTE INPUT === */}
-                    {/* Why: Raycast-inspired - keyboard-first, minimal chrome, feels powerful */}
+                    {/* Why: Raycast-inspired - keyboard-first, minimal chrome */}
                     <form onSubmit={handleSubmit} className="w-full mb-8">
                         <div className="relative group">
                             {/* Glow effect on focus/hover */}
-                            <div className="absolute -inset-0.5 bg-gradient-to-r from-violet-500 via-fuchsia-500 to-cyan-500 rounded-2xl blur opacity-0 group-hover:opacity-30 group-focus-within:opacity-50 transition-all duration-500" />
+                            <div className="absolute -inset-0.5 bg-gradient-to-r from-violet-400 via-fuchsia-400 to-cyan-400 rounded-2xl blur opacity-0 group-hover:opacity-20 group-focus-within:opacity-40 transition-all duration-500" />
 
-                            {/* Input container - Frosted glass */}
-                            <div className="relative bg-white/5 backdrop-blur-2xl rounded-2xl border border-white/10 overflow-hidden">
-                                {/* Command prefix - Like Raycast */}
-                                <div className="absolute left-5 top-1/2 -translate-y-1/2 flex items-center gap-2 text-white/30">
+                            {/* Input container - Frosted glass light */}
+                            <div className="relative bg-white/80 backdrop-blur-2xl rounded-2xl border border-gray-200/50 shadow-lg shadow-gray-200/50 overflow-hidden">
+                                {/* Command prefix */}
+                                <div className="absolute left-5 top-1/2 -translate-y-1/2 flex items-center gap-2 text-gray-300">
                                     <span className="text-lg">⌘</span>
                                 </div>
 
@@ -438,41 +440,41 @@ const AskAI = () => {
                                     value={input}
                                     onChange={(e) => setInput(e.target.value)}
                                     placeholder="What would you like to know?"
-                                    className="w-full pl-14 pr-16 py-5 bg-transparent text-white placeholder-white/30 focus:outline-none text-lg font-light"
+                                    className="w-full pl-14 pr-16 py-5 bg-transparent text-gray-900 placeholder-gray-400 focus:outline-none text-lg font-light"
                                 />
 
-                                {/* Submit button - Minimal, only visible when typed */}
+                                {/* Submit button */}
                                 <button
                                     type="submit"
                                     disabled={!input.trim()}
                                     className={`absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 ${input.trim()
-                                            ? 'bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white shadow-lg shadow-violet-500/30'
-                                            : 'bg-white/5 text-white/20'
+                                            ? 'bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white shadow-lg shadow-violet-300/50'
+                                            : 'bg-gray-100 text-gray-300'
                                         }`}
                                 >
                                     <PaperAirplaneIcon className="w-5 h-5" />
                                 </button>
                             </div>
 
-                            {/* Keyboard hint - Raycast style */}
-                            <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-2 text-white/20 text-xs">
-                                <kbd className="px-1.5 py-0.5 bg-white/5 rounded border border-white/10 font-mono">↵</kbd>
+                            {/* Keyboard hint */}
+                            <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-2 text-gray-400 text-xs">
+                                <kbd className="px-1.5 py-0.5 bg-gray-100 rounded border border-gray-200 font-mono text-gray-500">↵</kbd>
                                 <span>to search</span>
                             </div>
                         </div>
                     </form>
 
                     {/* === SUGGESTION CHIPS === */}
-                    {/* Why: Nothing OS inspired - minimal, monochrome, reveals on interaction */}
+                    {/* Why: Nothing OS inspired - minimal, clean, reveals on interaction */}
                     <div className="w-full mt-8">
                         <div className="flex items-center justify-center gap-3 mb-4">
-                            {/* Dot indicator like Nothing OS */}
+                            {/* Dot indicator */}
                             <div className="flex gap-1">
-                                <div className="w-1 h-1 rounded-full bg-violet-400" />
-                                <div className="w-1 h-1 rounded-full bg-fuchsia-400" />
-                                <div className="w-1 h-1 rounded-full bg-cyan-400" />
+                                <div className="w-1 h-1 rounded-full bg-violet-500" />
+                                <div className="w-1 h-1 rounded-full bg-fuchsia-500" />
+                                <div className="w-1 h-1 rounded-full bg-cyan-500" />
                             </div>
-                            <span className="text-white/30 text-xs uppercase tracking-[0.2em]">Explore</span>
+                            <span className="text-gray-400 text-xs uppercase tracking-[0.2em]">Explore</span>
                         </div>
 
                         <div className="flex flex-wrap justify-center gap-2">
@@ -480,10 +482,10 @@ const AskAI = () => {
                                 <button
                                     key={idx}
                                     onClick={() => handleChipClick(chip.text)}
-                                    className="group px-4 py-2 bg-white/[0.03] hover:bg-white/[0.08] backdrop-blur border border-white/[0.06] hover:border-white/20 rounded-full text-white/50 hover:text-white/90 text-sm transition-all duration-300 flex items-center gap-2"
+                                    className="group px-4 py-2.5 bg-white/60 hover:bg-white backdrop-blur border border-gray-200/50 hover:border-violet-300 rounded-full text-gray-600 hover:text-violet-700 text-sm transition-all duration-300 flex items-center gap-2 shadow-sm hover:shadow-md hover:shadow-violet-100/50"
                                 >
-                                    <span className="opacity-60 group-hover:opacity-100 transition-opacity">{chip.icon}</span>
-                                    <span className="font-light">{chip.text}</span>
+                                    <span className="text-base">{chip.icon}</span>
+                                    <span className="font-medium">{chip.text}</span>
                                 </button>
                             ))}
                         </div>
@@ -491,14 +493,14 @@ const AskAI = () => {
                 </div>
 
                 {/* === RECENT QUESTIONS - SPATIAL CARDS === */}
-                {/* Why: Vision Pro inspired floating panels with depth layers */}
+                {/* Why: Vision Pro inspired floating panels */}
                 {recentQuestions.length > 0 && (
                     <div className="mt-auto pt-8">
                         <div className="flex items-center gap-2 mb-4 justify-center">
-                            <div className="w-6 h-[1px] bg-gradient-to-r from-transparent to-white/20" />
-                            <ClockIcon className="w-3 h-3 text-white/30" />
-                            <span className="text-white/30 text-xs uppercase tracking-[0.15em]">Recent</span>
-                            <div className="w-6 h-[1px] bg-gradient-to-l from-transparent to-white/20" />
+                            <div className="w-8 h-[1px] bg-gradient-to-r from-transparent to-gray-300" />
+                            <ClockIcon className="w-3.5 h-3.5 text-gray-400" />
+                            <span className="text-gray-400 text-xs uppercase tracking-[0.15em]">Recent</span>
+                            <div className="w-8 h-[1px] bg-gradient-to-l from-transparent to-gray-300" />
                         </div>
 
                         <div className="flex flex-col gap-2 max-w-lg mx-auto">
@@ -509,17 +511,17 @@ const AskAI = () => {
                                     className="group relative overflow-hidden"
                                 >
                                     {/* Hover glow */}
-                                    <div className="absolute inset-0 bg-gradient-to-r from-violet-500/0 via-fuchsia-500/10 to-cyan-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-xl" />
+                                    <div className="absolute inset-0 bg-gradient-to-r from-violet-100/0 via-fuchsia-100/50 to-cyan-100/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-xl" />
 
-                                    <div className="relative flex items-center justify-between px-5 py-4 bg-white/[0.02] hover:bg-white/[0.05] backdrop-blur border border-white/[0.05] hover:border-white/10 rounded-xl cursor-pointer transition-all duration-300">
-                                        <span className="text-white/50 group-hover:text-white/80 text-sm font-light truncate pr-4 transition-colors">
+                                    <div className="relative flex items-center justify-between px-5 py-4 bg-white/60 hover:bg-white backdrop-blur border border-gray-200/50 hover:border-violet-200 rounded-xl cursor-pointer transition-all duration-300 shadow-sm hover:shadow-md">
+                                        <span className="text-gray-600 group-hover:text-gray-900 text-sm font-light truncate pr-4 transition-colors">
                                             {question}
                                         </span>
                                         <button
                                             onClick={(e) => deleteRecentQuestion(question, e)}
-                                            className="flex-shrink-0 w-6 h-6 rounded-lg flex items-center justify-center opacity-0 group-hover:opacity-100 hover:bg-red-500/20 transition-all"
+                                            className="flex-shrink-0 w-7 h-7 rounded-lg flex items-center justify-center opacity-0 group-hover:opacity-100 hover:bg-red-50 transition-all"
                                         >
-                                            <XMarkIcon className="w-3.5 h-3.5 text-white/30 hover:text-red-400" />
+                                            <XMarkIcon className="w-4 h-4 text-gray-400 hover:text-red-500" />
                                         </button>
                                     </div>
                                 </div>
@@ -532,20 +534,20 @@ const AskAI = () => {
                 {recentQuestions.length === 0 && (
                     <div className="mt-auto pt-8 flex flex-col items-center">
                         {/* Minimal status indicator */}
-                        <div className="flex items-center gap-3 px-4 py-2 bg-white/[0.02] rounded-full border border-white/[0.05]">
-                            <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                            <span className="text-white/30 text-xs uppercase tracking-wider">Ready</span>
+                        <div className="flex items-center gap-3 px-5 py-2.5 bg-white/60 backdrop-blur rounded-full border border-gray-200/50 shadow-sm">
+                            <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                            <span className="text-gray-500 text-xs uppercase tracking-wider">Ready</span>
                         </div>
                     </div>
                 )}
             </div>
 
-            {/* === AMBIENT CORNER ACCENTS - Nothing OS glyph style === */}
-            <div className="fixed top-6 left-6 text-white/10 text-2xl pointer-events-none">⌘</div>
-            <div className="fixed bottom-6 right-6 flex gap-1 pointer-events-none">
-                <div className="w-2 h-2 rounded-full bg-violet-400/30" />
-                <div className="w-2 h-2 rounded-full bg-fuchsia-400/30" />
-                <div className="w-2 h-2 rounded-full bg-cyan-400/30" />
+            {/* === AMBIENT CORNER ACCENTS === */}
+            <div className="fixed top-6 left-6 text-gray-200 text-2xl pointer-events-none select-none">⌘</div>
+            <div className="fixed bottom-6 right-6 flex gap-1.5 pointer-events-none">
+                <div className="w-2 h-2 rounded-full bg-violet-400/40" />
+                <div className="w-2 h-2 rounded-full bg-fuchsia-400/40" />
+                <div className="w-2 h-2 rounded-full bg-cyan-400/40" />
             </div>
         </div>
     );
