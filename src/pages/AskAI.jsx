@@ -371,117 +371,142 @@ const AskAI = () => {
         );
     }
 
-    // Home View (matching app style)
+    // Home View - Redesigned with vibrant visuals
     return (
-        <div className="min-h-screen flex flex-col">
-            {/* Branding Card */}
-            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 mb-6">
-                <div className="text-center">
-                    <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-indigo-500 via-violet-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-200/50">
-                        <SparklesIcon className="w-8 h-8 text-white" />
+        <div className="min-h-screen flex flex-col -mx-4 lg:-mx-8 -mt-16 lg:-mt-4">
+            {/* Hero Section with Gradient */}
+            <div className="relative overflow-hidden bg-gradient-to-br from-indigo-600 via-violet-600 to-purple-700 px-6 pt-20 lg:pt-12 pb-16">
+                {/* Animated background orbs */}
+                <div className="absolute top-0 left-0 w-72 h-72 bg-white/10 rounded-full -translate-x-1/2 -translate-y-1/2 blur-3xl animate-pulse"></div>
+                <div className="absolute top-1/2 right-0 w-96 h-96 bg-purple-400/20 rounded-full translate-x-1/2 blur-3xl"></div>
+                <div className="absolute bottom-0 left-1/3 w-64 h-64 bg-indigo-400/20 rounded-full translate-y-1/2 blur-2xl"></div>
+
+                {/* Floating sparkles */}
+                <div className="absolute top-8 right-8 text-white/30 animate-bounce" style={{ animationDelay: '0s' }}>✦</div>
+                <div className="absolute top-16 left-12 text-white/20 animate-bounce text-2xl" style={{ animationDelay: '0.5s' }}>✧</div>
+                <div className="absolute bottom-12 right-16 text-white/25 animate-bounce" style={{ animationDelay: '1s' }}>✦</div>
+
+                <div className="relative z-10 max-w-2xl mx-auto text-center">
+                    {/* Glowing AI icon */}
+                    <div className="relative inline-block mb-6">
+                        <div className="absolute inset-0 bg-white/30 rounded-3xl blur-xl animate-pulse"></div>
+                        <div className="relative w-20 h-20 rounded-3xl bg-white/20 backdrop-blur-sm border border-white/30 flex items-center justify-center shadow-2xl">
+                            <SparklesIcon className="w-10 h-10 text-white" />
+                        </div>
                     </div>
-                    <h2 className="text-lg font-bold text-gray-900 mb-1">
-                        SinhgadConnect AI
-                    </h2>
-                    <p className="text-gray-500 text-sm">
-                        Real answers from your campus community
+
+                    <h1 className="text-3xl lg:text-4xl font-bold text-white mb-3">
+                        Ask AI Anything
+                    </h1>
+                    <p className="text-white/70 text-lg mb-8">
+                        Get instant answers from your campus community
                     </p>
-                </div>
 
-                {/* Search Input */}
-                <form onSubmit={handleSubmit} className="mt-6">
-                    <div className="relative">
-                        <input
-                            ref={inputRef}
-                            type="text"
-                            value={input}
-                            onChange={(e) => setInput(e.target.value)}
-                            placeholder="Ask a question..."
-                            className="w-full px-5 py-4 pr-14 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent focus:bg-white transition-all text-base"
-                        />
-                        <button
-                            type="submit"
-                            disabled={!input.trim()}
-                            className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 bg-gradient-to-r from-indigo-600 to-violet-600 text-white rounded-lg hover:shadow-lg disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center transition-all"
-                        >
-                            <PaperAirplaneIcon className="w-5 h-5" />
-                        </button>
-                    </div>
-                </form>
-            </div>
-
-            {/* Suggestion Chips - Marquee */}
-            <div className="mb-6">
-                <h3 className="text-sm font-medium text-gray-700 mb-3 flex items-center gap-2">
-                    <span className="w-1 h-4 bg-gradient-to-b from-indigo-500 to-violet-500 rounded-full"></span>
-                    Popular topics
-                </h3>
-                <div className="overflow-hidden -mx-4">
-                    <div className="flex gap-3 animate-marquee hover:pause-animation">
-                        {/* First set of chips */}
-                        {SUGGESTION_CHIPS.map((chip, idx) => (
+                    {/* Glowing Search Input */}
+                    <form onSubmit={handleSubmit} className="relative">
+                        <div className="absolute -inset-1 bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 rounded-2xl blur opacity-30"></div>
+                        <div className="relative bg-white rounded-xl shadow-2xl">
+                            <input
+                                ref={inputRef}
+                                type="text"
+                                value={input}
+                                onChange={(e) => setInput(e.target.value)}
+                                placeholder="What would you like to know?"
+                                className="w-full px-6 py-5 pr-16 bg-transparent text-gray-900 placeholder-gray-400 focus:outline-none text-lg rounded-xl"
+                            />
                             <button
-                                key={`first-${idx}`}
-                                onClick={() => handleChipClick(chip.text)}
-                                className="flex-shrink-0 flex items-center gap-1.5 px-4 py-2.5 bg-white hover:bg-indigo-50 border border-gray-200 hover:border-indigo-200 rounded-full text-sm text-gray-700 hover:text-indigo-700 transition-all shadow-sm whitespace-nowrap"
+                                type="submit"
+                                disabled={!input.trim()}
+                                className="absolute right-2 top-1/2 -translate-y-1/2 w-12 h-12 bg-gradient-to-r from-indigo-600 to-violet-600 text-white rounded-xl hover:shadow-lg hover:scale-105 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center transition-all"
                             >
-                                <span>{chip.icon}</span>
-                                <span>{chip.text}</span>
+                                <PaperAirplaneIcon className="w-5 h-5" />
                             </button>
-                        ))}
-                        {/* Duplicate set for seamless loop */}
-                        {SUGGESTION_CHIPS.map((chip, idx) => (
-                            <button
-                                key={`second-${idx}`}
-                                onClick={() => handleChipClick(chip.text)}
-                                className="flex-shrink-0 flex items-center gap-1.5 px-4 py-2.5 bg-white hover:bg-indigo-50 border border-gray-200 hover:border-indigo-200 rounded-full text-sm text-gray-700 hover:text-indigo-700 transition-all shadow-sm whitespace-nowrap"
-                            >
-                                <span>{chip.icon}</span>
-                                <span>{chip.text}</span>
-                            </button>
-                        ))}
-                    </div>
+                        </div>
+                    </form>
                 </div>
             </div>
 
-            {/* Recent Questions */}
-            {recentQuestions.length > 0 && (
-                <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
-                    <div className="flex items-center gap-2 mb-3">
-                        <ClockIcon className="w-4 h-4 text-gray-400" />
-                        <h3 className="text-sm font-medium text-gray-700">Recent</h3>
-                    </div>
-                    <div className="space-y-1">
-                        {recentQuestions.map((question, idx) => (
-                            <div
-                                key={idx}
-                                onClick={() => handleRecentClick(question)}
-                                className="flex items-center justify-between px-3 py-2.5 hover:bg-gray-50 rounded-xl cursor-pointer group transition-colors"
-                            >
-                                <span className="text-gray-600 text-sm truncate pr-4">{question}</span>
+            {/* Content Section */}
+            <div className="flex-1 px-4 lg:px-8 -mt-6 relative z-10">
+                {/* Suggestion Chips */}
+                <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-5 shadow-lg border border-white/50 mb-6">
+                    <h3 className="text-sm font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                        <span className="w-6 h-6 rounded-lg bg-gradient-to-br from-indigo-500 to-violet-500 flex items-center justify-center">
+                            <span className="text-white text-xs">💡</span>
+                        </span>
+                        Popular Topics
+                    </h3>
+                    <div className="overflow-hidden -mx-1">
+                        <div className="flex gap-3 animate-marquee hover:pause-animation">
+                            {SUGGESTION_CHIPS.map((chip, idx) => (
                                 <button
-                                    onClick={(e) => deleteRecentQuestion(question, e)}
-                                    className="flex-shrink-0 w-7 h-7 rounded-full hover:bg-gray-200 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                                    key={`first-${idx}`}
+                                    onClick={() => handleChipClick(chip.text)}
+                                    className="flex-shrink-0 flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-gray-50 to-gray-100 hover:from-indigo-50 hover:to-violet-50 border border-gray-200 hover:border-indigo-300 rounded-full text-sm text-gray-700 hover:text-indigo-700 transition-all shadow-sm whitespace-nowrap group"
                                 >
-                                    <XMarkIcon className="w-4 h-4 text-gray-400" />
+                                    <span className="text-base">{chip.icon}</span>
+                                    <span className="font-medium">{chip.text}</span>
                                 </button>
-                            </div>
-                        ))}
+                            ))}
+                            {SUGGESTION_CHIPS.map((chip, idx) => (
+                                <button
+                                    key={`second-${idx}`}
+                                    onClick={() => handleChipClick(chip.text)}
+                                    className="flex-shrink-0 flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-gray-50 to-gray-100 hover:from-indigo-50 hover:to-violet-50 border border-gray-200 hover:border-indigo-300 rounded-full text-sm text-gray-700 hover:text-indigo-700 transition-all shadow-sm whitespace-nowrap group"
+                                >
+                                    <span className="text-base">{chip.icon}</span>
+                                    <span className="font-medium">{chip.text}</span>
+                                </button>
+                            ))}
+                        </div>
                     </div>
                 </div>
-            )}
 
-            {/* Empty State */}
-            {recentQuestions.length === 0 && (
-                <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 text-center">
-                    <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-indigo-50 flex items-center justify-center">
-                        <SparklesIcon className="w-6 h-6 text-indigo-500" />
+                {/* Recent Questions */}
+                {recentQuestions.length > 0 && (
+                    <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-5 shadow-lg border border-white/50">
+                        <div className="flex items-center gap-2 mb-4">
+                            <span className="w-6 h-6 rounded-lg bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center">
+                                <ClockIcon className="w-3.5 h-3.5 text-white" />
+                            </span>
+                            <h3 className="text-sm font-semibold text-gray-800">Recent Questions</h3>
+                        </div>
+                        <div className="space-y-2">
+                            {recentQuestions.map((question, idx) => (
+                                <div
+                                    key={idx}
+                                    onClick={() => handleRecentClick(question)}
+                                    className="flex items-center justify-between px-4 py-3 bg-gradient-to-r from-gray-50 to-transparent hover:from-indigo-50 hover:to-violet-50/50 rounded-xl cursor-pointer group transition-all border border-transparent hover:border-indigo-100"
+                                >
+                                    <span className="text-gray-700 text-sm truncate pr-4 group-hover:text-indigo-700 transition-colors">{question}</span>
+                                    <button
+                                        onClick={(e) => deleteRecentQuestion(question, e)}
+                                        className="flex-shrink-0 w-7 h-7 rounded-full hover:bg-red-100 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all"
+                                    >
+                                        <XMarkIcon className="w-4 h-4 text-gray-400 group-hover:text-red-500" />
+                                    </button>
+                                </div>
+                            ))}
+                        </div>
                     </div>
-                    <p className="text-gray-500 text-sm">
-                        Ask anything about campus life, placements, academics, and more!
-                    </p>
-                </div>
-            )}
+                )}
+
+                {/* Empty State - When no recent questions */}
+                {recentQuestions.length === 0 && (
+                    <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-lg border border-white/50 text-center">
+                        <div className="relative inline-block mb-4">
+                            <div className="absolute inset-0 bg-indigo-200 rounded-2xl blur-lg animate-pulse"></div>
+                            <div className="relative w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center">
+                                <SparklesIcon className="w-8 h-8 text-white" />
+                            </div>
+                        </div>
+                        <h3 className="font-semibold text-gray-900 mb-2">Ready to help!</h3>
+                        <p className="text-gray-500 text-sm max-w-xs mx-auto">
+                            Ask about placements, academics, campus life, or anything else about Sinhgad!
+                        </p>
+                    </div>
+                )}
+            </div>
         </div>
     );
 };
