@@ -10,7 +10,8 @@ import {
     BellIcon,
     UserIcon,
     Cog6ToothIcon,
-    ArrowRightOnRectangleIcon
+    ArrowRightOnRectangleIcon,
+    ChartBarIcon
 } from '@heroicons/react/24/outline';
 import { BellIcon as BellIconSolid } from '@heroicons/react/24/solid';
 
@@ -23,6 +24,7 @@ const MobileTopNav = () => {
 
     const menuItems = [
         { name: 'Profile', href: '/profile', icon: UserIcon },
+        { name: 'Leaderboard', href: '/leaderboard', icon: ChartBarIcon },
         { name: 'Settings', href: '/settings', icon: Cog6ToothIcon },
     ];
 
