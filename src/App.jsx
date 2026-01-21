@@ -28,7 +28,7 @@ import Trending from './pages/Trending';
 import HallOfFame from './pages/HallOfFame';
 import Resources from './pages/Resources';
 import AskAI from './pages/AskAI';
-import AskAIButton from './components/chat/AskAIButton';
+
 import { SocketProvider } from './context/SocketContext';
 
 // Layout wrapper for authenticated routes
@@ -75,9 +75,6 @@ const AuthenticatedLayout = ({ children }) => {
 
       {/* Mobile Bottom Navigation */}
       <MobileNav />
-
-      {/* Floating AI Button (desktop) */}
-      <AskAIButton />
 
       {/* Global Post Creation Modal */}
       {isModalOpen && (
