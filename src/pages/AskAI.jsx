@@ -379,10 +379,7 @@ const AskAI = () => {
                 <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center shadow-lg shadow-indigo-200">
                     <SparklesIcon className="w-5 h-5 text-white" />
                 </div>
-                <div>
-                    <h1 className="text-xl font-bold text-gray-900">Ask AI</h1>
-                    <p className="text-xs text-gray-500">Powered by SinhgadConnect</p>
-                </div>
+                <h1 className="text-xl font-bold text-gray-900">Ask AI</h1>
             </div>
 
             {/* Branding Card */}
