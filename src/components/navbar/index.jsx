@@ -59,8 +59,12 @@ const Navbar = () => {
 
   return (
     <nav className="fixed top-4 left-4 right-4 lg:left-4 lg:right-4 h-16 glass-panel rounded-2xl z-40 flex items-center justify-between px-4 sm:px-6 lg:px-8 transition-all duration-300">
-      {/* Logo - Hide on LG screens since Sidebar has it */}
-      <div className="flex-shrink-0 font-bold text-xl text-indigo-600 lg:hidden">
+      <div className="flex-shrink-0 font-bold text-xl lg:hidden" style={{
+        background: 'linear-gradient(90deg, #9185D6, #D094B6)',
+        WebkitBackgroundClip: 'text',
+        WebkitTextFillColor: 'transparent',
+        backgroundClip: 'text'
+      }}>
         SinhgadConnect
       </div>
 

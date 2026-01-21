@@ -47,14 +47,9 @@ const MobileTopNav = () => {
                 .rainbow-text {
                     background: linear-gradient(
                         90deg,
-                        #ef4444,
-                        #f97316,
-                        #eab308,
-                        #22c55e,
-                        #06b6d4,
-                        #3b82f6,
-                        #8b5cf6,
-                        #ec4899
+                        #9185D6,
+                        #D094B6,
+                        #F8BC26
                     );
                     -webkit-background-clip: text;
                     background-clip: text;
@@ -63,14 +58,9 @@ const MobileTopNav = () => {
                 .rainbow-bg {
                     background: linear-gradient(
                         135deg,
-                        #ef4444,
-                        #f97316,
-                        #eab308,
-                        #22c55e,
-                        #06b6d4,
-                        #3b82f6,
-                        #8b5cf6,
-                        #ec4899
+                        #9185D6,
+                        #D094B6,
+                        #F8BC26
                     );
                 }
             `}</style>

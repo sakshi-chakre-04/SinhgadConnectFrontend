@@ -67,6 +67,15 @@
     --accent-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%);
 
     --transition-slow: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* Lavender-Pink-Yellow Palette (Light Theme - Mobile) */
+    --lavender-main: #9185D6;
+    --lavender-light: #D4DBEE;
+    --pink-soft: #D094B6;
+    --yellow-soft: #F9D079;
+    --yellow-accent: #F8BC26;
+    --cyan-soft: #BAF0E8;
+    --gray-purple: #736473;
 }
 
 /* Base Styles - Compact for 100% zoom */

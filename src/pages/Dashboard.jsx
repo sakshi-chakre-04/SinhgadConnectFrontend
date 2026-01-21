@@ -28,7 +28,7 @@ const Dashboard = () => {
       {/* Futuristic Hero Section - Compact Version */}
       <div className="relative overflow-hidden rounded-3xl p-6 text-white shadow-2xl hover-glow transition-all duration-500 group">
         {/* Animated Gradient Background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500 animate-gradient-x"></div>
+        <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, #9185D6 0%, #B8ADE0 35%, #D094B6 70%, #D4DBEE 100%)' }}></div>
 
         {/* Glass Overlay Patterns */}
         <div className="absolute inset-0 opacity-20 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] mix-blend-overlay"></div>
@@ -51,14 +51,20 @@ const Dashboard = () => {
           <div className="flex flex-wrap gap-3 mt-1">
             <button
               onClick={() => openModal()}
-              className="inline-flex items-center gap-2 px-5 py-2.5 bg-white text-indigo-600 font-bold rounded-xl hover:bg-white/90 hover:scale-105 transition-all shadow-lg hover:shadow-indigo-500/30 group/btn text-sm"
+              className="inline-flex items-center gap-2 px-5 py-2.5 text-white font-bold rounded-xl hover:scale-105 transition-all shadow-lg group/btn text-sm"
+              style={{ backgroundColor: 'var(--yellow-accent)' }}
+              onMouseEnter={(e) => e.target.style.backgroundColor = 'var(--lavender-main)'}
+              onMouseLeave={(e) => e.target.style.backgroundColor = 'var(--yellow-accent)'}
             >
               <PlusCircleIcon className="w-5 h-5 group-hover/btn:rotate-90 transition-transform" />
               Ask Question
             </button>
             <button
               onClick={() => navigate('/trending')}
-              className="inline-flex items-center gap-2 px-5 py-2.5 bg-white/10 backdrop-blur-md border border-white/20 text-white font-bold rounded-xl hover:bg-white/20 hover:scale-105 transition-all shadow-lg text-sm"
+              className="inline-flex items-center gap-2 px-5 py-2.5 backdrop-blur-md border text-white font-bold rounded-xl hover:scale-105 transition-all shadow-lg text-sm"
+              style={{ backgroundColor: 'rgba(212, 219, 238, 0.2)', borderColor: 'var(--lavender-light)' }}
+              onMouseEnter={(e) => e.target.style.backgroundColor = 'rgba(212, 219, 238, 0.3)'}
+              onMouseLeave={(e) => e.target.style.backgroundColor = 'rgba(212, 219, 238, 0.2)'}
             >
               <FireIcon className="w-5 h-5" />
               Trending
@@ -82,7 +88,7 @@ const Dashboard = () => {
           className="relative group"
         >
           <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-2xl blur opacity-25 group-hover:opacity-40 transition duration-1000"></div>
-          <div className="relative flex items-center bg-white/90 backdrop-blur-xl border border-white/40 rounded-2xl shadow-lg p-2 transition-all duration-300 focus-within:ring-2 focus-within:ring-indigo-500/20 focus-within:scale-[1.01]">
+          <div className="relative flex items-center bg-white/90 backdrop-blur-xl border rounded-2xl shadow-lg p-2 transition-all duration-300 focus-within:scale-[1.01]" style={{ borderColor: 'var(--lavender-light)' }}>
             <div className="pl-4 text-gray-400">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6">
                 <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
@@ -94,7 +100,7 @@ const Dashboard = () => {
               placeholder="Search specific placement topics like 'TCS', 'Interview Tip'..."
               className="w-full bg-transparent border-none focus:ring-0 text-gray-800 placeholder-gray-500 text-lg py-3 px-4"
             />
-            <button type="submit" className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-xl font-medium transition-colors shadow-lg shadow-indigo-500/20">
+            <button type="submit" className="text-white px-6 py-2.5 rounded-xl font-medium transition-colors shadow-lg" style={{ backgroundColor: 'var(--lavender-main)' }}>
               Search
             </button>
           </div>
@@ -104,12 +110,13 @@ const Dashboard = () => {
       <div>
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-bold text-gray-900 flex items-center gap-2">
-            <SparklesIcon className="w-5 h-5 text-indigo-500" />
+            <SparklesIcon className="w-5 h-5" style={{ color: 'var(--lavender-main)' }} />
             Latest Discussions
           </h2>
           <button
             onClick={() => navigate('/posts')}
-            className="text-indigo-600 hover:text-indigo-700 font-medium text-sm flex items-center gap-1"
+            className="font-medium text-sm flex items-center gap-1"
+            style={{ color: 'var(--lavender-main)' }}
           >
             View all
             <ArrowRightIcon className="w-4 h-4" />
