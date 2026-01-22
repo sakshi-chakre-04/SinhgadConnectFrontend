@@ -8,7 +8,7 @@ import {
     ClockIcon,
     ChevronDownIcon
 } from '@heroicons/react/24/solid';
-import { AnimatePresence, LayoutGroup, motion } from 'framer-motion';
+import { AnimatePresence, LayoutGroup, motion, useReducedMotion } from 'framer-motion';
 import { useSelector } from 'react-redux';
 import { selectToken } from '../features/auth/authSlice';
 
@@ -138,9 +138,14 @@ const ShimmerBlock = ({ className }) => (
 );
 
 // Typewriter Hook - Streams text character by character
-const useTypewriter = (text, speed = 8, enabled = true) => {
+const useTypewriter = (text, speed = 8, enabled = true, onProgress) => {
     const [displayedText, setDisplayedText] = useState('');
     const [isComplete, setIsComplete] = useState(false);
+    const onProgressRef = useRef(onProgress);
+
+    useEffect(() => {
+        onProgressRef.current = onProgress;
+    }, [onProgress]);
 
     useEffect(() => {
         if (!enabled || !text) {
@@ -156,9 +161,11 @@ const useTypewriter = (text, speed = 8, enabled = true) => {
         const interval = setInterval(() => {
             if (index < text.length) {
                 // Add 2-4 characters at a time for faster but smooth typing
-                const charsToAdd = text.slice(index, index + 3);
-                setDisplayedText(prev => prev + charsToAdd);
-                index += 3;
+                const nextIndex = Math.min(text.length, index + 3);
+                const nextText = text.slice(0, nextIndex);
+                setDisplayedText(nextText);
+                index = nextIndex;
+                onProgressRef.current?.(nextText);
             } else {
                 setIsComplete(true);
                 clearInterval(interval);
@@ -172,8 +179,8 @@ const useTypewriter = (text, speed = 8, enabled = true) => {
 };
 
 // Streaming Message Component
-const StreamingMessage = ({ content, onComplete, isNew }) => {
-    const { displayedText, isComplete } = useTypewriter(content, 8, isNew);
+const StreamingMessage = ({ content, onComplete, isNew, onProgress }) => {
+    const { displayedText, isComplete } = useTypewriter(content, 8, isNew, onProgress);
 
     useEffect(() => {
         if (isComplete && onComplete) {
@@ -437,17 +444,33 @@ const AskAI = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [recentQuestions, setRecentQuestions] = useState([]);
     const [isInChat, setIsInChat] = useState(false);
+    const [isHandingOff, setIsHandingOff] = useState(false);
+    const [handoffQuery, setHandoffQuery] = useState('');
     const [headerVisible, setHeaderVisible] = useState(false);
     const [showSources, setShowSources] = useState({});
     const [streamingComplete, setStreamingComplete] = useState({});
+    const [autoScrollEnabled, setAutoScrollEnabled] = useState(true);
+    const [showJumpToBottom, setShowJumpToBottom] = useState(false);
     const messagesEndRef = useRef(null);
     const messagesRef = useRef([]);
+    const scrollContainerRef = useRef(null);
+    const scrollRafRef = useRef(null);
     const inputRef = useRef(null);
     const chatInputRef = useRef(null);
     const token = useSelector(selectToken);
+    const reduceMotion = useReducedMotion();
+
+    const handoffSpring = useMemo(
+        () => (reduceMotion ? { duration: 0 } : { type: 'spring', duration: 0.4, bounce: 0.16 }),
+        [reduceMotion]
+    );
 
     const isTyping = !!homeInput.trim();
     const smartSuggestions = useMemo(() => getSmartSuggestions(homeInput), [homeInput]);
+    const isGenerating = useMemo(
+        () => isLoading || messages.some((m) => m.role === 'assistant' && m.isNew && !streamingComplete[m.id]),
+        [isLoading, messages, streamingComplete]
+    );
 
     useEffect(() => {
         const saved = localStorage.getItem('askAI_recentQuestions');
@@ -470,12 +493,57 @@ const AskAI = () => {
     };
 
     useEffect(() => {
-        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-    }, [messages, streamingComplete]);
+        if (!isInChat) return;
+        if (!autoScrollEnabled) return;
+        requestScrollToBottom(isGenerating ? 'auto' : 'smooth');
+    }, [messages, isGenerating, autoScrollEnabled, isInChat]);
 
     useEffect(() => {
         messagesRef.current = messages;
     }, [messages]);
+
+    useEffect(() => {
+        if (!isHandingOff && handoffQuery) {
+            const t = setTimeout(() => setHandoffQuery(''), 180);
+            return () => clearTimeout(t);
+        }
+    }, [isHandingOff, handoffQuery]);
+
+    const requestScrollToBottom = (behavior = 'smooth') => {
+        if (scrollRafRef.current) return;
+        scrollRafRef.current = requestAnimationFrame(() => {
+            scrollRafRef.current = null;
+            const el = scrollContainerRef.current;
+            if (!el) return;
+            el.scrollTo({ top: el.scrollHeight, behavior: reduceMotion ? 'auto' : behavior });
+        });
+    };
+
+    const handleChatScroll = () => {
+        const el = scrollContainerRef.current;
+        if (!el) return;
+        const distanceFromBottom = el.scrollHeight - (el.scrollTop + el.clientHeight);
+        const atBottom = distanceFromBottom < 80;
+
+        if (atBottom) {
+            setAutoScrollEnabled(true);
+            setShowJumpToBottom(false);
+        } else {
+            setAutoScrollEnabled(false);
+            if (isGenerating) setShowJumpToBottom(true);
+        }
+    };
+
+    useEffect(() => {
+        if (!isInChat) return;
+        if (isGenerating && !autoScrollEnabled) setShowJumpToBottom(true);
+    }, [isGenerating, autoScrollEnabled, isInChat]);
+
+    useEffect(() => {
+        return () => {
+            if (scrollRafRef.current) cancelAnimationFrame(scrollRafRef.current);
+        };
+    }, []);
 
     useEffect(() => {
         if (isInChat) {
@@ -493,11 +561,11 @@ const AskAI = () => {
         }
     }, [isInChat]);
 
-    const handleStreamComplete = (idx) => {
-        setStreamingComplete(prev => ({ ...prev, [idx]: true }));
+    const handleStreamComplete = (id) => {
+        setStreamingComplete(prev => ({ ...prev, [id]: true }));
         // Show sources after streaming completes
         setTimeout(() => {
-            setShowSources(prev => ({ ...prev, [idx]: true }));
+            setShowSources(prev => ({ ...prev, [id]: true }));
         }, 300);
     };
 
@@ -506,12 +574,17 @@ const AskAI = () => {
         if (!userMessage || isLoading) return;
 
         setActiveQuery(userMessage);
+        setHandoffQuery(userMessage);
         saveRecentQuestion(userMessage);
 
         setHomeInput('');
         setChatInput('');
+        setAutoScrollEnabled(true);
+        setShowJumpToBottom(false);
+        setIsHandingOff(true);
         setIsInChat(true);
-        setMessages([{ role: 'user', content: userMessage }]);
+        setTimeout(() => setIsHandingOff(false), 450);
+        setMessages([{ id: `${Date.now()}-${Math.random()}`, role: 'user', content: userMessage }]);
         setIsLoading(true);
 
         // Check for demo mode
@@ -526,6 +599,7 @@ const AskAI = () => {
                 if (isDemoMode) {
                     await new Promise(resolve => setTimeout(resolve, 1500)); // Simulate API delay
                     setMessages(prev => [...prev, {
+                        id: `${Date.now()}-${Math.random()}`,
                         role: 'assistant',
                         content: DEMO_RESPONSE.answer,
                         sources: DEMO_RESPONSE.sources,
@@ -551,6 +625,7 @@ const AskAI = () => {
 
                 if (data.success && data.answer) {
                     setMessages(prev => [...prev, {
+                        id: `${Date.now()}-${Math.random()}`,
                         role: 'assistant',
                         content: data.answer,
                         sources: data.sources || [],
@@ -561,6 +636,7 @@ const AskAI = () => {
                 }
             } catch (error) {
                 setMessages(prev => [...prev, {
+                    id: `${Date.now()}-${Math.random()}`,
                     role: 'assistant',
                     content: "I'm having trouble connecting. Please try again.",
                     isNew: false
@@ -582,6 +658,9 @@ const AskAI = () => {
         setShowSources({});
         setStreamingComplete({});
         setActiveQuery('');
+        setIsHandingOff(false);
+        setAutoScrollEnabled(true);
+        setShowJumpToBottom(false);
     };
 
     const sendFollowUp = async (messageText) => {
@@ -591,7 +670,9 @@ const AskAI = () => {
         setActiveQuery(userMessage);
         const historyForApi = [...(messagesRef.current || []), { role: 'user', content: userMessage }];
 
-        setMessages(prev => [...prev, { role: 'user', content: userMessage }]);
+        setAutoScrollEnabled(true);
+        setShowJumpToBottom(false);
+        setMessages(prev => [...prev, { id: `${Date.now()}-${Math.random()}`, role: 'user', content: userMessage }]);
         setIsLoading(true);
 
         try {
@@ -614,6 +695,7 @@ const AskAI = () => {
 
             if (data.success && data.answer) {
                 setMessages(prev => [...prev, {
+                    id: `${Date.now()}-${Math.random()}`,
                     role: 'assistant',
                     content: data.answer,
                     sources: data.sources || [],
@@ -624,6 +706,7 @@ const AskAI = () => {
             }
         } catch (error) {
             setMessages(prev => [...prev, {
+                id: `${Date.now()}-${Math.random()}`,
                 role: 'assistant',
                 content: "I'm having trouble connecting. Please try again.",
                 isNew: false
@@ -653,7 +736,7 @@ const AskAI = () => {
 
             {/* === HOME VIEW === */}
             <div
-                className={`relative z-10 flex flex-col min-h-screen px-4 lg:px-6 pt-8 pb-8 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${isInChat ? 'opacity-0 scale-90 pointer-events-none' : 'opacity-100 scale-100'
+                className={`relative z-10 flex flex-col min-h-screen px-4 lg:px-6 pt-8 pb-8 transition-all duration-[400ms] ease-[cubic-bezier(0.16,1,0.3,1)] ${isInChat ? 'opacity-0 scale-90 pointer-events-none' : 'opacity-100 scale-100'
                     }`}
             >
                 <div className="flex-1 flex flex-col items-center justify-center max-w-2xl mx-auto w-full">
@@ -683,7 +766,7 @@ const AskAI = () => {
                             <motion.div
                                 layoutId="askai-search"
                                 className="bg-white/75 backdrop-blur-xl rounded-2xl border border-white/50 shadow-xl overflow-hidden"
-                                transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                                transition={handoffSpring}
                             >
                                 <div className="relative">
                                     <div className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-300 text-lg">⌘</div>
@@ -808,7 +891,7 @@ const AskAI = () => {
 
             {/* === CHAT VIEW === */}
             <div
-                className={`absolute inset-0 z-20 flex flex-col transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${isInChat ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'
+                className={`absolute inset-0 z-20 flex flex-col transition-all duration-[400ms] ease-[cubic-bezier(0.16,1,0.3,1)] ${isInChat ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'
                     }`}
                 style={{ background: 'linear-gradient(to bottom, #F9FAFB, #FFFFFF)' }}
             >
@@ -842,31 +925,23 @@ const AskAI = () => {
                             </div>
                         </div>
 
-                        <div className="mt-3">
-                            {isInChat && (
-                                <motion.div
-                                    layoutId="askai-search"
-                                    className="bg-white/70 backdrop-blur-xl rounded-2xl border border-white/50 shadow-sm overflow-hidden"
-                                    transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-                                >
-                                    <div className="px-5 py-3">
-                                        <p className="text-sm font-semibold text-gray-900 truncate">
-                                            {activeQuery || 'Ask anything'}
-                                        </p>
-                                    </div>
-                                </motion.div>
-                            )}
-                        </div>
                     </div>
                 </div>
 
                 {/* Messages */}
-                <div className="flex-1 overflow-y-auto px-4 lg:px-6 py-4 space-y-4">
-                    {messages.map((msg, idx) => (
-                        <div
-                            key={idx}
-                            className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} animate-slideUp`}
-                            style={{ animationDelay: `${idx * 80}ms` }}
+                <div
+                    ref={scrollContainerRef}
+                    onScroll={handleChatScroll}
+                    className="flex-1 overflow-y-auto px-4 lg:px-6 py-4 space-y-4"
+                    style={{ WebkitOverflowScrolling: 'touch' }}
+                >
+                    {messages.map((msg) => (
+                        <motion.div
+                            key={msg.id}
+                            initial={msg.role === 'user' ? { opacity: 0, y: 18, scale: 1.05 } : { opacity: 0, y: 10, scale: 1.01 }}
+                            animate={{ opacity: 1, y: 0, scale: 1 }}
+                            transition={reduceMotion ? { duration: 0 } : { type: 'spring', stiffness: 380, damping: 30, mass: 0.85 }}
+                            className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
                         >
                             <div
                                 className={`max-w-[85%] lg:max-w-[70%] px-5 py-4 text-sm leading-relaxed
@@ -880,11 +955,15 @@ const AskAI = () => {
                                     <p className="whitespace-pre-wrap">{msg.content}</p>
                                 ) : (
                                     <>
-                                        {msg.isNew && !streamingComplete[idx] ? (
+                                        {msg.isNew && !streamingComplete[msg.id] ? (
                                             <StreamingMessage
                                                 content={msg.content}
-                                                isNew={true}
-                                                onComplete={() => handleStreamComplete(idx)}
+                                                isNew={!reduceMotion}
+                                                onComplete={() => handleStreamComplete(msg.id)}
+                                                onProgress={() => {
+                                                    if (autoScrollEnabled) requestScrollToBottom('auto');
+                                                    else if (isGenerating) setShowJumpToBottom(true);
+                                                }}
                                             />
                                         ) : (
                                             <InsightResponse
@@ -902,7 +981,7 @@ const AskAI = () => {
                                 {/* Sources - Appear after streaming completes */}
                                 {msg.sources && msg.sources.length > 0 && msg.role === 'assistant' && (
                                     <div
-                                        className={`mt-3 pt-3 border-t border-gray-100 transition-all duration-500 ${showSources[idx] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2 h-0 overflow-hidden mt-0 pt-0 border-0'
+                                        className={`mt-3 pt-3 border-t border-gray-100 transition-all duration-500 ${showSources[msg.id] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2 h-0 overflow-hidden mt-0 pt-0 border-0'
                                             }`}
                                     >
                                         <p className="text-xs text-gray-500 mb-2">Related posts:</p>
@@ -921,7 +1000,7 @@ const AskAI = () => {
                                     </div>
                                 )}
                             </div>
-                        </div>
+                        </motion.div>
                     ))}
 
                     {/* Skeleton Loader with cross-fade */}
@@ -939,33 +1018,85 @@ const AskAI = () => {
                 </div>
 
                 {/* Chat Input */}
-                <div className="flex-shrink-0 px-4 lg:px-6 pb-6 pt-2">
-                    <form onSubmit={handleChatSubmit}>
-                        <div
-                            className="bg-white rounded-2xl border border-gray-200 flex items-center gap-2 pr-2"
-                            style={{ boxShadow: '0 4px 20px rgba(0,0,0,0.05)' }}
-                        >
-                            <input
-                                ref={chatInputRef}
-                                type="text"
-                                value={chatInput}
-                                onChange={(e) => setChatInput(e.target.value)}
-                                placeholder="Ask a follow-up..."
-                                disabled={isLoading}
-                                className="flex-1 px-5 py-4 bg-transparent text-gray-900 placeholder-gray-400 focus:outline-none text-base"
-                            />
-                            <button
-                                type="submit"
-                                disabled={isLoading || !chatInput.trim()}
-                                className={`w-11 h-11 rounded-xl flex items-center justify-center transition-all duration-300 ${chatInput.trim()
-                                    ? 'bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white shadow-lg'
-                                    : 'bg-gray-100 text-gray-400'
-                                    }`}
+                <div className="flex-shrink-0 px-4 lg:px-6 pb-6 pt-2 relative">
+                    <AnimatePresence>
+                        {showJumpToBottom && !autoScrollEnabled && isGenerating && (
+                            <motion.button
+                                type="button"
+                                initial={{ opacity: 0, y: 8, scale: 0.98 }}
+                                animate={{ opacity: 1, y: 0, scale: 1 }}
+                                exit={{ opacity: 0, y: 8, scale: 0.98 }}
+                                transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+                                onClick={() => {
+                                    setAutoScrollEnabled(true);
+                                    setShowJumpToBottom(false);
+                                    requestScrollToBottom('smooth');
+                                }}
+                                aria-label="Jump to bottom"
+                                className="absolute right-6 -top-5 px-3.5 py-2 rounded-full bg-white/70 backdrop-blur border border-gray-200 text-gray-800 shadow-lg text-xs font-semibold"
                             >
-                                <PaperAirplaneIcon className="w-5 h-5" />
-                            </button>
-                        </div>
-                    </form>
+                                ↓ Jump to bottom
+                            </motion.button>
+                        )}
+                    </AnimatePresence>
+                    {isInChat && (
+                        <form onSubmit={handleChatSubmit}>
+                            <motion.div
+                                layoutId="askai-search"
+                                transition={handoffSpring}
+                                className="bg-white/75 backdrop-blur-xl rounded-2xl border border-white/50 flex items-center gap-2 pr-2"
+                                style={{ boxShadow: '0 6px 28px rgba(0,0,0,0.08)' }}
+                            >
+                                <div className="flex-1">
+                                    <AnimatePresence mode="wait">
+                                        {isHandingOff ? (
+                                            <motion.div
+                                                key="handoff"
+                                                initial={{ opacity: 1 }}
+                                                animate={{ opacity: 0 }}
+                                                exit={{ opacity: 0 }}
+                                                transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+                                                className="px-5 py-4"
+                                            >
+                                                <p className="text-base font-semibold text-gray-900 truncate">
+                                                    {handoffQuery}
+                                                </p>
+                                            </motion.div>
+                                        ) : (
+                                            <motion.div
+                                                key="input"
+                                                initial={{ opacity: 0 }}
+                                                animate={{ opacity: 1 }}
+                                                exit={{ opacity: 0 }}
+                                                transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
+                                            >
+                                                <input
+                                                    ref={chatInputRef}
+                                                    type="text"
+                                                    value={chatInput}
+                                                    onChange={(e) => setChatInput(e.target.value)}
+                                                    placeholder="Ask a follow-up..."
+                                                    disabled={isLoading}
+                                                    className="w-full px-5 py-4 bg-transparent text-gray-900 placeholder-gray-400 focus:outline-none text-base"
+                                                />
+                                            </motion.div>
+                                        )}
+                                    </AnimatePresence>
+                                </div>
+                                <button
+                                    type="submit"
+                                    aria-label="Send message"
+                                    disabled={isLoading || !chatInput.trim() || isHandingOff}
+                                    className={`w-11 h-11 rounded-xl flex items-center justify-center transition-all duration-300 ${chatInput.trim() && !isHandingOff
+                                        ? 'bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white shadow-lg'
+                                        : 'bg-gray-100 text-gray-400'
+                                        }`}
+                                >
+                                    <PaperAirplaneIcon className="w-5 h-5" />
+                                </button>
+                            </motion.div>
+                        </form>
+                    )}
                 </div>
             </div>
         </div>
