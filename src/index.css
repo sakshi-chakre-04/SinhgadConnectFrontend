@@ -143,6 +143,24 @@ body {
     animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
+/* Stagger Fade - For content sections */
+@keyframes staggerFade {
+    0% {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-staggerFade {
+    opacity: 0;
+    animation: staggerFade 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
 /* ===== MODERN UTILITIES ===== */
 
 /* Premium Glassmorphism */

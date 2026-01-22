@@ -20,84 +20,110 @@ const SUGGESTION_CHIPS = [
     { icon: '🎯', text: 'career guidance' },
 ];
 
-// Typewriter component for streaming effect
-const TypewriterText = ({ text, onComplete }) => {
-    const [displayedText, setDisplayedText] = useState('');
-    const [currentIndex, setCurrentIndex] = useState(0);
+// Skeleton Loader matching actual response layout
+const SkeletonLoader = () => (
+    <div className="space-y-4 min-w-[300px]">
+        {/* Header skeleton */}
+        <div className="flex items-center gap-2">
+            <div className="w-1 h-5 bg-gradient-to-b from-violet-300 to-fuchsia-300 rounded-full animate-pulse" />
+            <div className="h-5 bg-gray-200 rounded-full w-48 animate-pulse" />
+        </div>
+        {/* Paragraph lines */}
+        <div className="space-y-2">
+            <div className="h-4 bg-gray-200 rounded-full w-full animate-pulse" />
+            <div className="h-4 bg-gray-200 rounded-full w-11/12 animate-pulse" style={{ animationDelay: '75ms' }} />
+            <div className="h-4 bg-gray-200 rounded-full w-4/5 animate-pulse" style={{ animationDelay: '150ms' }} />
+        </div>
+        {/* Bullet points */}
+        <div className="space-y-2 pl-4">
+            <div className="flex items-center gap-2">
+                <div className="w-2 h-2 bg-gray-300 rounded-full animate-pulse" />
+                <div className="h-4 bg-gray-200 rounded-full w-3/4 animate-pulse" />
+            </div>
+            <div className="flex items-center gap-2">
+                <div className="w-2 h-2 bg-gray-300 rounded-full animate-pulse" />
+                <div className="h-4 bg-gray-200 rounded-full w-2/3 animate-pulse" style={{ animationDelay: '100ms' }} />
+            </div>
+        </div>
+    </div>
+);
 
-    useEffect(() => {
-        if (currentIndex < text.length) {
-            const timeout = setTimeout(() => {
-                // Add multiple characters at once for faster typing
-                const charsToAdd = text.slice(currentIndex, currentIndex + 3);
-                setDisplayedText(prev => prev + charsToAdd);
-                setCurrentIndex(prev => prev + 3);
-            }, 15);
-            return () => clearTimeout(timeout);
-        } else if (onComplete) {
-            onComplete();
-        }
-    }, [currentIndex, text, onComplete]);
+// Staggered content renderer with delays
+const StaggeredContent = ({ children, delay = 0 }) => (
+    <div
+        className="animate-staggerFade"
+        style={{ animationDelay: `${delay}ms` }}
+    >
+        {children}
+    </div>
+);
 
-    useEffect(() => {
-        setDisplayedText('');
-        setCurrentIndex(0);
-    }, [text]);
-
-    return <span>{displayedText}</span>;
-};
-
-// Markdown renderer
-const renderMarkdown = (text, useTypewriter = false) => {
+// Markdown renderer with staggered sections
+const renderMarkdownStaggered = (text) => {
     if (!text) return null;
     const lines = text.split('\n');
-    const elements = [];
+    const sections = [];
+    let currentSection = [];
+    let sectionIndex = 0;
 
     lines.forEach((line, idx) => {
         const trimmed = line.trim();
-        if (trimmed.startsWith('## ') || trimmed.startsWith('### ')) {
-            elements.push(
-                <div key={idx} className="flex items-center gap-2 py-1 border-b border-violet-100 mt-2">
-                    <div className="w-1 h-4 bg-gradient-to-b from-violet-500 to-fuchsia-500 rounded-full" />
-                    <h3 className="font-semibold text-gray-900 text-sm">{trimmed.replace(/^#+\s/, '')}</h3>
-                </div>
-            );
-        } else if (trimmed.startsWith('- ') || trimmed.startsWith('• ')) {
-            elements.push(
-                <div key={idx} className="flex items-start gap-2 py-0.5">
-                    <span className="w-1.5 h-1.5 mt-1.5 bg-violet-400 rounded-full flex-shrink-0" />
-                    <span className="text-gray-700 text-sm">{trimmed.slice(2)}</span>
-                </div>
-            );
-        } else if (/^\d+\.\s/.test(trimmed)) {
-            const match = trimmed.match(/^(\d+)\.\s(.*)/);
-            if (match) {
-                elements.push(
-                    <div key={idx} className="flex items-start gap-2 py-0.5">
-                        <span className="w-5 h-5 bg-violet-100 text-violet-700 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">
-                            {match[1]}
-                        </span>
-                        <span className="text-gray-700 text-sm pt-0.5">{match[2]}</span>
-                    </div>
-                );
-            }
-        } else if (trimmed) {
-            elements.push(<p key={idx} className="text-gray-600 text-sm py-0.5">{trimmed}</p>);
+
+        // Start new section on headers
+        if ((trimmed.startsWith('## ') || trimmed.startsWith('### ')) && currentSection.length > 0) {
+            sections.push({ lines: [...currentSection], delay: sectionIndex * 100 });
+            currentSection = [];
+            sectionIndex++;
+        }
+
+        if (trimmed) {
+            currentSection.push({ line: trimmed, idx });
         }
     });
 
-    return <div className="space-y-1">{elements}</div>;
-};
+    if (currentSection.length > 0) {
+        sections.push({ lines: [...currentSection], delay: sectionIndex * 100 });
+    }
 
-// Skeleton Loader matching text layout
-const SkeletonLoader = () => (
-    <div className="space-y-3 animate-pulse">
-        <div className="h-4 bg-gray-200 rounded-full w-3/4" />
-        <div className="h-4 bg-gray-200 rounded-full w-full" />
-        <div className="h-4 bg-gray-200 rounded-full w-5/6" />
-        <div className="h-4 bg-gray-200 rounded-full w-2/3" />
-    </div>
-);
+    return (
+        <div className="space-y-2">
+            {sections.map((section, sIdx) => (
+                <StaggeredContent key={sIdx} delay={section.delay}>
+                    {section.lines.map(({ line, idx }) => {
+                        if (line.startsWith('## ') || line.startsWith('### ')) {
+                            return (
+                                <div key={idx} className="flex items-center gap-2 py-1 border-b border-violet-100 mt-2 mb-2">
+                                    <div className="w-1 h-4 bg-gradient-to-b from-violet-500 to-fuchsia-500 rounded-full" />
+                                    <h3 className="font-semibold text-gray-900 text-sm">{line.replace(/^#+\s/, '')}</h3>
+                                </div>
+                            );
+                        } else if (line.startsWith('- ') || line.startsWith('• ')) {
+                            return (
+                                <div key={idx} className="flex items-start gap-2 py-0.5">
+                                    <span className="w-1.5 h-1.5 mt-1.5 bg-violet-400 rounded-full flex-shrink-0" />
+                                    <span className="text-gray-700 text-sm">{line.slice(2)}</span>
+                                </div>
+                            );
+                        } else if (/^\d+\.\s/.test(line)) {
+                            const match = line.match(/^(\d+)\.\s(.*)/);
+                            if (match) {
+                                return (
+                                    <div key={idx} className="flex items-start gap-2 py-0.5">
+                                        <span className="w-5 h-5 bg-violet-100 text-violet-700 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">
+                                            {match[1]}
+                                        </span>
+                                        <span className="text-gray-700 text-sm pt-0.5">{match[2]}</span>
+                                    </div>
+                                );
+                            }
+                        }
+                        return <p key={idx} className="text-gray-600 text-sm py-0.5">{line}</p>;
+                    })}
+                </StaggeredContent>
+            ))}
+        </div>
+    );
+};
 
 const AskAI = () => {
     const [messages, setMessages] = useState([]);
@@ -105,7 +131,8 @@ const AskAI = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [recentQuestions, setRecentQuestions] = useState([]);
     const [isInChat, setIsInChat] = useState(false);
-    const [streamingIndex, setStreamingIndex] = useState(-1);
+    const [headerVisible, setHeaderVisible] = useState(false);
+    const [showSources, setShowSources] = useState({});
     const messagesEndRef = useRef(null);
     const inputRef = useRef(null);
     const chatInputRef = useRef(null);
@@ -133,7 +160,16 @@ const AskAI = () => {
 
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-    }, [messages, streamingIndex]);
+    }, [messages]);
+
+    // Header animation - slides in after chat view appears
+    useEffect(() => {
+        if (isInChat) {
+            setTimeout(() => setHeaderVisible(true), 150);
+        } else {
+            setHeaderVisible(false);
+        }
+    }, [isInChat]);
 
     useEffect(() => {
         if (isInChat && chatInputRef.current) {
@@ -142,6 +178,13 @@ const AskAI = () => {
             inputRef.current.focus();
         }
     }, [isInChat]);
+
+    // Delayed source reveal
+    const revealSources = (msgIndex) => {
+        setTimeout(() => {
+            setShowSources(prev => ({ ...prev, [msgIndex]: true }));
+        }, 800);
+    };
 
     const sendMessage = async (messageText) => {
         const userMessage = messageText || input.trim();
@@ -172,10 +215,9 @@ const AskAI = () => {
                 setMessages(prev => [...prev, {
                     role: 'assistant',
                     content: data.answer,
-                    sources: data.sources || [],
-                    isNew: true
+                    sources: data.sources || []
                 }]);
-                setStreamingIndex(1); // Start streaming the new message
+                revealSources(1);
             } else {
                 throw new Error('Failed');
             }
@@ -197,7 +239,7 @@ const AskAI = () => {
     const handleBack = () => {
         setIsInChat(false);
         setMessages([]);
-        setStreamingIndex(-1);
+        setShowSources({});
     };
 
     const handleChatSubmit = async (e) => {
@@ -205,6 +247,7 @@ const AskAI = () => {
         const userMessage = input.trim();
         if (!userMessage || isLoading) return;
 
+        const newMsgIndex = messages.length + 1;
         setInput('');
         setMessages(prev => [...prev, { role: 'user', content: userMessage }]);
         setIsLoading(true);
@@ -228,14 +271,12 @@ const AskAI = () => {
             const data = await response.json();
 
             if (data.success && data.answer) {
-                const newIndex = messages.length + 1;
                 setMessages(prev => [...prev, {
                     role: 'assistant',
                     content: data.answer,
-                    sources: data.sources || [],
-                    isNew: true
+                    sources: data.sources || []
                 }]);
-                setStreamingIndex(newIndex);
+                revealSources(newMsgIndex);
             } else {
                 throw new Error('Failed');
             }
@@ -251,8 +292,8 @@ const AskAI = () => {
 
     return (
         <div className="min-h-screen flex flex-col relative overflow-hidden bg-[#F9FAFB]">
-            {/* === BACKGROUND (Visible in home view) === */}
-            <div className={`absolute inset-0 pointer-events-none transition-opacity duration-700 ${isInChat ? 'opacity-30' : 'opacity-100'}`}>
+            {/* === BACKGROUND === */}
+            <div className={`absolute inset-0 pointer-events-none transition-opacity duration-700 ${isInChat ? 'opacity-20' : 'opacity-100'}`}>
                 <div className="absolute inset-0 bg-gradient-to-br from-violet-100 via-fuchsia-50 to-cyan-50" />
                 <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-gradient-to-br from-violet-300/50 to-purple-400/30 rounded-full blur-[100px] -translate-x-1/4 -translate-y-1/4" />
                 <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-gradient-to-tl from-cyan-300/40 to-teal-200/30 rounded-full blur-[80px] translate-x-1/4 translate-y-1/4" />
@@ -261,9 +302,7 @@ const AskAI = () => {
 
             {/* === HOME VIEW === */}
             <div
-                className={`relative z-10 flex flex-col min-h-screen px-4 lg:px-6 pt-8 pb-8 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${isInChat
-                        ? 'opacity-0 scale-90 pointer-events-none'
-                        : 'opacity-100 scale-100'
+                className={`relative z-10 flex flex-col min-h-screen px-4 lg:px-6 pt-8 pb-8 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${isInChat ? 'opacity-0 scale-90 pointer-events-none' : 'opacity-100 scale-100'
                     }`}
             >
                 <div className="flex-1 flex flex-col items-center justify-center max-w-2xl mx-auto w-full">
@@ -377,126 +416,131 @@ const AskAI = () => {
                 )}
             </div>
 
-            {/* === CHAT VIEW (Grows from center, doesn't cover sidebar) === */}
+            {/* === CHAT VIEW === */}
             <div
-                className={`absolute inset-0 z-20 flex flex-col transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${isInChat
-                        ? 'opacity-100 scale-100'
-                        : 'opacity-0 scale-95 pointer-events-none'
+                className={`absolute inset-0 z-20 flex flex-col transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${isInChat ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'
                     }`}
-                style={{
-                    background: 'linear-gradient(to bottom, #F9FAFB, #FFFFFF)'
-                }}
+                style={{ background: 'linear-gradient(to bottom, #F9FAFB, #FFFFFF)' }}
             >
-                {/* Chat Container with shadow for depth */}
-                <div className="flex flex-col h-full">
-                    {/* Chat Header */}
-                    <div className="flex-shrink-0 px-4 lg:px-6 pt-4 pb-2">
-                        <div className="bg-white rounded-2xl border border-gray-200 shadow-lg px-4 py-3 flex items-center gap-3" style={{ boxShadow: '0 4px 20px rgba(0,0,0,0.05)' }}>
-                            <button
-                                onClick={handleBack}
-                                className="w-10 h-10 rounded-xl bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-all hover:scale-105"
-                            >
-                                <ArrowLeftIcon className="w-5 h-5 text-gray-600" />
-                            </button>
-                            <div className="flex items-center gap-3 flex-1">
-                                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-500 via-fuchsia-500 to-indigo-600 flex items-center justify-center shadow-lg">
-                                    <SparklesIcon className="w-5 h-5 text-white" />
-                                </div>
-                                <div>
-                                    <span className="font-semibold text-gray-900">Sinhgad AI</span>
-                                    <p className="text-xs text-emerald-600 flex items-center gap-1.5">
-                                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                                        {isLoading ? 'Thinking...' : 'Online'}
-                                    </p>
-                                </div>
+                {/* Chat Header - Slides down separately */}
+                <div
+                    className={`flex-shrink-0 px-4 lg:px-6 pt-4 pb-2 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${headerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'
+                        }`}
+                >
+                    <div
+                        className="bg-white rounded-2xl border border-gray-200 px-4 py-3 flex items-center gap-3"
+                        style={{ boxShadow: '0 4px 20px rgba(0,0,0,0.05)' }}
+                    >
+                        <button
+                            onClick={handleBack}
+                            className="w-10 h-10 rounded-xl bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-all hover:scale-105"
+                        >
+                            <ArrowLeftIcon className="w-5 h-5 text-gray-600" />
+                        </button>
+                        <div className="flex items-center gap-3 flex-1">
+                            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-500 via-fuchsia-500 to-indigo-600 flex items-center justify-center shadow-lg">
+                                <SparklesIcon className="w-5 h-5 text-white" />
+                            </div>
+                            <div>
+                                <span className="font-semibold text-gray-900">Sinhgad AI</span>
+                                <p className="text-xs text-emerald-600 flex items-center gap-1.5">
+                                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                                    {isLoading ? 'Thinking...' : 'Online'}
+                                </p>
                             </div>
                         </div>
                     </div>
+                </div>
 
-                    {/* Messages */}
-                    <div className="flex-1 overflow-y-auto px-4 lg:px-6 py-4 space-y-4">
-                        {messages.map((msg, idx) => (
+                {/* Messages */}
+                <div className="flex-1 overflow-y-auto px-4 lg:px-6 py-4 space-y-4">
+                    {messages.map((msg, idx) => (
+                        <div
+                            key={idx}
+                            className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} animate-slideUp`}
+                            style={{ animationDelay: `${idx * 80}ms` }}
+                        >
                             <div
-                                key={idx}
-                                className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} animate-slideUp`}
-                                style={{ animationDelay: `${idx * 80}ms` }}
+                                className={`max-w-[85%] lg:max-w-[70%] px-5 py-4 text-sm leading-relaxed
+                                    ${msg.role === 'user'
+                                        ? 'bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white rounded-2xl rounded-br-md shadow-lg'
+                                        : 'bg-white text-gray-800 rounded-2xl rounded-bl-md border-t-2 border-t-violet-400 border border-gray-200'
+                                    }`}
+                                style={msg.role === 'assistant' ? { boxShadow: '0 4px 20px rgba(139, 92, 246, 0.08)' } : {}}
                             >
-                                <div
-                                    className={`max-w-[85%] lg:max-w-[70%] px-5 py-4 text-sm leading-relaxed
-                                        ${msg.role === 'user'
-                                            ? 'bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white rounded-2xl rounded-br-md shadow-lg'
-                                            : 'bg-white text-gray-800 rounded-2xl rounded-bl-md border border-gray-200'
-                                        }`}
-                                    style={msg.role === 'assistant' ? { boxShadow: '0 4px 20px rgba(0,0,0,0.05)' } : {}}
-                                >
-                                    {msg.role === 'user' ? (
-                                        <p className="whitespace-pre-wrap">{msg.content}</p>
-                                    ) : msg.isNew && idx === streamingIndex ? (
-                                        <TypewriterText
-                                            text={msg.content}
-                                            onComplete={() => setStreamingIndex(-1)}
-                                        />
-                                    ) : (
-                                        renderMarkdown(msg.content)
-                                    )}
+                                {msg.role === 'user' ? (
+                                    <p className="whitespace-pre-wrap">{msg.content}</p>
+                                ) : (
+                                    renderMarkdownStaggered(msg.content)
+                                )}
 
-                                    {msg.sources && msg.sources.length > 0 && msg.role === 'assistant' && idx !== streamingIndex && (
-                                        <div className="mt-3 pt-3 border-t border-gray-100">
-                                            <p className="text-xs text-gray-500 mb-2">Related posts:</p>
-                                            <div className="flex flex-wrap gap-2">
-                                                {msg.sources.slice(0, 3).map((source, sIdx) => (
-                                                    <Link
-                                                        key={sIdx}
-                                                        to={source.id ? `/posts/${source.id}` : '#'}
-                                                        className="text-xs px-3 py-1.5 bg-violet-50 text-violet-600 rounded-full hover:bg-violet-100 transition-all"
-                                                    >
-                                                        {source.title?.substring(0, 25)}...
-                                                    </Link>
-                                                ))}
-                                            </div>
+                                {/* Sources - Appear last with delay */}
+                                {msg.sources && msg.sources.length > 0 && msg.role === 'assistant' && (
+                                    <div
+                                        className={`mt-3 pt-3 border-t border-gray-100 transition-all duration-500 ${showSources[idx] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
+                                            }`}
+                                    >
+                                        <p className="text-xs text-gray-500 mb-2">Related posts:</p>
+                                        <div className="flex flex-wrap gap-2">
+                                            {msg.sources.slice(0, 3).map((source, sIdx) => (
+                                                <Link
+                                                    key={sIdx}
+                                                    to={source.id ? `/posts/${source.id}` : '#'}
+                                                    className="text-xs px-3 py-1.5 bg-violet-50 text-violet-600 rounded-full hover:bg-violet-100 transition-all border border-violet-100"
+                                                    style={{ animationDelay: `${sIdx * 100}ms` }}
+                                                >
+                                                    {source.title?.substring(0, 25)}...
+                                                </Link>
+                                            ))}
                                         </div>
-                                    )}
-                                </div>
+                                    </div>
+                                )}
                             </div>
-                        ))}
+                        </div>
+                    ))}
 
-                        {/* Skeleton Loader */}
-                        {isLoading && (
-                            <div className="flex justify-start animate-slideUp">
-                                <div className="max-w-[85%] lg:max-w-[70%] bg-white px-5 py-4 rounded-2xl rounded-bl-md border border-gray-200" style={{ boxShadow: '0 4px 20px rgba(0,0,0,0.05)' }}>
-                                    <SkeletonLoader />
-                                </div>
+                    {/* Skeleton Loader - Matches response layout */}
+                    {isLoading && (
+                        <div className="flex justify-start animate-slideUp">
+                            <div
+                                className="max-w-[85%] lg:max-w-[70%] bg-white px-5 py-4 rounded-2xl rounded-bl-md border-t-2 border-t-violet-400 border border-gray-200"
+                                style={{ boxShadow: '0 4px 20px rgba(139, 92, 246, 0.08)' }}
+                            >
+                                <SkeletonLoader />
                             </div>
-                        )}
-                        <div ref={messagesEndRef} />
-                    </div>
+                        </div>
+                    )}
+                    <div ref={messagesEndRef} />
+                </div>
 
-                    {/* Chat Input */}
-                    <div className="flex-shrink-0 px-4 lg:px-6 pb-6 pt-2">
-                        <form onSubmit={handleChatSubmit}>
-                            <div className="bg-white rounded-2xl border border-gray-200 shadow-lg flex items-center gap-2 pr-2" style={{ boxShadow: '0 4px 20px rgba(0,0,0,0.05)' }}>
-                                <input
-                                    ref={chatInputRef}
-                                    type="text"
-                                    value={input}
-                                    onChange={(e) => setInput(e.target.value)}
-                                    placeholder="Ask a follow-up..."
-                                    disabled={isLoading}
-                                    className="flex-1 px-5 py-4 bg-transparent text-gray-900 placeholder-gray-400 focus:outline-none text-base"
-                                />
-                                <button
-                                    type="submit"
-                                    disabled={isLoading || !input.trim()}
-                                    className={`w-11 h-11 rounded-xl flex items-center justify-center transition-all duration-300 ${input.trim()
-                                            ? 'bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white shadow-lg'
-                                            : 'bg-gray-100 text-gray-400'
-                                        }`}
-                                >
-                                    <PaperAirplaneIcon className="w-5 h-5" />
-                                </button>
-                            </div>
-                        </form>
-                    </div>
+                {/* Chat Input */}
+                <div className="flex-shrink-0 px-4 lg:px-6 pb-6 pt-2">
+                    <form onSubmit={handleChatSubmit}>
+                        <div
+                            className="bg-white rounded-2xl border border-gray-200 flex items-center gap-2 pr-2"
+                            style={{ boxShadow: '0 4px 20px rgba(0,0,0,0.05)' }}
+                        >
+                            <input
+                                ref={chatInputRef}
+                                type="text"
+                                value={input}
+                                onChange={(e) => setInput(e.target.value)}
+                                placeholder="Ask a follow-up..."
+                                disabled={isLoading}
+                                className="flex-1 px-5 py-4 bg-transparent text-gray-900 placeholder-gray-400 focus:outline-none text-base"
+                            />
+                            <button
+                                type="submit"
+                                disabled={isLoading || !input.trim()}
+                                className={`w-11 h-11 rounded-xl flex items-center justify-center transition-all duration-300 ${input.trim()
+                                        ? 'bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white shadow-lg'
+                                        : 'bg-gray-100 text-gray-400'
+                                    }`}
+                            >
+                                <PaperAirplaneIcon className="w-5 h-5" />
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
