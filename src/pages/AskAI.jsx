@@ -441,6 +441,7 @@ const AskAI = () => {
     const [showSources, setShowSources] = useState({});
     const [streamingComplete, setStreamingComplete] = useState({});
     const messagesEndRef = useRef(null);
+    const messagesRef = useRef([]);
     const inputRef = useRef(null);
     const chatInputRef = useRef(null);
     const token = useSelector(selectToken);
@@ -471,6 +472,10 @@ const AskAI = () => {
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     }, [messages, streamingComplete]);
+
+    useEffect(() => {
+        messagesRef.current = messages;
+    }, [messages]);
 
     useEffect(() => {
         if (isInChat) {
@@ -583,7 +588,8 @@ const AskAI = () => {
         const userMessage = (messageText || '').trim();
         if (!userMessage || isLoading) return;
 
-        const historyForApi = [...messages, { role: 'user', content: userMessage }];
+        setActiveQuery(userMessage);
+        const historyForApi = [...(messagesRef.current || []), { role: 'user', content: userMessage }];
 
         setMessages(prev => [...prev, { role: 'user', content: userMessage }]);
         setIsLoading(true);
@@ -673,33 +679,35 @@ const AskAI = () => {
 
                     {/* Search Input */}
                     <form onSubmit={handleSubmit} className="w-full mb-8">
-                        <motion.div
-                            layoutId="askai-search"
-                            className="bg-white/75 backdrop-blur-xl rounded-2xl border border-white/50 shadow-xl overflow-hidden"
-                            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-                        >
-                            <div className="relative">
-                                <div className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-300 text-lg">⌘</div>
-                                <input
-                                    ref={inputRef}
-                                    type="text"
-                                    value={homeInput}
-                                    onChange={(e) => setHomeInput(e.target.value)}
-                                    placeholder="What would you like to know?"
-                                    className="w-full pl-14 pr-16 py-5 bg-transparent text-gray-900 placeholder-gray-400 focus:outline-none text-lg font-light"
-                                />
-                                <button
-                                    type="submit"
-                                    disabled={!homeInput.trim()}
-                                    className={`absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 ${homeInput.trim()
-                                        ? 'bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white shadow-lg'
-                                        : 'bg-violet-100 text-violet-400'
-                                        }`}
-                                >
-                                    <PaperAirplaneIcon className="w-5 h-5" />
-                                </button>
-                            </div>
-                        </motion.div>
+                        {!isInChat && (
+                            <motion.div
+                                layoutId="askai-search"
+                                className="bg-white/75 backdrop-blur-xl rounded-2xl border border-white/50 shadow-xl overflow-hidden"
+                                transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                            >
+                                <div className="relative">
+                                    <div className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-300 text-lg">⌘</div>
+                                    <input
+                                        ref={inputRef}
+                                        type="text"
+                                        value={homeInput}
+                                        onChange={(e) => setHomeInput(e.target.value)}
+                                        placeholder="What would you like to know?"
+                                        className="w-full pl-14 pr-16 py-5 bg-transparent text-gray-900 placeholder-gray-400 focus:outline-none text-lg font-light"
+                                    />
+                                    <button
+                                        type="submit"
+                                        disabled={!homeInput.trim()}
+                                        className={`absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 ${homeInput.trim()
+                                            ? 'bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white shadow-lg'
+                                            : 'bg-violet-100 text-violet-400'
+                                            }`}
+                                    >
+                                        <PaperAirplaneIcon className="w-5 h-5" />
+                                    </button>
+                                </div>
+                            </motion.div>
+                        )}
                         <div className="flex justify-center mt-2">
                             <div className="flex items-center gap-2 text-gray-400 text-xs">
                                 <kbd className="px-1.5 py-0.5 bg-white rounded border border-gray-200 font-mono text-gray-500">↵</kbd>
@@ -835,17 +843,19 @@ const AskAI = () => {
                         </div>
 
                         <div className="mt-3">
-                            <motion.div
-                                layoutId="askai-search"
-                                className="bg-white/70 backdrop-blur-xl rounded-2xl border border-white/50 shadow-sm overflow-hidden"
-                                transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-                            >
-                                <div className="px-5 py-3">
-                                    <p className="text-sm font-semibold text-gray-900 truncate">
-                                        {activeQuery || 'Ask anything'}
-                                    </p>
-                                </div>
-                            </motion.div>
+                            {isInChat && (
+                                <motion.div
+                                    layoutId="askai-search"
+                                    className="bg-white/70 backdrop-blur-xl rounded-2xl border border-white/50 shadow-sm overflow-hidden"
+                                    transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                                >
+                                    <div className="px-5 py-3">
+                                        <p className="text-sm font-semibold text-gray-900 truncate">
+                                            {activeQuery || 'Ask anything'}
+                                        </p>
+                                    </div>
+                                </motion.div>
+                            )}
                         </div>
                     </div>
                 </div>
