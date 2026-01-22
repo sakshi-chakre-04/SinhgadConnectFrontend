@@ -20,6 +20,44 @@ const SUGGESTION_CHIPS = [
     { icon: '🎯', text: 'career guidance' },
 ];
 
+// DEMO MODE - Type "demo" or "test" to get mock response without API call
+const DEMO_KEYWORDS = ['demo', 'test', 'ui test', 'testing'];
+const DEMO_RESPONSE = {
+    answer: `## TCS Placement Preparation Guide
+
+Here's a comprehensive guide to help you prepare for TCS placements:
+
+### 1. Aptitude Preparation
+- Practice quantitative aptitude questions daily
+- Focus on time management and speed
+- Use platforms like IndiaBix and PrepInsta
+
+### 2. Coding Skills
+- Master at least one programming language (Python/Java/C++)
+- Practice on LeetCode and HackerRank
+- Focus on Data Structures and Algorithms
+
+### 3. Communication Skills
+- Work on verbal and written communication
+- Practice group discussions
+- Prepare for HR interview questions
+
+### 4. Company Research
+- Understand TCS's services and recent projects
+- Know about their work culture and values
+- Stay updated with tech industry trends
+
+### Resources
+- TCS iON platform for mock tests
+- GeeksforGeeks for coding practice
+- YouTube channels for aptitude tricks`,
+    sources: [
+        { id: '1', title: 'How to prepare for TCS NQT exam' },
+        { id: '2', title: 'TCS Interview Experience - Selected' },
+        { id: '3', title: 'Best DSA preparation strategy' }
+    ]
+};
+
 // Typewriter Hook - Streams text character by character
 const useTypewriter = (text, speed = 8, enabled = true) => {
     const [displayedText, setDisplayedText] = useState('');
@@ -220,9 +258,27 @@ const AskAI = () => {
             setInputMorphing(false);
         }, 300);
 
-        // API call
+        // Check for demo mode
+        const isDemoMode = DEMO_KEYWORDS.some(keyword =>
+            userMessage.toLowerCase().includes(keyword)
+        );
+
+        // API call or Demo response
         setTimeout(async () => {
             try {
+                // DEMO MODE - Return mock response without API call
+                if (isDemoMode) {
+                    await new Promise(resolve => setTimeout(resolve, 1500)); // Simulate API delay
+                    setMessages(prev => [...prev, {
+                        role: 'assistant',
+                        content: DEMO_RESPONSE.answer,
+                        sources: DEMO_RESPONSE.sources,
+                        isNew: true
+                    }]);
+                    setIsLoading(false);
+                    return;
+                }
+
                 const response = await fetch((import.meta.env.VITE_API_URL || 'https://sinhgadconnectbackend.onrender.com/api') + '/chat', {
                     method: 'POST',
                     headers: {
@@ -333,8 +389,8 @@ const AskAI = () => {
             {/* === MORPHING INPUT (Shared Element) === */}
             <div
                 className={`fixed z-50 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${inputMorphing
-                        ? 'left-4 right-4 lg:left-1/4 lg:right-1/4 bottom-6 opacity-100'
-                        : 'opacity-0 pointer-events-none left-1/4 right-1/4 top-1/2'
+                    ? 'left-4 right-4 lg:left-1/4 lg:right-1/4 bottom-6 opacity-100'
+                    : 'opacity-0 pointer-events-none left-1/4 right-1/4 top-1/2'
                     }`}
             >
                 <div className="bg-white rounded-2xl border-2 border-violet-200 shadow-2xl p-1">
@@ -387,8 +443,8 @@ const AskAI = () => {
                                     type="submit"
                                     disabled={!input.trim()}
                                     className={`absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 ${input.trim()
-                                            ? 'bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white shadow-lg'
-                                            : 'bg-violet-100 text-violet-400'
+                                        ? 'bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white shadow-lg'
+                                        : 'bg-violet-100 text-violet-400'
                                         }`}
                                 >
                                     <PaperAirplaneIcon className="w-5 h-5" />
@@ -581,8 +637,8 @@ const AskAI = () => {
                                 type="submit"
                                 disabled={isLoading || !input.trim()}
                                 className={`w-11 h-11 rounded-xl flex items-center justify-center transition-all duration-300 ${input.trim()
-                                        ? 'bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white shadow-lg'
-                                        : 'bg-gray-100 text-gray-400'
+                                    ? 'bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white shadow-lg'
+                                    : 'bg-gray-100 text-gray-400'
                                     }`}
                             >
                                 <PaperAirplaneIcon className="w-5 h-5" />
