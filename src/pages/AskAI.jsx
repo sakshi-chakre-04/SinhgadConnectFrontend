@@ -20,8 +20,35 @@ const SUGGESTION_CHIPS = [
     { icon: '🎯', text: 'career guidance' },
 ];
 
+// Typewriter component for streaming effect
+const TypewriterText = ({ text, onComplete }) => {
+    const [displayedText, setDisplayedText] = useState('');
+    const [currentIndex, setCurrentIndex] = useState(0);
+
+    useEffect(() => {
+        if (currentIndex < text.length) {
+            const timeout = setTimeout(() => {
+                // Add multiple characters at once for faster typing
+                const charsToAdd = text.slice(currentIndex, currentIndex + 3);
+                setDisplayedText(prev => prev + charsToAdd);
+                setCurrentIndex(prev => prev + 3);
+            }, 15);
+            return () => clearTimeout(timeout);
+        } else if (onComplete) {
+            onComplete();
+        }
+    }, [currentIndex, text, onComplete]);
+
+    useEffect(() => {
+        setDisplayedText('');
+        setCurrentIndex(0);
+    }, [text]);
+
+    return <span>{displayedText}</span>;
+};
+
 // Markdown renderer
-const renderMarkdown = (text) => {
+const renderMarkdown = (text, useTypewriter = false) => {
     if (!text) return null;
     const lines = text.split('\n');
     const elements = [];
@@ -62,13 +89,23 @@ const renderMarkdown = (text) => {
     return <div className="space-y-1">{elements}</div>;
 };
 
+// Skeleton Loader matching text layout
+const SkeletonLoader = () => (
+    <div className="space-y-3 animate-pulse">
+        <div className="h-4 bg-gray-200 rounded-full w-3/4" />
+        <div className="h-4 bg-gray-200 rounded-full w-full" />
+        <div className="h-4 bg-gray-200 rounded-full w-5/6" />
+        <div className="h-4 bg-gray-200 rounded-full w-2/3" />
+    </div>
+);
+
 const AskAI = () => {
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [recentQuestions, setRecentQuestions] = useState([]);
     const [isInChat, setIsInChat] = useState(false);
-    const [isTransitioning, setIsTransitioning] = useState(false);
+    const [streamingIndex, setStreamingIndex] = useState(-1);
     const messagesEndRef = useRef(null);
     const inputRef = useRef(null);
     const chatInputRef = useRef(null);
@@ -96,71 +133,60 @@ const AskAI = () => {
 
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-    }, [messages]);
+    }, [messages, streamingIndex]);
 
     useEffect(() => {
-        if (isInChat && !isTransitioning && chatInputRef.current) {
-            chatInputRef.current.focus();
+        if (isInChat && chatInputRef.current) {
+            setTimeout(() => chatInputRef.current?.focus(), 500);
         } else if (!isInChat && inputRef.current) {
             inputRef.current.focus();
         }
-    }, [isInChat, isTransitioning]);
+    }, [isInChat]);
 
     const sendMessage = async (messageText) => {
         const userMessage = messageText || input.trim();
         if (!userMessage || isLoading) return;
 
         saveRecentQuestion(userMessage);
-
-        // Start transition
-        setIsTransitioning(true);
         setInput('');
+        setIsInChat(true);
+        setMessages([{ role: 'user', content: userMessage }]);
+        setIsLoading(true);
 
-        // Delay to allow input animation
-        setTimeout(() => {
-            setIsInChat(true);
-            setMessages([{ role: 'user', content: userMessage }]);
-            setIsLoading(true);
+        try {
+            const response = await fetch((import.meta.env.VITE_API_URL || 'https://sinhgadconnectbackend.onrender.com/api') + '/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    message: userMessage,
+                    history: []
+                })
+            });
 
-            // End transition after chat view is visible
-            setTimeout(() => setIsTransitioning(false), 400);
-        }, 150);
+            const data = await response.json();
 
-        // API call
-        setTimeout(async () => {
-            try {
-                const response = await fetch((import.meta.env.VITE_API_URL || 'https://sinhgadconnectbackend.onrender.com/api') + '/chat', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
-                    },
-                    body: JSON.stringify({
-                        message: userMessage,
-                        history: []
-                    })
-                });
-
-                const data = await response.json();
-
-                if (data.success && data.answer) {
-                    setMessages(prev => [...prev, {
-                        role: 'assistant',
-                        content: data.answer,
-                        sources: data.sources || []
-                    }]);
-                } else {
-                    throw new Error(data.message || 'Failed');
-                }
-            } catch (error) {
+            if (data.success && data.answer) {
                 setMessages(prev => [...prev, {
                     role: 'assistant',
-                    content: "I'm having trouble connecting. Please try again."
+                    content: data.answer,
+                    sources: data.sources || [],
+                    isNew: true
                 }]);
-            } finally {
-                setIsLoading(false);
+                setStreamingIndex(1); // Start streaming the new message
+            } else {
+                throw new Error('Failed');
             }
-        }, 300);
+        } catch (error) {
+            setMessages(prev => [...prev, {
+                role: 'assistant',
+                content: "I'm having trouble connecting. Please try again."
+            }]);
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     const handleSubmit = (e) => {
@@ -169,15 +195,11 @@ const AskAI = () => {
     };
 
     const handleBack = () => {
-        setIsTransitioning(true);
-        setTimeout(() => {
-            setIsInChat(false);
-            setMessages([]);
-            setIsTransitioning(false);
-        }, 300);
+        setIsInChat(false);
+        setMessages([]);
+        setStreamingIndex(-1);
     };
 
-    // Send follow-up in chat
     const handleChatSubmit = async (e) => {
         e.preventDefault();
         const userMessage = input.trim();
@@ -206,11 +228,14 @@ const AskAI = () => {
             const data = await response.json();
 
             if (data.success && data.answer) {
+                const newIndex = messages.length + 1;
                 setMessages(prev => [...prev, {
                     role: 'assistant',
                     content: data.answer,
-                    sources: data.sources || []
+                    sources: data.sources || [],
+                    isNew: true
                 }]);
+                setStreamingIndex(newIndex);
             } else {
                 throw new Error('Failed');
             }
@@ -225,135 +250,19 @@ const AskAI = () => {
     };
 
     return (
-        <div className="min-h-screen flex flex-col -mx-4 lg:-mx-8 -mt-16 lg:-mt-4 relative overflow-hidden">
-            {/* === BACKGROUND (Always visible) === */}
-            <div className="fixed inset-0 pointer-events-none z-0">
+        <div className="min-h-screen flex flex-col relative overflow-hidden bg-[#F9FAFB]">
+            {/* === BACKGROUND (Visible in home view) === */}
+            <div className={`absolute inset-0 pointer-events-none transition-opacity duration-700 ${isInChat ? 'opacity-30' : 'opacity-100'}`}>
                 <div className="absolute inset-0 bg-gradient-to-br from-violet-100 via-fuchsia-50 to-cyan-50" />
-                <div className="absolute inset-0 bg-gradient-to-tr from-indigo-100/80 via-transparent to-pink-100/60" />
-                <div className="absolute top-0 left-0 w-[600px] h-[600px] bg-gradient-to-br from-violet-300/60 to-purple-400/40 rounded-full blur-[100px] animate-pulse -translate-x-1/4 -translate-y-1/4" style={{ animationDuration: '4s' }} />
-                <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-gradient-to-tl from-cyan-300/50 to-teal-200/40 rounded-full blur-[80px] animate-pulse translate-x-1/4 translate-y-1/4" style={{ animationDuration: '5s' }} />
-                <div className="absolute top-1/3 right-1/4 w-[400px] h-[400px] bg-gradient-to-bl from-pink-300/50 to-rose-200/30 rounded-full blur-[90px]" />
-            </div>
-
-            {/* === CHAT VIEW === */}
-            <div
-                className={`fixed inset-0 z-30 flex flex-col bg-gradient-to-br from-slate-50/95 via-white/95 to-violet-50/95 backdrop-blur-sm transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] ${isInChat
-                        ? 'opacity-100 translate-y-0'
-                        : 'opacity-0 translate-y-full pointer-events-none'
-                    }`}
-            >
-                {/* Chat Header */}
-                <div className="flex-shrink-0 px-4 lg:px-8 pt-4 pb-2">
-                    <div className="bg-white rounded-2xl border border-gray-200 shadow-lg px-4 py-3 flex items-center gap-3">
-                        <button
-                            onClick={handleBack}
-                            className="w-10 h-10 rounded-xl bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-all"
-                        >
-                            <ArrowLeftIcon className="w-5 h-5 text-gray-600" />
-                        </button>
-                        <div className="flex items-center gap-3 flex-1">
-                            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-500 via-fuchsia-500 to-indigo-600 flex items-center justify-center shadow-lg">
-                                <SparklesIcon className="w-5 h-5 text-white" />
-                            </div>
-                            <div>
-                                <span className="font-semibold text-gray-900">Sinhgad AI</span>
-                                <p className="text-xs text-emerald-600 flex items-center gap-1.5">
-                                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                                    {isLoading ? 'Typing...' : 'Online'}
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Messages */}
-                <div className="flex-1 overflow-y-auto px-4 lg:px-8 py-4 space-y-4">
-                    {messages.map((msg, idx) => (
-                        <div
-                            key={idx}
-                            className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} animate-slideUp`}
-                            style={{ animationDelay: `${idx * 100}ms` }}
-                        >
-                            <div className={`max-w-[85%] lg:max-w-[70%] px-5 py-4 text-sm leading-relaxed
-                                ${msg.role === 'user'
-                                    ? 'bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white rounded-2xl rounded-br-md shadow-lg'
-                                    : 'bg-white text-gray-800 rounded-2xl rounded-bl-md border border-gray-200 shadow-md'
-                                }`}>
-                                {msg.role === 'user'
-                                    ? <p className="whitespace-pre-wrap">{msg.content}</p>
-                                    : renderMarkdown(msg.content)
-                                }
-
-                                {msg.sources && msg.sources.length > 0 && msg.role === 'assistant' && (
-                                    <div className="mt-3 pt-3 border-t border-gray-200">
-                                        <p className="text-xs text-gray-500 mb-2">Related posts:</p>
-                                        <div className="flex flex-wrap gap-2">
-                                            {msg.sources.slice(0, 3).map((source, sIdx) => (
-                                                <Link
-                                                    key={sIdx}
-                                                    to={source.id ? `/posts/${source.id}` : '#'}
-                                                    className="text-xs px-3 py-1.5 bg-violet-50 text-violet-600 rounded-full hover:bg-violet-100"
-                                                >
-                                                    {source.title?.substring(0, 25)}...
-                                                </Link>
-                                            ))}
-                                        </div>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    ))}
-
-                    {/* Typing Indicator - Shows immediately */}
-                    {isLoading && (
-                        <div className="flex justify-start animate-slideUp">
-                            <div className="bg-white px-5 py-4 rounded-2xl rounded-bl-md border border-gray-200 shadow-md">
-                                <div className="flex items-center gap-2">
-                                    <div className="flex gap-1">
-                                        <div className="w-2 h-2 bg-violet-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                                        <div className="w-2 h-2 bg-fuchsia-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                                        <div className="w-2 h-2 bg-cyan-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
-                                    </div>
-                                    <span className="text-xs text-gray-400 ml-2">Sinhgad AI is thinking...</span>
-                                </div>
-                            </div>
-                        </div>
-                    )}
-                    <div ref={messagesEndRef} />
-                </div>
-
-                {/* Chat Input */}
-                <div className="flex-shrink-0 px-4 lg:px-8 pb-6 pt-2">
-                    <form onSubmit={handleChatSubmit}>
-                        <div className="bg-white rounded-2xl border border-gray-200 shadow-lg flex items-center gap-2 pr-2">
-                            <input
-                                ref={chatInputRef}
-                                type="text"
-                                value={input}
-                                onChange={(e) => setInput(e.target.value)}
-                                placeholder="Ask a follow-up..."
-                                disabled={isLoading}
-                                className="flex-1 px-5 py-4 bg-transparent text-gray-900 placeholder-gray-400 focus:outline-none text-base"
-                            />
-                            <button
-                                type="submit"
-                                disabled={isLoading || !input.trim()}
-                                className={`w-11 h-11 rounded-xl flex items-center justify-center transition-all duration-300 ${input.trim()
-                                        ? 'bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white shadow-lg'
-                                        : 'bg-gray-100 text-gray-400'
-                                    }`}
-                            >
-                                <PaperAirplaneIcon className="w-5 h-5" />
-                            </button>
-                        </div>
-                    </form>
-                </div>
+                <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-gradient-to-br from-violet-300/50 to-purple-400/30 rounded-full blur-[100px] -translate-x-1/4 -translate-y-1/4" />
+                <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-gradient-to-tl from-cyan-300/40 to-teal-200/30 rounded-full blur-[80px] translate-x-1/4 translate-y-1/4" />
+                <div className="absolute top-1/3 right-1/4 w-[350px] h-[350px] bg-gradient-to-bl from-pink-300/40 to-rose-200/20 rounded-full blur-[90px]" />
             </div>
 
             {/* === HOME VIEW === */}
             <div
-                className={`relative z-10 flex flex-col min-h-screen px-4 lg:px-8 pt-20 lg:pt-8 pb-8 transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] ${isInChat
-                        ? 'opacity-0 scale-95 pointer-events-none'
+                className={`relative z-10 flex flex-col min-h-screen px-4 lg:px-6 pt-8 pb-8 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${isInChat
+                        ? 'opacity-0 scale-90 pointer-events-none'
                         : 'opacity-100 scale-100'
                     }`}
             >
@@ -362,7 +271,7 @@ const AskAI = () => {
                     {/* AI Orb */}
                     <div className="relative mb-8">
                         <div className="absolute inset-0 rounded-full bg-gradient-to-r from-violet-400 via-fuchsia-400 to-cyan-400 blur-xl opacity-40 animate-pulse" style={{ animationDuration: '3s' }} />
-                        <div className="relative w-24 h-24 rounded-full bg-white border-2 border-white shadow-xl flex items-center justify-center">
+                        <div className="relative w-24 h-24 rounded-full bg-white border-2 border-white shadow-2xl flex items-center justify-center">
                             <div className="w-20 h-20 rounded-full bg-gradient-to-br from-violet-500 via-fuchsia-500 to-indigo-600 flex items-center justify-center shadow-lg">
                                 <SparklesIcon className="w-10 h-10 text-white" />
                             </div>
@@ -380,8 +289,8 @@ const AskAI = () => {
 
                     {/* Search Input */}
                     <form onSubmit={handleSubmit} className="w-full mb-8">
-                        <div className={`relative transition-all duration-300 ${isTransitioning ? 'scale-95 opacity-50' : 'scale-100 opacity-100'}`}>
-                            <div className="bg-white rounded-2xl border-2 border-violet-200 shadow-xl overflow-hidden">
+                        <div className="bg-white rounded-2xl border-2 border-violet-200 shadow-xl overflow-hidden">
+                            <div className="relative">
                                 <div className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-300 text-lg">⌘</div>
                                 <input
                                     ref={inputRef}
@@ -395,36 +304,38 @@ const AskAI = () => {
                                     type="submit"
                                     disabled={!input.trim()}
                                     className={`absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 ${input.trim()
-                                            ? 'bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white shadow-lg scale-100'
-                                            : 'bg-violet-100 text-violet-400 scale-95'
+                                            ? 'bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white shadow-lg'
+                                            : 'bg-violet-100 text-violet-400'
                                         }`}
                                 >
                                     <PaperAirplaneIcon className="w-5 h-5" />
                                 </button>
                             </div>
-                            <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-2 text-gray-400 text-xs">
-                                <kbd className="px-1.5 py-0.5 bg-gray-100 rounded border border-gray-200 font-mono text-gray-500">↵</kbd>
+                        </div>
+                        <div className="flex justify-center mt-2">
+                            <div className="flex items-center gap-2 text-gray-400 text-xs">
+                                <kbd className="px-1.5 py-0.5 bg-white rounded border border-gray-200 font-mono text-gray-500">↵</kbd>
                                 <span>to search</span>
                             </div>
                         </div>
                     </form>
 
                     {/* Chips */}
-                    <div className="w-full mt-8">
+                    <div className="w-full mt-4">
                         <div className="flex items-center justify-center gap-3 mb-4">
                             <div className="flex gap-1">
                                 <div className="w-1 h-1 rounded-full bg-violet-500" />
                                 <div className="w-1 h-1 rounded-full bg-fuchsia-500" />
                                 <div className="w-1 h-1 rounded-full bg-cyan-500" />
                             </div>
-                            <span className="text-gray-400 text-xs uppercase tracking-[0.2em]">Explore</span>
+                            <span className="text-gray-400 text-xs uppercase tracking-widest">Explore</span>
                         </div>
                         <div className="flex flex-wrap justify-center gap-2">
                             {SUGGESTION_CHIPS.map((chip, idx) => (
                                 <button
                                     key={idx}
                                     onClick={() => sendMessage(chip.text)}
-                                    className="px-4 py-2.5 bg-white/70 hover:bg-white border border-gray-200 hover:border-violet-300 rounded-full text-gray-700 hover:text-violet-700 text-sm transition-all duration-300 flex items-center gap-2 shadow-sm hover:shadow-md hover:-translate-y-0.5"
+                                    className="px-4 py-2.5 bg-white border border-gray-200 hover:border-violet-300 rounded-full text-gray-700 hover:text-violet-700 text-sm transition-all duration-300 flex items-center gap-2 shadow-sm hover:shadow-lg hover:-translate-y-0.5"
                                 >
                                     <span>{chip.icon}</span>
                                     <span className="font-medium">{chip.text}</span>
@@ -448,14 +359,14 @@ const AskAI = () => {
                                 <div
                                     key={idx}
                                     onClick={() => sendMessage(question)}
-                                    className="flex items-center justify-between px-5 py-4 bg-white/80 hover:bg-white border border-gray-200 hover:border-violet-200 rounded-xl cursor-pointer transition-all shadow-sm hover:shadow-md"
+                                    className="group flex items-center justify-between px-5 py-4 bg-white border border-gray-200 hover:border-violet-200 rounded-xl cursor-pointer transition-all shadow-sm hover:shadow-lg"
                                 >
-                                    <span className="text-gray-600 hover:text-gray-900 text-sm truncate pr-4">
+                                    <span className="text-gray-600 group-hover:text-gray-900 text-sm truncate pr-4">
                                         {question}
                                     </span>
                                     <button
                                         onClick={(e) => deleteRecentQuestion(question, e)}
-                                        className="flex-shrink-0 w-7 h-7 rounded-lg flex items-center justify-center opacity-0 group-hover:opacity-100 hover:bg-red-50"
+                                        className="flex-shrink-0 w-7 h-7 rounded-lg flex items-center justify-center opacity-0 group-hover:opacity-100 hover:bg-red-50 transition-all"
                                     >
                                         <XMarkIcon className="w-4 h-4 text-gray-400 hover:text-red-500" />
                                     </button>
@@ -464,6 +375,129 @@ const AskAI = () => {
                         </div>
                     </div>
                 )}
+            </div>
+
+            {/* === CHAT VIEW (Grows from center, doesn't cover sidebar) === */}
+            <div
+                className={`absolute inset-0 z-20 flex flex-col transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${isInChat
+                        ? 'opacity-100 scale-100'
+                        : 'opacity-0 scale-95 pointer-events-none'
+                    }`}
+                style={{
+                    background: 'linear-gradient(to bottom, #F9FAFB, #FFFFFF)'
+                }}
+            >
+                {/* Chat Container with shadow for depth */}
+                <div className="flex flex-col h-full">
+                    {/* Chat Header */}
+                    <div className="flex-shrink-0 px-4 lg:px-6 pt-4 pb-2">
+                        <div className="bg-white rounded-2xl border border-gray-200 shadow-lg px-4 py-3 flex items-center gap-3" style={{ boxShadow: '0 4px 20px rgba(0,0,0,0.05)' }}>
+                            <button
+                                onClick={handleBack}
+                                className="w-10 h-10 rounded-xl bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-all hover:scale-105"
+                            >
+                                <ArrowLeftIcon className="w-5 h-5 text-gray-600" />
+                            </button>
+                            <div className="flex items-center gap-3 flex-1">
+                                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-500 via-fuchsia-500 to-indigo-600 flex items-center justify-center shadow-lg">
+                                    <SparklesIcon className="w-5 h-5 text-white" />
+                                </div>
+                                <div>
+                                    <span className="font-semibold text-gray-900">Sinhgad AI</span>
+                                    <p className="text-xs text-emerald-600 flex items-center gap-1.5">
+                                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                                        {isLoading ? 'Thinking...' : 'Online'}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Messages */}
+                    <div className="flex-1 overflow-y-auto px-4 lg:px-6 py-4 space-y-4">
+                        {messages.map((msg, idx) => (
+                            <div
+                                key={idx}
+                                className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} animate-slideUp`}
+                                style={{ animationDelay: `${idx * 80}ms` }}
+                            >
+                                <div
+                                    className={`max-w-[85%] lg:max-w-[70%] px-5 py-4 text-sm leading-relaxed
+                                        ${msg.role === 'user'
+                                            ? 'bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white rounded-2xl rounded-br-md shadow-lg'
+                                            : 'bg-white text-gray-800 rounded-2xl rounded-bl-md border border-gray-200'
+                                        }`}
+                                    style={msg.role === 'assistant' ? { boxShadow: '0 4px 20px rgba(0,0,0,0.05)' } : {}}
+                                >
+                                    {msg.role === 'user' ? (
+                                        <p className="whitespace-pre-wrap">{msg.content}</p>
+                                    ) : msg.isNew && idx === streamingIndex ? (
+                                        <TypewriterText
+                                            text={msg.content}
+                                            onComplete={() => setStreamingIndex(-1)}
+                                        />
+                                    ) : (
+                                        renderMarkdown(msg.content)
+                                    )}
+
+                                    {msg.sources && msg.sources.length > 0 && msg.role === 'assistant' && idx !== streamingIndex && (
+                                        <div className="mt-3 pt-3 border-t border-gray-100">
+                                            <p className="text-xs text-gray-500 mb-2">Related posts:</p>
+                                            <div className="flex flex-wrap gap-2">
+                                                {msg.sources.slice(0, 3).map((source, sIdx) => (
+                                                    <Link
+                                                        key={sIdx}
+                                                        to={source.id ? `/posts/${source.id}` : '#'}
+                                                        className="text-xs px-3 py-1.5 bg-violet-50 text-violet-600 rounded-full hover:bg-violet-100 transition-all"
+                                                    >
+                                                        {source.title?.substring(0, 25)}...
+                                                    </Link>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        ))}
+
+                        {/* Skeleton Loader */}
+                        {isLoading && (
+                            <div className="flex justify-start animate-slideUp">
+                                <div className="max-w-[85%] lg:max-w-[70%] bg-white px-5 py-4 rounded-2xl rounded-bl-md border border-gray-200" style={{ boxShadow: '0 4px 20px rgba(0,0,0,0.05)' }}>
+                                    <SkeletonLoader />
+                                </div>
+                            </div>
+                        )}
+                        <div ref={messagesEndRef} />
+                    </div>
+
+                    {/* Chat Input */}
+                    <div className="flex-shrink-0 px-4 lg:px-6 pb-6 pt-2">
+                        <form onSubmit={handleChatSubmit}>
+                            <div className="bg-white rounded-2xl border border-gray-200 shadow-lg flex items-center gap-2 pr-2" style={{ boxShadow: '0 4px 20px rgba(0,0,0,0.05)' }}>
+                                <input
+                                    ref={chatInputRef}
+                                    type="text"
+                                    value={input}
+                                    onChange={(e) => setInput(e.target.value)}
+                                    placeholder="Ask a follow-up..."
+                                    disabled={isLoading}
+                                    className="flex-1 px-5 py-4 bg-transparent text-gray-900 placeholder-gray-400 focus:outline-none text-base"
+                                />
+                                <button
+                                    type="submit"
+                                    disabled={isLoading || !input.trim()}
+                                    className={`w-11 h-11 rounded-xl flex items-center justify-center transition-all duration-300 ${input.trim()
+                                            ? 'bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white shadow-lg'
+                                            : 'bg-gray-100 text-gray-400'
+                                        }`}
+                                >
+                                    <PaperAirplaneIcon className="w-5 h-5" />
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
     );
