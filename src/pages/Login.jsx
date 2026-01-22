@@ -229,7 +229,7 @@ const Login = () => {
               Don't have an account?{' '}
               <Link 
                 to="/register" 
-                className="font-medium text-violet-600 hover:text-violet-700 transition-colors duration-200 hover:underline"
+                className="font-medium text-gray-600 hover:text-gray-800 transition-colors duration-200 hover:underline"
               >
                 Sign up
               </Link>
