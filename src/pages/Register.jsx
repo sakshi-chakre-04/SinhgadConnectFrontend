@@ -66,7 +66,7 @@ const Register = () => {
                 </div>
               </div>
               <h1 className="text-3xl lg:text-4xl font-light text-gray-800 tracking-tight mb-2">
-                Create <span className="font-semibold bg-gradient-to-r from-violet-600 via-fuchsia-600 to-indigo-600 bg-clip-text text-transparent">Account</span>
+                Create <span className="font-light text-gray-800">Account</span>
               </h1>
               <p className="text-gray-500 text-sm tracking-widest uppercase flex items-center gap-2 justify-center">
                 <span className="w-1.5 h-1.5 rounded-full bg-gradient-to-r from-violet-500 to-fuchsia-500 animate-pulse" />
