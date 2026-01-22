@@ -759,14 +759,38 @@ const AskAI = () => {
                 >
                     <div className="flex-1 flex flex-col items-center justify-center max-w-2xl mx-auto w-full">
 
-                        {/* AI Orb */}
+                        {/* AI Orb - Premium breathing glow with context-awareness */}
                         <div className="relative mb-8">
-                            <div className="absolute inset-0 rounded-full bg-gradient-to-r from-violet-400 via-fuchsia-400 to-cyan-400 blur-xl opacity-40 animate-pulse" style={{ animationDuration: '3s' }} />
-                            <div className="relative w-24 h-24 rounded-full bg-white border-2 border-white shadow-2xl flex items-center justify-center">
+                            {/* Soft radial gradient that pulses (6-8% opacity) */}
+                            <div
+                                className={`absolute inset-[-20px] rounded-full transition-opacity duration-500 ${isTyping ? 'opacity-0' : 'opacity-100'}`}
+                                style={{
+                                    background: 'radial-gradient(circle, rgba(139,92,246,0.07) 0%, rgba(217,70,239,0.04) 50%, transparent 70%)',
+                                    animation: isTyping ? 'none' : 'glowPulse 3s ease-in-out infinite',
+                                }}
+                            />
+                            {/* Main orb with breathing animation */}
+                            <div
+                                className="relative w-24 h-24 rounded-full bg-white border-2 border-white shadow-2xl flex items-center justify-center"
+                                style={{
+                                    animation: isTyping ? 'none' : 'breathe 3s ease-in-out infinite',
+                                }}
+                            >
                                 <div className="w-20 h-20 rounded-full bg-gradient-to-br from-violet-500 via-fuchsia-500 to-indigo-600 flex items-center justify-center shadow-lg">
                                     <SparklesIcon className="w-10 h-10 text-white" />
                                 </div>
                             </div>
+                            {/* CSS for breathing animation */}
+                            <style>{`
+                                @keyframes breathe {
+                                    0%, 100% { opacity: 0.85; transform: scale(1); }
+                                    50% { opacity: 1; transform: scale(1.03); }
+                                }
+                                @keyframes glowPulse {
+                                    0%, 100% { opacity: 0.06; transform: scale(1); }
+                                    50% { opacity: 0.1; transform: scale(1.05); }
+                                }
+                            `}</style>
                         </div>
 
                         {/* Title */}
