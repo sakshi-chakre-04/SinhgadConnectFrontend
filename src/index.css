@@ -161,6 +161,21 @@ body {
     animation: staggerFade 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
+/* Content Fade - For streaming text lines */
+@keyframes contentFade {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+.animate-contentFade {
+    animation: contentFade 0.3s ease-out forwards;
+}
+
 /* ===== MODERN UTILITIES ===== */
 
 /* Premium Glassmorphism */
