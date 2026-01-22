@@ -913,38 +913,28 @@ const AskAI = () => {
                         }`}
                     style={{ background: 'linear-gradient(to bottom, #F9FAFB, #FFFFFF)' }}
                 >
-                    {/* Chat Header */}
+                    {/* Chat Header - Slim context bar */}
                     <div
-                        className={`flex-shrink-0 px-4 lg:px-6 pt-4 pb-2 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${headerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'
+                        className={`flex-shrink-0 px-3 lg:px-5 pt-2 pb-1 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${headerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'
                             }`}
                     >
-                        <div
-                            className="bg-white rounded-2xl border border-gray-200 px-4 py-3"
-                            style={{ boxShadow: '0 4px 20px rgba(0,0,0,0.05)' }}
-                        >
-                            <div className="flex items-center gap-3">
-                                <button
-                                    onClick={handleBack}
-                                    className="w-10 h-10 rounded-xl bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-all hover:scale-105"
-                                >
-                                    <ArrowLeftIcon className="w-5 h-5 text-gray-600" />
-                                </button>
-                                <div className="flex items-center gap-3 flex-1">
-                                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-500 via-fuchsia-500 to-indigo-600 flex items-center justify-center shadow-lg">
-                                        <SparklesIcon className="w-5 h-5 text-white" />
-                                    </div>
-                                    <div>
-                                        <span className="font-semibold text-gray-900">Sinhgad AI</span>
-                                        <p className={`text-xs flex items-center gap-1.5 ${isLoading ? 'text-violet-600' : 'text-emerald-600'}`}>
-                                            <span className={`w-1.5 h-1.5 rounded-full ${isLoading ? 'bg-violet-400/80' : 'bg-emerald-400/80'} animate-pulse`} />
-                                            <span className={isLoading && !reduceMotion ? 'animate-pulse' : ''}>
-                                                {isLoading ? 'Thinking...' : 'Online'}
-                                            </span>
-                                        </p>
-                                    </div>
-                                </div>
+                        <div className="flex items-center gap-2.5 py-2 px-1">
+                            <button
+                                onClick={handleBack}
+                                className="w-8 h-8 rounded-lg hover:bg-gray-100 flex items-center justify-center transition-colors"
+                            >
+                                <ArrowLeftIcon className="w-5 h-5 text-gray-500" />
+                            </button>
+                            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center">
+                                <SparklesIcon className="w-4 h-4 text-white" />
                             </div>
-
+                            <div className="flex items-center gap-2">
+                                <span className="font-medium text-gray-900 text-sm">Sinhgad AI</span>
+                                <span className={`text-xs flex items-center gap-1 ${isLoading ? 'text-violet-500' : 'text-emerald-500'}`}>
+                                    <span className={`w-1.5 h-1.5 rounded-full ${isLoading ? 'bg-violet-400' : 'bg-emerald-400'}`} />
+                                    {isLoading ? 'Thinking...' : 'Online'}
+                                </span>
+                            </div>
                         </div>
                     </div>
 
