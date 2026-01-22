@@ -267,6 +267,57 @@ const SimpleMarkdown = ({ content, onQuickAction, contextQuery }) => {
         [contextQuery, content]
     );
 
+    // Parse inline markdown: **bold**, *italic*, `code`, [link](url)
+    const parseInline = (text) => {
+        if (!text) return text;
+
+        const parts = [];
+        let remaining = text;
+        let key = 0;
+
+        const patterns = [
+            { regex: /\*\*(.+?)\*\*/g, render: (m) => <strong key={key++} className="font-semibold text-gray-800">{m}</strong> },
+            { regex: /\*(.+?)\*/g, render: (m) => <em key={key++} className="italic">{m}</em> },
+            { regex: /`(.+?)`/g, render: (m) => <code key={key++} className="bg-gray-100 text-violet-700 px-1.5 py-0.5 rounded text-xs font-mono">{m}</code> },
+            { regex: /\[(.+?)\]\((.+?)\)/g, render: (m, url) => <a key={key++} href={url} target="_blank" rel="noopener noreferrer" className="text-violet-600 hover:underline">{m}</a> },
+        ];
+
+        // Simple approach: process one pattern at a time
+        let processed = text;
+
+        // Bold
+        processed = processed.replace(/\*\*(.+?)\*\*/g, '{{BOLD:$1}}');
+        // Italic (but not if part of bold)
+        processed = processed.replace(/(?<!\*)\*([^*]+?)\*(?!\*)/g, '{{ITALIC:$1}}');
+        // Code
+        processed = processed.replace(/`(.+?)`/g, '{{CODE:$1}}');
+        // Links
+        processed = processed.replace(/\[(.+?)\]\((.+?)\)/g, '{{LINK:$1||$2}}');
+
+        // Split and render
+        const tokens = processed.split(/({{.+?}})/g);
+        return tokens.map((token, i) => {
+            if (token.startsWith('{{BOLD:')) {
+                const inner = token.slice(7, -2);
+                return <strong key={i} className="font-semibold text-gray-800">{inner}</strong>;
+            }
+            if (token.startsWith('{{ITALIC:')) {
+                const inner = token.slice(9, -2);
+                return <em key={i} className="italic">{inner}</em>;
+            }
+            if (token.startsWith('{{CODE:')) {
+                const inner = token.slice(7, -2);
+                return <code key={i} className="bg-gray-100 text-violet-700 px-1.5 py-0.5 rounded text-xs font-mono">{inner}</code>;
+            }
+            if (token.startsWith('{{LINK:')) {
+                const inner = token.slice(7, -2);
+                const [label, url] = inner.split('||');
+                return <a key={i} href={url} target="_blank" rel="noopener noreferrer" className="text-violet-600 hover:underline">{label}</a>;
+            }
+            return token;
+        });
+    };
+
     const renderLine = (line, idx) => {
         const trimmed = line.trim();
         if (!trimmed) return <div key={idx} className="h-2" />;
@@ -275,7 +326,7 @@ const SimpleMarkdown = ({ content, onQuickAction, contextQuery }) => {
         if (trimmed.startsWith('## ')) {
             return (
                 <h2 key={idx} className="text-base font-semibold text-gray-900 mb-1">
-                    {trimmed.slice(3)}
+                    {parseInline(trimmed.slice(3))}
                 </h2>
             );
         }
@@ -293,7 +344,7 @@ const SimpleMarkdown = ({ content, onQuickAction, contextQuery }) => {
         if (trimmed.startsWith('### ')) {
             return (
                 <h3 key={idx} className="text-sm font-semibold text-gray-800 mt-4 mb-1.5 flex items-center gap-1.5">
-                    {trimmed.slice(4)}
+                    {parseInline(trimmed.slice(4))}
                 </h3>
             );
         }
@@ -303,7 +354,7 @@ const SimpleMarkdown = ({ content, onQuickAction, contextQuery }) => {
             return (
                 <div key={idx} className="flex items-start gap-2 py-0.5 pl-1">
                     <span className="w-1.5 h-1.5 mt-2 bg-gray-400 rounded-full flex-shrink-0" />
-                    <span className="text-gray-600 text-sm leading-relaxed">{trimmed.slice(2)}</span>
+                    <span className="text-gray-600 text-sm leading-relaxed">{parseInline(trimmed.slice(2))}</span>
                 </div>
             );
         }
@@ -314,7 +365,7 @@ const SimpleMarkdown = ({ content, onQuickAction, contextQuery }) => {
             return (
                 <div key={idx} className="flex items-start gap-2.5 py-0.5 pl-1">
                     <span className="text-gray-500 text-sm font-medium min-w-[1.25rem]">{numberedMatch[1]}.</span>
-                    <span className="text-gray-600 text-sm leading-relaxed">{numberedMatch[2]}</span>
+                    <span className="text-gray-600 text-sm leading-relaxed">{parseInline(numberedMatch[2])}</span>
                 </div>
             );
         }
@@ -322,7 +373,7 @@ const SimpleMarkdown = ({ content, onQuickAction, contextQuery }) => {
         // Regular paragraph (intro/description)
         return (
             <p key={idx} className="text-gray-600 text-sm leading-relaxed py-0.5">
-                {trimmed}
+                {parseInline(trimmed)}
             </p>
         );
     };
