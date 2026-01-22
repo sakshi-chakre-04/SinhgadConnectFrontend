@@ -769,11 +769,12 @@ const AskAI = () => {
                                     animation: isTyping ? 'none' : 'glowPulse 3s ease-in-out infinite',
                                 }}
                             />
-                            {/* Main orb with breathing animation */}
+                            {/* Main orb with breathing animation + layered shadows */}
                             <div
-                                className="relative w-24 h-24 rounded-full bg-white border-2 border-white shadow-2xl flex items-center justify-center"
+                                className="relative w-24 h-24 rounded-full bg-white border-2 border-white flex items-center justify-center"
                                 style={{
                                     animation: isTyping ? 'none' : 'breathe 3s ease-in-out infinite',
+                                    boxShadow: '0 4px 6px -1px rgba(139,92,246,0.2), 0 10px 20px -5px rgba(139,92,246,0.15), 0 25px 50px -12px rgba(139,92,246,0.1)',
                                 }}
                             >
                                 <div className="w-20 h-20 rounded-full bg-gradient-to-br from-violet-500 via-fuchsia-500 to-indigo-600 flex items-center justify-center shadow-lg">
@@ -811,7 +812,14 @@ const AskAI = () => {
                                     transition={handoffSpring}
                                 >
                                     <div className="relative">
-                                        <div className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-300 text-lg">⌘</div>
+                                        {/* Mini sparkle icon for brand consistency */}
+                                        <div className="absolute left-4 top-1/2 -translate-y-1/2">
+                                            <svg className="w-5 h-5 text-violet-300" viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M12 2L13.09 8.26L19 9L13.09 9.74L12 16L10.91 9.74L5 9L10.91 8.26L12 2Z" />
+                                                <path d="M18 14L18.545 16.455L21 17L18.545 17.545L18 20L17.455 17.545L15 17L17.455 16.455L18 14Z" opacity="0.6" />
+                                                <path d="M6 14L6.364 15.636L8 16L6.364 16.364L6 18L5.636 16.364L4 16L5.636 15.636L6 14Z" opacity="0.4" />
+                                            </svg>
+                                        </div>
                                         <input
                                             ref={inputRef}
                                             type="text"
