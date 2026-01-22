@@ -451,10 +451,13 @@ const AskAI = () => {
     const [streamingComplete, setStreamingComplete] = useState({});
     const [autoScrollEnabled, setAutoScrollEnabled] = useState(true);
     const [showJumpToBottom, setShowJumpToBottom] = useState(false);
+    const [pendingFirstUserMessage, setPendingFirstUserMessage] = useState(null);
     const messagesEndRef = useRef(null);
     const messagesRef = useRef([]);
     const scrollContainerRef = useRef(null);
     const scrollRafRef = useRef(null);
+    const programmaticScrollRef = useRef(false);
+    const autoScrollEnabledRef = useRef(true);
     const inputRef = useRef(null);
     const chatInputRef = useRef(null);
     const token = useSelector(selectToken);
@@ -462,6 +465,16 @@ const AskAI = () => {
 
     const handoffSpring = useMemo(
         () => (reduceMotion ? { duration: 0 } : { type: 'spring', duration: 0.4, bounce: 0.16 }),
+        [reduceMotion]
+    );
+
+    const userBubbleSpring = useMemo(
+        () => (reduceMotion ? { duration: 0 } : { type: 'spring', stiffness: 320, damping: 24, mass: 0.95 }),
+        [reduceMotion]
+    );
+
+    const assistantBubbleSpring = useMemo(
+        () => (reduceMotion ? { duration: 0 } : { type: 'spring', stiffness: 360, damping: 30, mass: 0.85 }),
         [reduceMotion]
     );
 
@@ -503,6 +516,10 @@ const AskAI = () => {
     }, [messages]);
 
     useEffect(() => {
+        autoScrollEnabledRef.current = autoScrollEnabled;
+    }, [autoScrollEnabled]);
+
+    useEffect(() => {
         if (!isHandingOff && handoffQuery) {
             const t = setTimeout(() => setHandoffQuery(''), 180);
             return () => clearTimeout(t);
@@ -515,15 +532,20 @@ const AskAI = () => {
             scrollRafRef.current = null;
             const el = scrollContainerRef.current;
             if (!el) return;
+            programmaticScrollRef.current = true;
             el.scrollTo({ top: el.scrollHeight, behavior: reduceMotion ? 'auto' : behavior });
+            requestAnimationFrame(() => {
+                programmaticScrollRef.current = false;
+            });
         });
     };
 
     const handleChatScroll = () => {
         const el = scrollContainerRef.current;
         if (!el) return;
+        if (programmaticScrollRef.current) return;
         const distanceFromBottom = el.scrollHeight - (el.scrollTop + el.clientHeight);
-        const atBottom = distanceFromBottom < 80;
+        const atBottom = distanceFromBottom < 36;
 
         if (atBottom) {
             setAutoScrollEnabled(true);
@@ -577,6 +599,7 @@ const AskAI = () => {
         setHandoffQuery(userMessage);
         saveRecentQuestion(userMessage);
 
+        const firstId = `${Date.now()}-${Math.random()}`;
         setHomeInput('');
         setChatInput('');
         setAutoScrollEnabled(true);
@@ -584,7 +607,12 @@ const AskAI = () => {
         setIsHandingOff(true);
         setIsInChat(true);
         setTimeout(() => setIsHandingOff(false), 450);
-        setMessages([{ id: `${Date.now()}-${Math.random()}`, role: 'user', content: userMessage }]);
+        setPendingFirstUserMessage({ id: firstId, role: 'user', content: userMessage });
+        setMessages([]);
+        setTimeout(() => {
+            setMessages([{ id: firstId, role: 'user', content: userMessage }]);
+            setPendingFirstUserMessage(null);
+        }, reduceMotion ? 0 : 360);
         setIsLoading(true);
 
         // Check for demo mode
@@ -917,9 +945,11 @@ const AskAI = () => {
                                 </div>
                                 <div>
                                     <span className="font-semibold text-gray-900">Sinhgad AI</span>
-                                    <p className="text-xs text-emerald-600 flex items-center gap-1.5">
-                                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                                        {isLoading ? 'Thinking...' : 'Online'}
+                                    <p className={`text-xs flex items-center gap-1.5 ${isLoading ? 'text-violet-600' : 'text-emerald-600'}`}>
+                                        <span className={`w-1.5 h-1.5 rounded-full ${isLoading ? 'bg-violet-400/80' : 'bg-emerald-400/80'} animate-pulse`} />
+                                        <span className={isLoading && !reduceMotion ? 'animate-pulse' : ''}>
+                                            {isLoading ? 'Thinking...' : 'Online'}
+                                        </span>
                                     </p>
                                 </div>
                             </div>
@@ -938,9 +968,9 @@ const AskAI = () => {
                     {messages.map((msg) => (
                         <motion.div
                             key={msg.id}
-                            initial={msg.role === 'user' ? { opacity: 0, y: 18, scale: 1.05 } : { opacity: 0, y: 10, scale: 1.01 }}
+                            initial={msg.role === 'user' ? { opacity: 0, y: 22, scale: 1.06 } : { opacity: 0, y: 12, scale: 1.01 }}
                             animate={{ opacity: 1, y: 0, scale: 1 }}
-                            transition={reduceMotion ? { duration: 0 } : { type: 'spring', stiffness: 380, damping: 30, mass: 0.85 }}
+                            transition={msg.role === 'user' ? userBubbleSpring : assistantBubbleSpring}
                             className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
                         >
                             <div
@@ -961,7 +991,7 @@ const AskAI = () => {
                                                 isNew={!reduceMotion}
                                                 onComplete={() => handleStreamComplete(msg.id)}
                                                 onProgress={() => {
-                                                    if (autoScrollEnabled) requestScrollToBottom('auto');
+                                                    if (autoScrollEnabledRef.current) requestScrollToBottom('auto');
                                                     else if (isGenerating) setShowJumpToBottom(true);
                                                 }}
                                             />
@@ -1033,7 +1063,7 @@ const AskAI = () => {
                                     requestScrollToBottom('smooth');
                                 }}
                                 aria-label="Jump to bottom"
-                                className="absolute right-6 -top-5 px-3.5 py-2 rounded-full bg-white/70 backdrop-blur border border-gray-200 text-gray-800 shadow-lg text-xs font-semibold"
+                                className="absolute right-6 -top-5 px-3.5 py-2 rounded-full bg-white/55 backdrop-blur-xl border border-white/60 text-gray-900 shadow-[0_10px_30px_rgba(0,0,0,0.12)] text-xs font-semibold hover:bg-white/65 transition-colors"
                             >
                                 ↓ Jump to bottom
                             </motion.button>
@@ -1044,9 +1074,16 @@ const AskAI = () => {
                             <motion.div
                                 layoutId="askai-search"
                                 transition={handoffSpring}
-                                className="bg-white/75 backdrop-blur-xl rounded-2xl border border-white/50 flex items-center gap-2 pr-2"
-                                style={{ boxShadow: '0 6px 28px rgba(0,0,0,0.08)' }}
+                                className={`bg-white/75 backdrop-blur-xl rounded-2xl border border-white/50 flex gap-2 pr-2 relative overflow-hidden ${isHandingOff ? 'min-h-[168px] items-start' : 'items-center'}`}
+                                style={{ boxShadow: isHandingOff ? '0 18px 55px rgba(0,0,0,0.12)' : '0 6px 28px rgba(0,0,0,0.08)' }}
                             >
+                                {isHandingOff && (
+                                    <div className="absolute inset-0 flex items-center justify-center px-6">
+                                        <p className="text-base font-semibold text-gray-900 truncate">
+                                            {handoffQuery}
+                                        </p>
+                                    </div>
+                                )}
                                 <div className="flex-1">
                                     <AnimatePresence mode="wait">
                                         {isHandingOff ? (
