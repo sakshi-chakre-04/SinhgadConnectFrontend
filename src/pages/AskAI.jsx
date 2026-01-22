@@ -428,7 +428,8 @@ const AskAI = () => {
                     <h1 className="text-4xl lg:text-5xl font-light text-gray-800 tracking-tight mb-2 text-center">
                         Ask <span className="font-semibold bg-gradient-to-r from-violet-600 via-fuchsia-600 to-indigo-600 bg-clip-text text-transparent">anything</span>
                     </h1>
-                    <p className="text-gray-400 text-sm tracking-widest uppercase mb-10">
+                    <p className="text-gray-500 text-sm tracking-widest uppercase mb-10 flex items-center gap-2 justify-center">
+                        <span className="w-1.5 h-1.5 rounded-full bg-gradient-to-r from-violet-500 to-fuchsia-500 animate-pulse" />
                         Campus Intelligence • Powered by AI
                     </p>
 
@@ -439,8 +440,8 @@ const AskAI = () => {
                             {/* Glow effect on focus/hover */}
                             <div className="absolute -inset-0.5 bg-gradient-to-r from-violet-400 via-fuchsia-400 to-cyan-400 rounded-2xl blur opacity-0 group-hover:opacity-20 group-focus-within:opacity-40 transition-all duration-500" />
 
-                            {/* Input container - Frosted glass light */}
-                            <div className="relative bg-white/80 backdrop-blur-2xl rounded-2xl border border-gray-200/50 shadow-lg shadow-gray-200/50 overflow-hidden">
+                            {/* Input container - Frosted glass with gradient border */}
+                            <div className="relative bg-white/90 backdrop-blur-2xl rounded-2xl border-2 border-violet-200/60 shadow-xl shadow-violet-100/30 overflow-hidden">
                                 {/* Command prefix */}
                                 <div className="absolute left-5 top-1/2 -translate-y-1/2 flex items-center gap-2 text-gray-300">
                                     <span className="text-lg">⌘</span>
@@ -460,8 +461,8 @@ const AskAI = () => {
                                     type="submit"
                                     disabled={!input.trim()}
                                     className={`absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 ${input.trim()
-                                        ? 'bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white shadow-lg shadow-violet-300/50'
-                                        : 'bg-gray-100 text-gray-300'
+                                        ? 'bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white shadow-lg shadow-violet-300/50 scale-100'
+                                        : 'bg-violet-100 text-violet-400 scale-95'
                                         }`}
                                 >
                                     <PaperAirplaneIcon className="w-5 h-5" />
@@ -494,7 +495,7 @@ const AskAI = () => {
                                 <button
                                     key={idx}
                                     onClick={() => handleChipClick(chip.text)}
-                                    className="group px-4 py-2.5 bg-white/60 hover:bg-white backdrop-blur border border-gray-200/50 hover:border-violet-300 rounded-full text-gray-600 hover:text-violet-700 text-sm transition-all duration-300 flex items-center gap-2 shadow-sm hover:shadow-md hover:shadow-violet-100/50"
+                                    className="group px-4 py-2.5 bg-white/40 hover:bg-white/80 backdrop-blur-xl border border-white/60 hover:border-violet-300 rounded-full text-gray-700 hover:text-violet-700 text-sm transition-all duration-300 flex items-center gap-2 shadow-sm shadow-violet-100/20 hover:shadow-lg hover:shadow-violet-200/40 hover:-translate-y-0.5"
                                 >
                                     <span className="text-base">{chip.icon}</span>
                                     <span className="font-medium">{chip.text}</span>
