@@ -2,25 +2,25 @@ import React from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import {
     HomeIcon,
-    FireIcon,
     UserGroupIcon,
-    TrophyIcon,
-    BookOpenIcon
+    SparklesIcon,
+    BookOpenIcon,
+    TrophyIcon
 } from '@heroicons/react/24/outline';
 import {
     HomeIcon as HomeIconSolid,
-    FireIcon as FireIconSolid,
     UserGroupIcon as UserGroupIconSolid,
-    TrophyIcon as TrophyIconSolid,
-    BookOpenIcon as BookOpenIconSolid
+    SparklesIcon as SparklesIconSolid,
+    BookOpenIcon as BookOpenIconSolid,
+    TrophyIcon as TrophyIconSolid
 } from '@heroicons/react/24/solid';
 
 const navigation = [
     { name: 'Home', href: '/dashboard', icon: HomeIcon, activeIcon: HomeIconSolid },
-    { name: 'Trending', href: '/trending', icon: FireIcon, activeIcon: FireIconSolid },
     { name: 'Community', href: '/community', icon: UserGroupIcon, activeIcon: UserGroupIconSolid },
-    { name: 'Hall of Fame', href: '/hall-of-fame', icon: TrophyIcon, activeIcon: TrophyIconSolid },
+    { name: 'Ask AI', href: '/ask-ai', icon: SparklesIcon, activeIcon: SparklesIconSolid },
     { name: 'Resources', href: '/resources', icon: BookOpenIcon, activeIcon: BookOpenIconSolid },
+    { name: 'Hall of Fame', href: '/hall-of-fame', icon: TrophyIcon, activeIcon: TrophyIconSolid },
 ];
 
 const MobileNav = () => {

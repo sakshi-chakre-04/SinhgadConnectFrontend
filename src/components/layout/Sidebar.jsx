@@ -7,9 +7,10 @@ import {
     UserIcon,
     ChatBubbleLeftRightIcon,
     PlusCircleIcon,
-    FireIcon,
+    ChartBarIcon,
     TrophyIcon,
-    BookOpenIcon
+    BookOpenIcon,
+    SparklesIcon
 } from '@heroicons/react/24/outline';
 import {
     HomeIcon as HomeIconSolid,
@@ -17,15 +18,17 @@ import {
     BellIcon as BellIconSolid,
     UserIcon as UserIconSolid,
     ChatBubbleLeftRightIcon as ChatBubbleLeftRightIconSolid,
-    FireIcon as FireIconSolid,
+    ChartBarIcon as ChartBarIconSolid,
     TrophyIcon as TrophyIconSolid,
-    BookOpenIcon as BookOpenIconSolid
+    BookOpenIcon as BookOpenIconSolid,
+    SparklesIcon as SparklesIconSolid
 } from '@heroicons/react/24/solid';
 
 const navigation = [
     { name: 'Home', href: '/dashboard', icon: HomeIcon, activeIcon: HomeIconSolid },
     { name: 'Notifications', href: '/notifications', icon: BellIcon, activeIcon: BellIconSolid },
-    { name: 'Trending', href: '/trending', icon: FireIcon, activeIcon: FireIconSolid },
+    { name: 'Ask AI', href: '/ask-ai', icon: SparklesIcon, activeIcon: SparklesIconSolid },
+    { name: 'Leaderboard', href: '/leaderboard', icon: ChartBarIcon, activeIcon: ChartBarIconSolid },
     { name: 'Hall of Fame', href: '/hall-of-fame', icon: TrophyIcon, activeIcon: TrophyIconSolid },
     { name: 'Resources', href: '/resources', icon: BookOpenIcon, activeIcon: BookOpenIconSolid },
     { name: 'Community', href: '/community', icon: ChatBubbleLeftRightIcon, activeIcon: ChatBubbleLeftRightIconSolid },
