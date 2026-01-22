@@ -49,14 +49,14 @@ const Register = () => {
 
   return (
     <MagicGradient>
-      <div className="relative w-full max-w-md mx-auto px-4 sm:px-0">
+      <div className="relative w-full max-w-md mx-auto">
         {/* Glassmorphism card with animated border */}
         <div className="relative backdrop-blur-xl bg-white/10 rounded-3xl shadow-2xl border border-white/20 overflow-hidden">
           {/* Animated gradient border */}
           <div className="absolute inset-0 bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 opacity-50 animate-pulse" />
           <div className="absolute inset-[1px] backdrop-blur-xl bg-black/20 rounded-3xl" />
           
-          <form onSubmit={handleSubmit(onSubmit)} className="relative p-6 sm:p-8" noValidate>
+          <form onSubmit={handleSubmit(onSubmit)} className="relative p-8" noValidate>
             {/* Futuristic header */}
             <div className="text-center mb-8">
               <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 mb-4 shadow-lg">
