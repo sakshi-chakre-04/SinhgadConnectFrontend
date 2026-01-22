@@ -87,10 +87,10 @@ const Login = () => {
       <div className="relative w-full max-w-md mx-auto">
         {/* AskAI-style card */}
         <div className="bg-white rounded-2xl border-2 border-violet-200 shadow-xl overflow-hidden">
-          <form onSubmit={handleSubmit(onSubmit)} className="p-8" noValidate>
+          <form onSubmit={handleSubmit(onSubmit)} className="p-6" noValidate>
             {/* AI Orb Header */}
-            <div className="text-center mb-8">
-              <div className="relative mb-6">
+            <div className="text-center mb-6">
+              <div className="relative mb-4">
                 <div className="absolute inset-0 rounded-full bg-gradient-to-r from-violet-400 via-fuchsia-400 to-cyan-400 blur-xl opacity-40 animate-pulse" style={{ animationDuration: '3s' }} />
                 <div className="relative w-16 h-16 rounded-full bg-white border-2 border-white shadow-2xl flex items-center justify-center mx-auto">
                   <div className="w-12 h-12 rounded-full bg-gradient-to-br from-violet-500 via-fuchsia-500 to-indigo-600 flex items-center justify-center shadow-lg">
@@ -101,7 +101,7 @@ const Login = () => {
                 </div>
               </div>
               <h1 className="text-3xl lg:text-4xl font-light text-gray-800 tracking-tight mb-2">
-                Welcome <span className="font-semibold bg-gradient-to-r from-violet-600 via-fuchsia-600 to-indigo-600 bg-clip-text text-transparent">Back</span>
+                Welcome <span className="font-light text-gray-800">back</span>
               </h1>
               <p className="text-gray-500 text-sm tracking-widest uppercase flex items-center gap-2 justify-center">
                 <span className="w-1.5 h-1.5 rounded-full bg-gradient-to-r from-violet-500 to-fuchsia-500 animate-pulse" />
