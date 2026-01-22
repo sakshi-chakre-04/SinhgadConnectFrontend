@@ -376,18 +376,30 @@ const AskAI = () => {
     // Same design language as dark mode but adapted for light theme
     return (
         <div className="min-h-screen flex flex-col -mx-4 lg:-mx-8 -mt-16 lg:-mt-4 relative overflow-hidden">
-            {/* === SPATIAL BACKGROUND (LIGHT) === */}
-            {/* Why: Creates depth like visionOS but in light mode */}
-            <div className="fixed inset-0 bg-gradient-to-br from-slate-50 via-white to-violet-50/30">
-                {/* Ambient glow orbs - Soft pastel tones for light mode */}
-                <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-violet-200/40 rounded-full blur-[120px] animate-pulse" style={{ animationDuration: '4s' }} />
-                <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-cyan-200/30 rounded-full blur-[100px] animate-pulse" style={{ animationDuration: '6s' }} />
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-fuchsia-100/40 rounded-full blur-[150px]" />
+            {/* === SPATIAL BACKGROUND (LIGHT - ENHANCED) === */}
+            {/* Why: Creates vibrant depth while staying light-themed */}
+            <div className="fixed inset-0">
+                {/* Base gradient - More vibrant */}
+                <div className="absolute inset-0 bg-gradient-to-br from-violet-100 via-fuchsia-50 to-cyan-50" />
 
-                {/* Dot matrix grid - Light version */}
-                <div className="absolute inset-0 opacity-[0.03]" style={{
+                {/* Mesh gradient overlay for depth */}
+                <div className="absolute inset-0 bg-gradient-to-tr from-indigo-100/80 via-transparent to-pink-100/60" />
+
+                {/* Animated gradient orbs - More saturated and visible */}
+                <div className="absolute top-0 left-0 w-[600px] h-[600px] bg-gradient-to-br from-violet-300/60 to-purple-400/40 rounded-full blur-[100px] animate-pulse -translate-x-1/4 -translate-y-1/4" style={{ animationDuration: '4s' }} />
+                <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-gradient-to-tl from-cyan-300/50 to-teal-200/40 rounded-full blur-[80px] animate-pulse translate-x-1/4 translate-y-1/4" style={{ animationDuration: '5s' }} />
+                <div className="absolute top-1/3 right-1/4 w-[400px] h-[400px] bg-gradient-to-bl from-pink-300/50 to-rose-200/30 rounded-full blur-[90px] animate-pulse" style={{ animationDuration: '6s' }} />
+                <div className="absolute bottom-1/3 left-1/3 w-[350px] h-[350px] bg-gradient-to-tr from-indigo-200/50 to-blue-200/30 rounded-full blur-[70px]" />
+
+                {/* Subtle noise texture for premium feel */}
+                <div className="absolute inset-0 opacity-[0.015]" style={{
+                    backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`
+                }} />
+
+                {/* Dot matrix grid - Slightly more visible */}
+                <div className="absolute inset-0 opacity-[0.04]" style={{
                     backgroundImage: 'radial-gradient(circle, #6366f1 1px, transparent 1px)',
-                    backgroundSize: '24px 24px'
+                    backgroundSize: '20px 20px'
                 }} />
             </div>
 
@@ -448,8 +460,8 @@ const AskAI = () => {
                                     type="submit"
                                     disabled={!input.trim()}
                                     className={`absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 ${input.trim()
-                                            ? 'bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white shadow-lg shadow-violet-300/50'
-                                            : 'bg-gray-100 text-gray-300'
+                                        ? 'bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white shadow-lg shadow-violet-300/50'
+                                        : 'bg-gray-100 text-gray-300'
                                         }`}
                                 >
                                     <PaperAirplaneIcon className="w-5 h-5" />
