@@ -27,32 +27,29 @@ const DEMO_KEYWORDS = ['demo', 'test', 'ui test', 'testing'];
 const DEMO_RESPONSE = {
     answer: `## TCS Placement Preparation Guide
 
-Here's a comprehensive guide to help you prepare for TCS placements:
+Start here if you're preparing for TCS placements.
 
-### 1. Aptitude Preparation
+⭐ Recommended to start with Aptitude Preparation
+
+### 📊 1. Aptitude Preparation
 - Practice quantitative aptitude questions daily
 - Focus on time management and speed
-- Use platforms like IndiaBix and PrepInsta
 
-### 2. Coding Skills
-- Master at least one programming language (Python/Java/C++)
-- Practice on LeetCode and HackerRank
-- Focus on Data Structures and Algorithms
+### 💻 2. Coding Skills
+- Master Python, Java, or C++ fundamentals
+- Practice DSA on LeetCode or HackerRank
 
-### 3. Communication Skills
+### 🗣 3. Communication Skills
 - Work on verbal and written communication
-- Practice group discussions
-- Prepare for HR interview questions
+- Practice group discussions regularly
 
-### 4. Company Research
+### 🏢 4. Company Research
 - Understand TCS's services and recent projects
 - Know about their work culture and values
-- Stay updated with tech industry trends
 
-### Resources
+### 📚 Resources
 - TCS iON platform for mock tests
-- GeeksforGeeks for coding practice
-- YouTube channels for aptitude tricks`,
+- GeeksforGeeks for coding practice`,
     sources: [
         { id: '1', title: 'How to prepare for TCS NQT exam' },
         { id: '2', title: 'TCS Interview Experience - Selected' },
@@ -263,7 +260,7 @@ const SkeletonLoader = ({ isVisible }) => (
     </div>
 );
 
-// ChatGPT-style simple markdown renderer
+// ChatGPT-style simple markdown renderer with improved UX
 const SimpleMarkdown = ({ content, onQuickAction, contextQuery }) => {
     const actions = useMemo(
         () => getQuickActions(contextQuery || 'this', content),
@@ -277,16 +274,25 @@ const SimpleMarkdown = ({ content, onQuickAction, contextQuery }) => {
         // Main title (## )
         if (trimmed.startsWith('## ')) {
             return (
-                <h2 key={idx} className="text-base font-semibold text-gray-900 mt-1 mb-2">
+                <h2 key={idx} className="text-base font-semibold text-gray-900 mb-1">
                     {trimmed.slice(3)}
                 </h2>
             );
         }
 
-        // Section title (### )
+        // Recommended hint (⭐)
+        if (trimmed.startsWith('⭐')) {
+            return (
+                <p key={idx} className="text-xs text-violet-600 bg-violet-50 px-3 py-1.5 rounded-lg inline-block mb-3 font-medium">
+                    {trimmed}
+                </p>
+            );
+        }
+
+        // Section title (### ) - with emoji support
         if (trimmed.startsWith('### ')) {
             return (
-                <h3 key={idx} className="text-sm font-semibold text-gray-800 mt-4 mb-1.5">
+                <h3 key={idx} className="text-sm font-semibold text-gray-800 mt-4 mb-1.5 flex items-center gap-1.5">
                     {trimmed.slice(4)}
                 </h3>
             );
@@ -297,7 +303,7 @@ const SimpleMarkdown = ({ content, onQuickAction, contextQuery }) => {
             return (
                 <div key={idx} className="flex items-start gap-2 py-0.5 pl-1">
                     <span className="w-1.5 h-1.5 mt-2 bg-gray-400 rounded-full flex-shrink-0" />
-                    <span className="text-gray-700 text-sm leading-relaxed">{trimmed.slice(2)}</span>
+                    <span className="text-gray-600 text-sm leading-relaxed">{trimmed.slice(2)}</span>
                 </div>
             );
         }
@@ -308,14 +314,14 @@ const SimpleMarkdown = ({ content, onQuickAction, contextQuery }) => {
             return (
                 <div key={idx} className="flex items-start gap-2.5 py-0.5 pl-1">
                     <span className="text-gray-500 text-sm font-medium min-w-[1.25rem]">{numberedMatch[1]}.</span>
-                    <span className="text-gray-700 text-sm leading-relaxed">{numberedMatch[2]}</span>
+                    <span className="text-gray-600 text-sm leading-relaxed">{numberedMatch[2]}</span>
                 </div>
             );
         }
 
-        // Regular paragraph
+        // Regular paragraph (intro/description)
         return (
-            <p key={idx} className="text-gray-700 text-sm leading-relaxed py-0.5">
+            <p key={idx} className="text-gray-600 text-sm leading-relaxed py-0.5">
                 {trimmed}
             </p>
         );
@@ -323,11 +329,31 @@ const SimpleMarkdown = ({ content, onQuickAction, contextQuery }) => {
 
     const lines = (content || '').split('\n');
 
+    // Find where title ends (after ## and first paragraph) to insert actions there
+    let titleEndIdx = 0;
+    for (let i = 0; i < lines.length; i++) {
+        const t = lines[i].trim();
+        if (t.startsWith('## ')) { titleEndIdx = i + 1; continue; }
+        if (titleEndIdx > 0 && t && !t.startsWith('#') && !t.startsWith('⭐')) {
+            titleEndIdx = i + 1;
+            break;
+        }
+        if (t.startsWith('⭐')) { titleEndIdx = i + 1; break; }
+    }
+
+    const beforeActions = lines.slice(0, titleEndIdx);
+    const afterActions = lines.slice(titleEndIdx);
+
     return (
         <div className="space-y-1">
-            {/* Quick actions at top */}
+            {/* Title & intro first */}
+            <div className="space-y-0.5">
+                {beforeActions.map((line, idx) => renderLine(line, idx))}
+            </div>
+
+            {/* Quick actions AFTER title */}
             {actions && actions.length > 0 && (
-                <div className="flex flex-wrap gap-2 mb-3">
+                <div className="flex flex-wrap gap-2 py-2">
                     {actions.slice(0, 3).map((a, idx) => (
                         <button
                             key={idx}
@@ -341,9 +367,9 @@ const SimpleMarkdown = ({ content, onQuickAction, contextQuery }) => {
                 </div>
             )}
 
-            {/* Content */}
+            {/* Rest of content */}
             <div className="space-y-0.5">
-                {lines.map((line, idx) => renderLine(line, idx))}
+                {afterActions.map((line, idx) => renderLine(line, titleEndIdx + idx))}
             </div>
         </div>
     );
