@@ -263,99 +263,77 @@ const SkeletonLoader = ({ isVisible }) => (
     </div>
 );
 
-const parseInsightContent = (raw) => {
-    const text = raw || '';
-    const lines = text.split('\n');
-    let title = '';
-    let intro = '';
-    const sections = [];
-    let current = null;
-    let inIntro = true;
+// ChatGPT-style simple markdown renderer
+const SimpleMarkdown = ({ content, onQuickAction, contextQuery }) => {
+    const actions = useMemo(
+        () => getQuickActions(contextQuery || 'this', content),
+        [contextQuery, content]
+    );
 
-    const flush = () => {
-        if (current && (current.items.length > 0 || current.paragraphs.length > 0)) {
-            sections.push(current);
+    const renderLine = (line, idx) => {
+        const trimmed = line.trim();
+        if (!trimmed) return <div key={idx} className="h-2" />;
+
+        // Main title (## )
+        if (trimmed.startsWith('## ')) {
+            return (
+                <h2 key={idx} className="text-base font-semibold text-gray-900 mt-1 mb-2">
+                    {trimmed.slice(3)}
+                </h2>
+            );
         }
-        current = null;
+
+        // Section title (### )
+        if (trimmed.startsWith('### ')) {
+            return (
+                <h3 key={idx} className="text-sm font-semibold text-gray-800 mt-4 mb-1.5">
+                    {trimmed.slice(4)}
+                </h3>
+            );
+        }
+
+        // Bullet points
+        if (trimmed.startsWith('- ') || trimmed.startsWith('• ') || trimmed.startsWith('* ')) {
+            return (
+                <div key={idx} className="flex items-start gap-2 py-0.5 pl-1">
+                    <span className="w-1.5 h-1.5 mt-2 bg-gray-400 rounded-full flex-shrink-0" />
+                    <span className="text-gray-700 text-sm leading-relaxed">{trimmed.slice(2)}</span>
+                </div>
+            );
+        }
+
+        // Numbered items
+        const numberedMatch = trimmed.match(/^(\d+)\.\s(.*)/);
+        if (numberedMatch) {
+            return (
+                <div key={idx} className="flex items-start gap-2.5 py-0.5 pl-1">
+                    <span className="text-gray-500 text-sm font-medium min-w-[1.25rem]">{numberedMatch[1]}.</span>
+                    <span className="text-gray-700 text-sm leading-relaxed">{numberedMatch[2]}</span>
+                </div>
+            );
+        }
+
+        // Regular paragraph
+        return (
+            <p key={idx} className="text-gray-700 text-sm leading-relaxed py-0.5">
+                {trimmed}
+            </p>
+        );
     };
 
-    for (const line of lines) {
-        const trimmed = (line || '').trim();
-        if (!trimmed) continue;
-
-        if (trimmed.startsWith('## ')) {
-            if (!title) title = trimmed.slice(3);
-            continue;
-        }
-
-        if (trimmed.startsWith('### ')) {
-            flush();
-            inIntro = false;
-            current = { title: trimmed.slice(4), items: [], paragraphs: [] };
-            continue;
-        }
-
-        const isBullet = trimmed.startsWith('- ') || trimmed.startsWith('• ') || trimmed.startsWith('* ');
-        const numberedMatch = trimmed.match(/^(\d+)\.\s(.*)/);
-
-        if (isBullet) {
-            const itemText = trimmed.slice(2).trim();
-            if (!current) current = { title: 'Key Points', items: [], paragraphs: [] };
-            current.items.push({ type: 'bullet', text: itemText });
-            continue;
-        }
-
-        if (numberedMatch) {
-            if (!current) current = { title: 'Steps', items: [], paragraphs: [] };
-            current.items.push({ type: 'numbered', num: numberedMatch[1], text: numberedMatch[2] });
-            continue;
-        }
-
-        if (inIntro && !intro) {
-            intro = trimmed;
-            continue;
-        }
-
-        if (!current) current = { title: 'Details', items: [], paragraphs: [] };
-        current.paragraphs.push(trimmed);
-    }
-
-    flush();
-
-    return { title, intro, sections };
-};
-
-const InsightResponse = ({ content, contextQuery, onQuickAction }) => {
-    const parsed = useMemo(() => parseInsightContent(content), [content]);
-    const actions = useMemo(
-        () => getQuickActions(contextQuery || parsed.title || 'this', content),
-        [contextQuery, parsed.title, content]
-    );
-    const [openIndex, setOpenIndex] = useState(0);
+    const lines = (content || '').split('\n');
 
     return (
-        <div className="space-y-3">
-            {(parsed.title || contextQuery) && (
-                <div className="flex items-center gap-2 pb-1.5 border-b border-violet-100">
-                    <div className="w-1 h-4 bg-gradient-to-b from-violet-500 to-fuchsia-500 rounded-full" />
-                    <h3 className="font-semibold text-gray-900 text-sm">
-                        {parsed.title || contextQuery}
-                    </h3>
-                </div>
-            )}
-
-            {parsed.intro && (
-                <p className="text-gray-700 text-sm leading-relaxed">{parsed.intro}</p>
-            )}
-
+        <div className="space-y-1">
+            {/* Quick actions at top */}
             {actions && actions.length > 0 && (
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-2 mb-3">
                     {actions.slice(0, 3).map((a, idx) => (
                         <button
                             key={idx}
                             type="button"
                             onClick={() => onQuickAction?.(a.prompt)}
-                            className="px-3 py-2 rounded-full bg-violet-50 text-violet-700 border border-violet-100 hover:bg-violet-100 transition-all text-xs font-semibold"
+                            className="px-3 py-1.5 rounded-full bg-violet-50 text-violet-700 border border-violet-100 hover:bg-violet-100 transition-all text-xs font-medium"
                         >
                             {a.label}
                         </button>
@@ -363,74 +341,9 @@ const InsightResponse = ({ content, contextQuery, onQuickAction }) => {
                 </div>
             )}
 
-            <div className="space-y-2">
-                {parsed.sections.map((section, idx) => {
-                    const isOpen = openIndex === idx;
-                    return (
-                        <div key={idx} className="rounded-2xl border border-gray-200 bg-white/80 backdrop-blur">
-                            <button
-                                type="button"
-                                onClick={() => setOpenIndex(isOpen ? -1 : idx)}
-                                className="w-full flex items-center justify-between gap-3 px-4 py-3"
-                            >
-                                <span className="text-sm font-semibold text-gray-900 text-left">
-                                    {section.title}
-                                </span>
-                                <ChevronDownIcon
-                                    className={`w-4 h-4 text-gray-500 transition-transform ${isOpen ? 'rotate-180' : 'rotate-0'}`}
-                                />
-                            </button>
-
-                            <AnimatePresence initial={false}>
-                                {isOpen && (
-                                    <motion.div
-                                        initial={{ height: 0, opacity: 0 }}
-                                        animate={{ height: 'auto', opacity: 1 }}
-                                        exit={{ height: 0, opacity: 0 }}
-                                        transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-                                        className="overflow-hidden"
-                                    >
-                                        <div className="px-4 pb-4 space-y-2">
-                                            {section.paragraphs.map((p, pIdx) => (
-                                                <p key={pIdx} className="text-gray-700 text-sm leading-relaxed">
-                                                    {p}
-                                                </p>
-                                            ))}
-
-                                            {section.items.length > 0 && (
-                                                <div className="space-y-2">
-                                                    {section.items.map((item, iIdx) => {
-                                                        if (item.type === 'numbered') {
-                                                            return (
-                                                                <div key={iIdx} className="flex items-start gap-2.5 py-1 px-2 bg-gradient-to-r from-violet-50/60 to-transparent rounded-lg">
-                                                                    <span className="w-5 h-5 bg-violet-100 text-violet-700 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">
-                                                                        {item.num}
-                                                                    </span>
-                                                                    <span className="text-gray-700 text-sm leading-relaxed pt-0.5">
-                                                                        {item.text}
-                                                                    </span>
-                                                                </div>
-                                                            );
-                                                        }
-
-                                                        return (
-                                                            <div key={iIdx} className="flex items-start gap-2.5 py-1 px-2 bg-gray-50/80 rounded-lg">
-                                                                <span className="w-1.5 h-1.5 mt-1.5 bg-violet-500 rounded-full flex-shrink-0" />
-                                                                <span className="text-gray-700 text-sm leading-relaxed">
-                                                                    {item.text}
-                                                                </span>
-                                                            </div>
-                                                        );
-                                                    })}
-                                                </div>
-                                            )}
-                                        </div>
-                                    </motion.div>
-                                )}
-                            </AnimatePresence>
-                        </div>
-                    );
-                })}
+            {/* Content */}
+            <div className="space-y-0.5">
+                {lines.map((line, idx) => renderLine(line, idx))}
             </div>
         </div>
     );
@@ -996,7 +909,7 @@ const AskAI = () => {
                                                     }}
                                                 />
                                             ) : (
-                                                <InsightResponse
+                                                <SimpleMarkdown
                                                     content={msg.content}
                                                     contextQuery={activeQuery}
                                                     onQuickAction={(prompt) => {
