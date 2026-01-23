@@ -61,10 +61,10 @@ const Dashboard = () => {
             </button>
             <button
               onClick={() => navigate('/trending')}
-              className="inline-flex items-center gap-2 px-5 py-2.5 backdrop-blur-md border text-white font-bold rounded-xl hover:scale-105 transition-all shadow-lg text-sm"
-              style={{ backgroundColor: 'rgba(74, 144, 226, 0.25)', borderColor: '#607BE7' }}
-              onMouseEnter={(e) => e.target.style.backgroundColor = 'rgba(74, 144, 226, 0.4)'}
-              onMouseLeave={(e) => e.target.style.backgroundColor = 'rgba(74, 144, 226, 0.25)'}
+              className="inline-flex items-center gap-2 px-5 py-2.5 text-white font-bold rounded-xl hover:scale-105 transition-all shadow-lg text-sm"
+              style={{ backgroundColor: '#607BE7', borderColor: '#4A90E2' }}
+              onMouseEnter={(e) => e.target.style.backgroundColor = '#7666EC'}
+              onMouseLeave={(e) => e.target.style.backgroundColor = '#607BE7'}
             >
               <FireIcon className="w-5 h-5" />
               Trending
