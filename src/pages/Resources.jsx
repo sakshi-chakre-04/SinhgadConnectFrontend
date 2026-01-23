@@ -423,9 +423,9 @@ const Resources = () => {
             {/* GATE Section */}
             {activeSection === 'gate' && (
                 <div className="px-4 mt-6 space-y-6">
-                    <div className="bg-gradient-to-r from-emerald-50 to-teal-50 rounded-2xl p-6 border border-emerald-100">
-                        <h2 className="text-lg font-semibold text-emerald-800 mb-2">GATE Preparation Resources</h2>
-                        <p className="text-emerald-600 text-sm">Curated resources for GATE CS/IT preparation</p>
+                    <div className="rounded-2xl p-6 border" style={{ background: 'linear-gradient(to right, rgba(162, 60, 244, 0.1), rgba(184, 47, 248, 0.1))', borderColor: '#A23CF4' }}>
+                        <h2 className="text-lg font-semibold mb-2" style={{ color: '#A23CF4' }}>GATE Preparation Resources</h2>
+                        <p className="text-sm" style={{ color: '#8651F1' }}>Curated resources for GATE CS/IT preparation</p>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -435,24 +435,27 @@ const Resources = () => {
                                 href={resource.url}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm hover:shadow-md hover:border-emerald-200 transition-all group"
+                                className="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm hover:shadow-md transition-all group"
+                                style={{ '--hover-border-color': '#A23CF4' }}
+                                onMouseEnter={(e) => e.target.style.borderColor = '#A23CF4'}
+                                onMouseLeave={(e) => e.target.style.borderColor = ''}
                             >
                                 <div className="flex items-start gap-4">
-                                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center shrink-0">
+                                    <div className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0" style={{ background: 'linear-gradient(to bottom right, #A23CF4, #B82FF8)' }}>
                                         <BookOpenIcon className="w-6 h-6 text-white" />
                                     </div>
                                     <div className="flex-1 min-w-0">
                                         <div className="flex items-center gap-2 mb-1">
-                                            <h3 className="font-semibold text-gray-800 group-hover:text-emerald-600 transition-colors">
+                                            <h3 className="font-semibold text-gray-800 transition-colors group-hover:text-[#A23CF4]">
                                                 {resource.title}
                                             </h3>
-                                            <span className="px-2 py-0.5 bg-emerald-100 text-emerald-700 text-xs rounded-full">
+                                            <span className="px-2 py-0.5 text-xs rounded-full text-white" style={{ backgroundColor: '#A23CF4' }}>
                                                 {resource.category}
                                             </span>
                                         </div>
                                         <p className="text-sm text-gray-500">{resource.description}</p>
                                     </div>
-                                    <ArrowTopRightOnSquareIcon className="w-5 h-5 text-gray-400 group-hover:text-emerald-500 shrink-0" />
+                                    <ArrowTopRightOnSquareIcon className="w-5 h-5 text-gray-400 shrink-0 transition-colors group-hover:text-[#A23CF4]" />
                                 </div>
                             </a>
                         ))}
