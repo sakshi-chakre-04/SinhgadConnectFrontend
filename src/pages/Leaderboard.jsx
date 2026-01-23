@@ -8,7 +8,8 @@ import {
     TrophyIcon,
     ChevronUpIcon,
     ChatBubbleLeftIcon,
-    DocumentTextIcon
+    DocumentTextIcon,
+    SparklesIcon
 } from '@heroicons/react/24/outline';
 import { TrophyIcon as TrophyIconSolid } from '@heroicons/react/24/solid';
 
@@ -57,7 +58,7 @@ const Leaderboard = () => {
             case 3:
                 return 'bg-gradient-to-br from-orange-300 to-amber-600 text-white shadow-lg shadow-orange-500/20';
             default:
-                return 'bg-white text-gray-500 border border-gray-200';
+                return 'bg-violet-50 text-violet-600 border border-violet-200';
         }
     };
 
@@ -74,161 +75,158 @@ const Leaderboard = () => {
         leaderboard.some(u => u.userId === currentUserRank.userId);
 
     return (
-        <div className="max-w-4xl mx-auto space-y-6">
-            {/* Header */}
-            <div className="relative overflow-hidden rounded-2xl p-8 text-white" style={{ background: 'linear-gradient(135deg, #4A90E2 0%, #607BE7 20%, #7666EC 40%, #8651F1 60%, #A23CF4 80%, #B82FF8 90%, #CD13FC 100%)' }}>
-                <div className="absolute inset-0 bg-black/10"></div>
-                <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/4 blur-3xl"></div>
-                <div className="absolute bottom-0 left-0 w-48 h-48 bg-purple-300/20 rounded-full translate-y-1/2 -translate-x-1/4 blur-2xl"></div>
+        <div
+            className="min-h-screen pb-20"
+            style={{ background: 'linear-gradient(180deg, #faf5ff 0%, #f5f3ff 50%, #ffffff 100%)' }}
+        >
+            <div className="max-w-4xl mx-auto px-4 space-y-6 pt-4">
+                {/* Header */}
+                <div
+                    className="relative overflow-hidden rounded-3xl p-8 text-white"
+                    style={{
+                        background: 'linear-gradient(135deg, #7c3aed 0%, #8b5cf6 25%, #a855f7 50%, #c026d3 75%, #d946ef 100%)',
+                        boxShadow: '0 10px 40px rgba(139, 92, 246, 0.3), 0 0 60px rgba(217, 70, 239, 0.15)'
+                    }}
+                >
+                    {/* Background Effects */}
+                    <div className="absolute inset-0 opacity-30 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] mix-blend-overlay"></div>
+                    <div className="absolute -top-24 -right-24 w-72 h-72 bg-white/20 blur-3xl rounded-full"></div>
+                    <div className="absolute -bottom-24 -left-24 w-72 h-72 bg-fuchsia-400/30 blur-3xl rounded-full"></div>
 
-                <div className="relative z-10">
-                    <Link to="/dashboard" className="inline-flex items-center gap-2 text-white/80 hover:text-white mb-4 text-sm">
-                        <ArrowLeftIcon className="w-4 h-4" />
-                        Back to Dashboard
-                    </Link>
+                    <div className="relative z-10">
+                        <Link to="/dashboard" className="inline-flex items-center gap-2 text-white/80 hover:text-white mb-4 text-sm transition-colors">
+                            <ArrowLeftIcon className="w-4 h-4" />
+                            Back to Dashboard
+                        </Link>
 
-                    <div className="flex items-center gap-3 mb-2">
-                        <TrophyIconSolid className="w-10 h-10 text-yellow-300 animate-pulse" />
-                        <h1 className="text-3xl font-bold">Leaderboard</h1>
-                    </div>
-                    <p className="text-white/80 text-lg">Top helpers making a difference in the Sinhgad community</p>
-                </div>
-            </div>
-
-            {/* Time Range Filter */}
-            <div className="flex gap-2">
-                {timeRanges.map(range => (
-                    <button
-                        key={range.id}
-                        onClick={() => setTimeRange(range.id)}
-                        className={`px-5 py-2.5 rounded-xl text-sm font-medium transition-all ${timeRange === range.id
-                            ? 'text-white shadow-lg'
-                            : 'bg-white border border-gray-200 text-gray-600 hover:text-white'
-                            }`}
-                        style={timeRange === range.id ? { backgroundColor: '#8651F1' } : {}}
-                        onMouseEnter={(e) => { if (timeRange !== range.id) e.target.style.backgroundColor = '#A23CF4'; }}
-                        onMouseLeave={(e) => { if (timeRange !== range.id) e.target.style.backgroundColor = ''; }}
-                    >
-                        {range.label}
-                    </button>
-                ))}
-            </div>
-
-            {/* Stats */}
-            <div className="grid grid-cols-2 gap-4">
-                <div className="rounded-2xl p-4 text-center border" style={{ background: 'linear-gradient(to bottom right, rgba(134, 81, 241, 0.1), rgba(162, 60, 244, 0.1))', borderColor: '#8651F1' }}>
-                    <div className="text-2xl font-bold" style={{ color: '#8651F1' }}>{totalParticipants}</div>
-                    <div className="text-xs text-gray-600 mt-1">Contributors</div>
-                </div>
-                <div className="rounded-2xl p-4 text-center border" style={{ background: 'linear-gradient(to bottom right, rgba(205, 19, 252, 0.1), rgba(184, 47, 248, 0.1))', borderColor: '#CD13FC' }}>
-                    <div className="text-2xl font-bold" style={{ color: '#CD13FC' }}>
-                        {currentUserRank ? `#${currentUserRank.rank}` : '-'}
-                    </div>
-                    <div className="text-xs text-gray-600 mt-1">Your Rank</div>
-                </div>
-            </div>
-
-            {/* Leaderboard List */}
-            <div className="space-y-3">
-                {loading ? (
-                    <div className="flex justify-center py-12">
-                        <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-purple-500"></div>
-                    </div>
-                ) : leaderboard.length === 0 ? (
-                    <div className="text-center py-12 bg-white/60 backdrop-blur-sm rounded-2xl border border-white/50">
-                        <TrophyIcon className="w-16 h-16 mx-auto text-gray-300 mb-4" />
-                        <p className="text-gray-500 font-medium">No contributors yet</p>
-                        <p className="text-gray-400 text-sm mt-1">Be the first to help others!</p>
-                    </div>
-                ) : (
-                    <>
-                        {leaderboard.map((user, index) => (
+                        <div className="flex items-center gap-3 mb-2">
                             <div
-                                key={user.userId}
-                                onClick={() => navigate(`/user/${user.userId}`)}
-                                className={`flex items-center gap-4 p-4 bg-white/70 backdrop-blur-sm rounded-2xl border transition-all cursor-pointer hover:shadow-lg hover:-translate-y-0.5 ${user.userId === currentUserRank?.userId
-                                    ? 'border-purple-300 bg-purple-50/50 ring-2 ring-purple-200'
-                                    : 'border-white/50 hover:border-purple-200'
-                                    }`}
+                                className="w-14 h-14 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center"
+                                style={{ boxShadow: '0 4px 15px rgba(0,0,0,0.1)' }}
                             >
-                                {/* Rank Badge */}
-                                <div className={`flex-shrink-0 w-12 h-12 rounded-2xl flex items-center justify-center font-bold text-lg ${getMedalStyle(user.rank)}`}>
-                                    {getMedalEmoji(user.rank) || user.rank}
-                                </div>
-
-                                {/* User Info */}
-                                <div className="flex-1 min-w-0">
-                                    <div className="flex items-center gap-2">
-                                        <h3 className="font-semibold text-gray-900 truncate">
-                                            {user.name}
-                                            {user.userId === currentUserRank?.userId && (
-                                                <span className="ml-2 text-xs text-purple-600 font-medium">(You)</span>
-                                            )}
-                                        </h3>
-                                    </div>
-                                    <div className="flex items-center gap-2 mt-1 text-xs text-gray-500">
-                                        <span className="px-2 py-0.5 bg-gray-100 rounded-full">{user.department}</span>
-                                        <span>•</span>
-                                        <span>{user.year}</span>
-                                    </div>
-                                </div>
-
-                                {/* Stats */}
-                                <div className="flex items-center gap-4 text-sm">
-                                    <div className="text-center">
-                                        <div className="flex items-center gap-1 text-green-600 font-semibold">
-                                            <ChevronUpIcon className="w-4 h-4" strokeWidth={2.5} />
-                                            {user.totalUpvotes}
-                                        </div>
-                                        <div className="text-xs text-gray-400">upvotes</div>
-                                    </div>
-                                    <div className="text-center hidden sm:block">
-                                        <div className="flex items-center gap-1 text-blue-600 font-semibold">
-                                            <ChatBubbleLeftIcon className="w-4 h-4" />
-                                            {user.answerCount}
-                                        </div>
-                                        <div className="text-xs text-gray-400">answers</div>
-                                    </div>
-                                    <div className="text-center hidden sm:block">
-                                        <div className="flex items-center gap-1 text-purple-600 font-semibold">
-                                            <DocumentTextIcon className="w-4 h-4" />
-                                            {user.postCount}
-                                        </div>
-                                        <div className="text-xs text-gray-400">posts</div>
-                                    </div>
-                                </div>
+                                <TrophyIconSolid className="w-8 h-8 text-yellow-300" />
                             </div>
-                        ))}
+                            <div>
+                                <h1 className="text-3xl font-bold drop-shadow-lg">Leaderboard</h1>
+                                <p className="text-violet-100 text-sm">Top contributors in the community</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-                        {/* Current User Card (if not in top 20) */}
-                        {currentUserRank && !isCurrentUserInTop && (
-                            <>
-                                <div className="flex items-center justify-center gap-2 text-gray-400 py-2">
-                                    <div className="w-8 h-px bg-gray-200"></div>
-                                    <span className="text-xs">Your Position</span>
-                                    <div className="w-8 h-px bg-gray-200"></div>
-                                </div>
+                {/* Time Range Filter */}
+                <div className="flex gap-2">
+                    {timeRanges.map(range => (
+                        <button
+                            key={range.id}
+                            onClick={() => setTimeRange(range.id)}
+                            className={`px-5 py-2.5 rounded-xl text-sm font-semibold transition-all ${timeRange === range.id
+                                ? 'text-white shadow-lg'
+                                : 'bg-white/80 border border-violet-200 text-violet-600 hover:bg-violet-50'
+                                }`}
+                            style={timeRange === range.id ? {
+                                background: 'linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%)',
+                                boxShadow: '0 4px 15px rgba(139, 92, 246, 0.3)'
+                            } : {}}
+                        >
+                            {range.label}
+                        </button>
+                    ))}
+                </div>
+
+                {/* Stats */}
+                <div className="grid grid-cols-2 gap-4">
+                    <div
+                        className="rounded-2xl p-5 text-center"
+                        style={{
+                            background: 'rgba(255, 255, 255, 0.8)',
+                            backdropFilter: 'blur(12px)',
+                            border: '1px solid rgba(139, 92, 246, 0.2)',
+                            boxShadow: '0 4px 20px rgba(139, 92, 246, 0.08)'
+                        }}
+                    >
+                        <div className="text-3xl font-bold text-violet-600">{totalParticipants}</div>
+                        <div className="text-sm text-gray-500 mt-1 font-medium">Contributors</div>
+                    </div>
+                    <div
+                        className="rounded-2xl p-5 text-center"
+                        style={{
+                            background: 'rgba(255, 255, 255, 0.8)',
+                            backdropFilter: 'blur(12px)',
+                            border: '1px solid rgba(217, 70, 239, 0.2)',
+                            boxShadow: '0 4px 20px rgba(217, 70, 239, 0.08)'
+                        }}
+                    >
+                        <div className="text-3xl font-bold text-fuchsia-600">
+                            {currentUserRank ? `#${currentUserRank.rank}` : '-'}
+                        </div>
+                        <div className="text-sm text-gray-500 mt-1 font-medium">Your Rank</div>
+                    </div>
+                </div>
+
+                {/* Leaderboard List */}
+                <div className="space-y-3">
+                    {loading ? (
+                        <div className="flex justify-center py-12">
+                            <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-violet-500"></div>
+                        </div>
+                    ) : leaderboard.length === 0 ? (
+                        <div
+                            className="text-center py-12 rounded-2xl"
+                            style={{
+                                background: 'rgba(255, 255, 255, 0.8)',
+                                backdropFilter: 'blur(12px)',
+                                border: '1px solid rgba(139, 92, 246, 0.15)'
+                            }}
+                        >
+                            <TrophyIcon className="w-16 h-16 mx-auto text-violet-300 mb-4" />
+                            <p className="text-gray-700 font-semibold">No contributors yet</p>
+                            <p className="text-gray-500 text-sm mt-1">Be the first to help others!</p>
+                        </div>
+                    ) : (
+                        <>
+                            {leaderboard.map((user, index) => (
                                 <div
-                                    onClick={() => navigate(`/user/${currentUserRank.userId}`)}
-                                    className="flex items-center gap-4 p-4 bg-purple-50/80 backdrop-blur-sm rounded-2xl border border-purple-200 ring-2 ring-purple-100 cursor-pointer hover:shadow-lg transition-all"
+                                    key={user.userId}
+                                    onClick={() => navigate(`/user/${user.userId}`)}
+                                    className={`flex items-center gap-4 p-4 rounded-2xl transition-all cursor-pointer hover:scale-[1.01] ${user.userId === currentUserRank?.userId
+                                        ? 'ring-2 ring-violet-300'
+                                        : ''
+                                        }`}
+                                    style={{
+                                        background: user.userId === currentUserRank?.userId
+                                            ? 'rgba(139, 92, 246, 0.1)'
+                                            : 'rgba(255, 255, 255, 0.8)',
+                                        backdropFilter: 'blur(12px)',
+                                        border: '1px solid rgba(139, 92, 246, 0.15)',
+                                        boxShadow: '0 4px 15px rgba(139, 92, 246, 0.06)'
+                                    }}
+                                    onMouseEnter={(e) => {
+                                        e.currentTarget.style.boxShadow = '0 8px 25px rgba(139, 92, 246, 0.12)';
+                                    }}
+                                    onMouseLeave={(e) => {
+                                        e.currentTarget.style.boxShadow = '0 4px 15px rgba(139, 92, 246, 0.06)';
+                                    }}
                                 >
                                     {/* Rank Badge */}
-                                    <div className="flex-shrink-0 w-12 h-12 rounded-2xl flex items-center justify-center font-bold text-lg bg-purple-100 text-purple-600 border border-purple-200">
-                                        {currentUserRank.rank}
+                                    <div className={`flex-shrink-0 w-12 h-12 rounded-2xl flex items-center justify-center font-bold text-lg ${getMedalStyle(user.rank)}`}>
+                                        {getMedalEmoji(user.rank) || user.rank}
                                     </div>
 
                                     {/* User Info */}
                                     <div className="flex-1 min-w-0">
                                         <div className="flex items-center gap-2">
                                             <h3 className="font-semibold text-gray-900 truncate">
-                                                {currentUserRank.name}
-                                                <span className="ml-2 text-xs text-purple-600 font-medium">(You)</span>
+                                                {user.name}
+                                                {user.userId === currentUserRank?.userId && (
+                                                    <span className="ml-2 text-xs text-violet-600 font-medium">(You)</span>
+                                                )}
                                             </h3>
                                         </div>
                                         <div className="flex items-center gap-2 mt-1 text-xs text-gray-500">
-                                            <span className="px-2 py-0.5 bg-purple-100 rounded-full">{currentUserRank.department}</span>
+                                            <span className="px-2 py-0.5 bg-violet-50 text-violet-600 rounded-full font-medium">{user.department}</span>
                                             <span>•</span>
-                                            <span>{currentUserRank.year}</span>
+                                            <span>{user.year}</span>
                                         </div>
                                     </div>
 
@@ -237,30 +235,95 @@ const Leaderboard = () => {
                                         <div className="text-center">
                                             <div className="flex items-center gap-1 text-green-600 font-semibold">
                                                 <ChevronUpIcon className="w-4 h-4" strokeWidth={2.5} />
-                                                {currentUserRank.totalUpvotes}
+                                                {user.totalUpvotes}
                                             </div>
                                             <div className="text-xs text-gray-400">upvotes</div>
                                         </div>
                                         <div className="text-center hidden sm:block">
-                                            <div className="flex items-center gap-1 text-blue-600 font-semibold">
+                                            <div className="flex items-center gap-1 text-violet-600 font-semibold">
                                                 <ChatBubbleLeftIcon className="w-4 h-4" />
-                                                {currentUserRank.answerCount}
+                                                {user.answerCount}
                                             </div>
                                             <div className="text-xs text-gray-400">answers</div>
                                         </div>
                                         <div className="text-center hidden sm:block">
-                                            <div className="flex items-center gap-1 text-purple-600 font-semibold">
+                                            <div className="flex items-center gap-1 text-fuchsia-600 font-semibold">
                                                 <DocumentTextIcon className="w-4 h-4" />
-                                                {currentUserRank.postCount}
+                                                {user.postCount}
                                             </div>
                                             <div className="text-xs text-gray-400">posts</div>
                                         </div>
                                     </div>
                                 </div>
-                            </>
-                        )}
-                    </>
-                )}
+                            ))}
+
+                            {/* Current User Card (if not in top 20) */}
+                            {currentUserRank && !isCurrentUserInTop && (
+                                <>
+                                    <div className="flex items-center justify-center gap-2 text-gray-400 py-2">
+                                        <div className="w-8 h-px bg-violet-200"></div>
+                                        <span className="text-xs font-medium">Your Position</span>
+                                        <div className="w-8 h-px bg-violet-200"></div>
+                                    </div>
+                                    <div
+                                        onClick={() => navigate(`/user/${currentUserRank.userId}`)}
+                                        className="flex items-center gap-4 p-4 rounded-2xl ring-2 ring-violet-300 cursor-pointer hover:shadow-lg transition-all"
+                                        style={{
+                                            background: 'rgba(139, 92, 246, 0.1)',
+                                            backdropFilter: 'blur(12px)',
+                                            border: '1px solid rgba(139, 92, 246, 0.2)'
+                                        }}
+                                    >
+                                        {/* Rank Badge */}
+                                        <div className="flex-shrink-0 w-12 h-12 rounded-2xl flex items-center justify-center font-bold text-lg bg-violet-100 text-violet-600 border border-violet-200">
+                                            {currentUserRank.rank}
+                                        </div>
+
+                                        {/* User Info */}
+                                        <div className="flex-1 min-w-0">
+                                            <div className="flex items-center gap-2">
+                                                <h3 className="font-semibold text-gray-900 truncate">
+                                                    {currentUserRank.name}
+                                                    <span className="ml-2 text-xs text-violet-600 font-medium">(You)</span>
+                                                </h3>
+                                            </div>
+                                            <div className="flex items-center gap-2 mt-1 text-xs text-gray-500">
+                                                <span className="px-2 py-0.5 bg-violet-100 text-violet-600 rounded-full font-medium">{currentUserRank.department}</span>
+                                                <span>•</span>
+                                                <span>{currentUserRank.year}</span>
+                                            </div>
+                                        </div>
+
+                                        {/* Stats */}
+                                        <div className="flex items-center gap-4 text-sm">
+                                            <div className="text-center">
+                                                <div className="flex items-center gap-1 text-green-600 font-semibold">
+                                                    <ChevronUpIcon className="w-4 h-4" strokeWidth={2.5} />
+                                                    {currentUserRank.totalUpvotes}
+                                                </div>
+                                                <div className="text-xs text-gray-400">upvotes</div>
+                                            </div>
+                                            <div className="text-center hidden sm:block">
+                                                <div className="flex items-center gap-1 text-violet-600 font-semibold">
+                                                    <ChatBubbleLeftIcon className="w-4 h-4" />
+                                                    {currentUserRank.answerCount}
+                                                </div>
+                                                <div className="text-xs text-gray-400">answers</div>
+                                            </div>
+                                            <div className="text-center hidden sm:block">
+                                                <div className="flex items-center gap-1 text-fuchsia-600 font-semibold">
+                                                    <DocumentTextIcon className="w-4 h-4" />
+                                                    {currentUserRank.postCount}
+                                                </div>
+                                                <div className="text-xs text-gray-400">posts</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </>
+                            )}
+                        </>
+                    )}
+                </div>
             </div>
         </div>
     );
