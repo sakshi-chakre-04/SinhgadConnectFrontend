@@ -70,7 +70,7 @@ const VideoCard = ({ video, onPlay }) => {
                     </div>
                 </div>
                 {/* Company Badge */}
-                <div className="absolute top-3 left-3 px-3 py-1 bg-white/90 backdrop-blur-sm rounded-full text-xs font-semibold text-indigo-600">
+                <div className="absolute top-3 left-3 px-3 py-1 bg-white/90 backdrop-blur-sm rounded-full text-xs font-semibold" style={{ color: '#8651F1' }}>
                     {video.company}
                 </div>
             </div>
@@ -102,7 +102,7 @@ const HallOfFame = () => {
     return (
         <div className="max-w-5xl mx-auto space-y-6">
             {/* Header */}
-            <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-amber-500 via-orange-500 to-yellow-500 p-8 text-white">
+            <div className="relative overflow-hidden rounded-2xl p-8 text-white" style={{ background: 'linear-gradient(135deg, #4A90E2 0%, #607BE7 20%, #7666EC 40%, #8651F1 60%, #A23CF4 80%, #B82FF8 90%, #CD13FC 100%)' }}>
                 <div className="absolute inset-0 bg-black/10"></div>
                 <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/4 blur-3xl"></div>
                 <div className="absolute bottom-0 left-0 w-48 h-48 bg-yellow-300/20 rounded-full translate-y-1/2 -translate-x-1/4 blur-2xl"></div>
@@ -128,9 +128,12 @@ const HallOfFame = () => {
                         key={year}
                         onClick={() => setFilterYear(year)}
                         className={`px-4 py-2 rounded-xl text-sm font-medium whitespace-nowrap transition-all ${filterYear === year
-                            ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-lg shadow-orange-500/20'
-                            : 'bg-white border border-gray-200 text-gray-600 hover:border-orange-300 hover:text-orange-600'
+                            ? 'text-white shadow-lg'
+                            : 'bg-white border border-gray-200 text-gray-600 hover:text-white'
                             }`}
+                        style={filterYear === year ? { backgroundColor: '#8651F1' } : {}}
+                        onMouseEnter={(e) => { if (filterYear !== year) e.target.style.backgroundColor = '#A23CF4'; }}
+                        onMouseLeave={(e) => { if (filterYear !== year) e.target.style.backgroundColor = ''; }}
                     >
                         {year === 'all' ? 'All Years' : `Batch ${year}`}
                     </button>
@@ -139,16 +142,16 @@ const HallOfFame = () => {
 
             {/* Stats */}
             <div className="grid grid-cols-3 gap-4">
-                <div className="bg-gradient-to-br from-indigo-50 to-violet-50 rounded-2xl p-4 text-center border border-indigo-100">
-                    <div className="text-2xl font-bold text-indigo-600">{hallOfFameVideos.length}</div>
+                <div className="rounded-2xl p-4 text-center border" style={{ background: 'linear-gradient(to bottom right, rgba(74, 144, 226, 0.1), rgba(96, 123, 231, 0.1))', borderColor: '#4A90E2' }}>
+                    <div className="text-2xl font-bold" style={{ color: '#4A90E2' }}>{hallOfFameVideos.length}</div>
                     <div className="text-xs text-gray-600 mt-1">Success Stories</div>
                 </div>
-                <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-4 text-center border border-green-100">
-                    <div className="text-2xl font-bold text-green-600">{new Set(hallOfFameVideos.map(v => v.company)).size}</div>
+                <div className="rounded-2xl p-4 text-center border" style={{ background: 'linear-gradient(to bottom right, rgba(134, 81, 241, 0.1), rgba(162, 60, 244, 0.1))', borderColor: '#8651F1' }}>
+                    <div className="text-2xl font-bold" style={{ color: '#8651F1' }}>{new Set(hallOfFameVideos.map(v => v.company)).size}</div>
                     <div className="text-xs text-gray-600 mt-1">Companies</div>
                 </div>
-                <div className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl p-4 text-center border border-amber-100">
-                    <div className="text-2xl font-bold text-amber-600">{new Set(hallOfFameVideos.map(v => v.year)).size}</div>
+                <div className="rounded-2xl p-4 text-center border" style={{ background: 'linear-gradient(to bottom right, rgba(205, 19, 252, 0.1), rgba(184, 47, 248, 0.1))', borderColor: '#CD13FC' }}>
+                    <div className="text-2xl font-bold" style={{ color: '#CD13FC' }}>{new Set(hallOfFameVideos.map(v => v.year)).size}</div>
                     <div className="text-xs text-gray-600 mt-1">Batches</div>
                 </div>
             </div>

@@ -76,7 +76,7 @@ const Leaderboard = () => {
     return (
         <div className="max-w-4xl mx-auto space-y-6">
             {/* Header */}
-            <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-violet-600 via-purple-600 to-indigo-700 p-8 text-white">
+            <div className="relative overflow-hidden rounded-2xl p-8 text-white" style={{ background: 'linear-gradient(135deg, #4A90E2 0%, #607BE7 20%, #7666EC 40%, #8651F1 60%, #A23CF4 80%, #B82FF8 90%, #CD13FC 100%)' }}>
                 <div className="absolute inset-0 bg-black/10"></div>
                 <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/4 blur-3xl"></div>
                 <div className="absolute bottom-0 left-0 w-48 h-48 bg-purple-300/20 rounded-full translate-y-1/2 -translate-x-1/4 blur-2xl"></div>
@@ -102,9 +102,12 @@ const Leaderboard = () => {
                         key={range.id}
                         onClick={() => setTimeRange(range.id)}
                         className={`px-5 py-2.5 rounded-xl text-sm font-medium transition-all ${timeRange === range.id
-                                ? 'bg-gradient-to-r from-violet-600 to-purple-600 text-white shadow-lg shadow-purple-500/20'
-                                : 'bg-white border border-gray-200 text-gray-600 hover:border-purple-300 hover:text-purple-600'
+                            ? 'text-white shadow-lg'
+                            : 'bg-white border border-gray-200 text-gray-600 hover:text-white'
                             }`}
+                        style={timeRange === range.id ? { backgroundColor: '#8651F1' } : {}}
+                        onMouseEnter={(e) => { if (timeRange !== range.id) e.target.style.backgroundColor = '#A23CF4'; }}
+                        onMouseLeave={(e) => { if (timeRange !== range.id) e.target.style.backgroundColor = ''; }}
                     >
                         {range.label}
                     </button>
@@ -113,12 +116,12 @@ const Leaderboard = () => {
 
             {/* Stats */}
             <div className="grid grid-cols-2 gap-4">
-                <div className="bg-gradient-to-br from-violet-50 to-purple-50 rounded-2xl p-4 text-center border border-violet-100">
-                    <div className="text-2xl font-bold text-violet-600">{totalParticipants}</div>
+                <div className="rounded-2xl p-4 text-center border" style={{ background: 'linear-gradient(to bottom right, rgba(134, 81, 241, 0.1), rgba(162, 60, 244, 0.1))', borderColor: '#8651F1' }}>
+                    <div className="text-2xl font-bold" style={{ color: '#8651F1' }}>{totalParticipants}</div>
                     <div className="text-xs text-gray-600 mt-1">Contributors</div>
                 </div>
-                <div className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl p-4 text-center border border-amber-100">
-                    <div className="text-2xl font-bold text-amber-600">
+                <div className="rounded-2xl p-4 text-center border" style={{ background: 'linear-gradient(to bottom right, rgba(205, 19, 252, 0.1), rgba(184, 47, 248, 0.1))', borderColor: '#CD13FC' }}>
+                    <div className="text-2xl font-bold" style={{ color: '#CD13FC' }}>
                         {currentUserRank ? `#${currentUserRank.rank}` : '-'}
                     </div>
                     <div className="text-xs text-gray-600 mt-1">Your Rank</div>
@@ -144,8 +147,8 @@ const Leaderboard = () => {
                                 key={user.userId}
                                 onClick={() => navigate(`/user/${user.userId}`)}
                                 className={`flex items-center gap-4 p-4 bg-white/70 backdrop-blur-sm rounded-2xl border transition-all cursor-pointer hover:shadow-lg hover:-translate-y-0.5 ${user.userId === currentUserRank?.userId
-                                        ? 'border-purple-300 bg-purple-50/50 ring-2 ring-purple-200'
-                                        : 'border-white/50 hover:border-purple-200'
+                                    ? 'border-purple-300 bg-purple-50/50 ring-2 ring-purple-200'
+                                    : 'border-white/50 hover:border-purple-200'
                                     }`}
                             >
                                 {/* Rank Badge */}

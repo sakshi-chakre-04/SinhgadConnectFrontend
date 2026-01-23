@@ -18,11 +18,11 @@ import { api } from '../services/api/api';
 // Avatar gradient based on name
 const getAvatarGradient = (name) => {
   const gradients = [
-    'from-blue-500 to-indigo-600',
-    'from-purple-500 to-pink-500',
-    'from-cyan-500 to-blue-500',
-    'from-green-500 to-emerald-500',
-    'from-orange-500 to-red-500'
+    'from-[#4A90E2] to-[#607BE7]',
+    'from-[#7666EC] to-[#8651F1]',
+    'from-[#A23CF4] to-[#B82FF8]',
+    'from-[#607BE7] to-[#7666EC]',
+    'from-[#8651F1] to-[#A23CF4]'
   ];
   const index = name?.charCodeAt(0) % gradients.length || 0;
   return gradients[index];
@@ -108,7 +108,7 @@ const Profile = () => {
       {/* Profile Header Card with Gradient */}
       <div className="relative overflow-hidden rounded-2xl bg-white shadow-lg">
         {/* Gradient Banner */}
-        <div className={`h-32 bg-gradient-to-r ${getAvatarGradient(userData?.name)}`}>
+        <div className="h-32" style={{ background: 'linear-gradient(135deg, #4A90E2 0%, #607BE7 20%, #7666EC 40%, #8651F1 60%, #A23CF4 80%, #B82FF8 90%, #CD13FC 100%)' }}>
           <div className="absolute inset-0 opacity-20">
             <div className="absolute top-0 right-0 w-64 h-64 bg-white rounded-full -translate-y-1/2 translate-x-1/4"></div>
           </div>
@@ -125,14 +125,20 @@ const Profile = () => {
           <div className="flex justify-end pt-3 gap-2">
             <Link
               to="/edit-profile"
-              className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 transition-colors shadow-sm"
+              className="inline-flex items-center gap-2 px-4 py-2 text-white rounded-xl transition-all shadow-sm hover:shadow-md"
+              style={{ backgroundColor: '#4A90E2' }}
+              onMouseEnter={(e) => e.target.style.backgroundColor = '#607BE7'}
+              onMouseLeave={(e) => e.target.style.backgroundColor = '#4A90E2'}
             >
               <PencilIcon className="w-4 h-4" />
               Edit Profile
             </Link>
             <button
               onClick={handleSignOut}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 text-gray-500 rounded-xl hover:bg-red-50 hover:text-red-500 hover:border-red-200 transition-colors shadow-sm"
+              className="inline-flex items-center gap-2 px-4 py-2 text-white rounded-xl transition-all shadow-sm hover:shadow-md"
+              style={{ backgroundColor: '#CD13FC' }}
+              onMouseEnter={(e) => e.target.style.backgroundColor = '#B82FF8'}
+              onMouseLeave={(e) => e.target.style.backgroundColor = '#CD13FC'}
             >
               <ArrowRightOnRectangleIcon className="w-4 h-4" />
               Sign Out
@@ -161,15 +167,15 @@ const Profile = () => {
           {/* Stats Row */}
           <div className="grid grid-cols-3 gap-4 mt-6 p-4 bg-gray-50 rounded-xl">
             <div className="text-center">
-              <p className="text-2xl font-bold text-indigo-600">{stats.totalPosts}</p>
+              <p className="text-2xl font-bold" style={{ color: '#4A90E2' }}>{stats.totalPosts}</p>
               <p className="text-xs text-gray-500 font-medium">Posts</p>
             </div>
             <div className="text-center border-x border-gray-200">
-              <p className="text-2xl font-bold text-green-600">{stats.totalComments}</p>
+              <p className="text-2xl font-bold" style={{ color: '#8651F1' }}>{stats.totalComments}</p>
               <p className="text-xs text-gray-500 font-medium">Comments</p>
             </div>
             <div className="text-center">
-              <p className="text-2xl font-bold text-orange-500">{stats.totalUpvotes}</p>
+              <p className="text-2xl font-bold" style={{ color: '#CD13FC' }}>{stats.totalUpvotes}</p>
               <p className="text-xs text-gray-500 font-medium">Upvotes</p>
             </div>
           </div>
@@ -187,15 +193,17 @@ const Profile = () => {
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
                 className={`flex-1 flex items-center justify-center gap-2 px-4 py-4 text-sm font-medium transition-all ${activeTab === tab.id
-                  ? 'text-indigo-600 border-b-2 border-indigo-600 bg-indigo-50/50'
+                  ? 'border-b-2 bg-opacity-50'
                   : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
                   }`}
+                style={activeTab === tab.id ? { color: '#8651F1', borderBottomColor: '#8651F1', backgroundColor: 'rgba(134, 81, 241, 0.05)' } : {}}
               >
                 <Icon className="w-5 h-5" />
                 {tab.label}
                 {tab.count !== undefined && (
-                  <span className={`px-2 py-0.5 text-xs rounded-full ${activeTab === tab.id ? 'bg-indigo-100 text-indigo-600' : 'bg-gray-100 text-gray-600'
-                    }`}>
+                  <span className={`px-2 py-0.5 text-xs rounded-full ${activeTab === tab.id ? 'text-white' : 'bg-gray-100 text-gray-600'
+                    }`}
+                    style={activeTab === tab.id ? { backgroundColor: '#8651F1' } : {}}>
                     {tab.count}
                   </span>
                 )}

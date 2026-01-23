@@ -129,9 +129,9 @@ const Resources = () => {
     const [placementTab, setPlacementTab] = useState('dsa');
 
     const sections = [
-        { id: 'academics', label: 'Academics', icon: AcademicCapIcon, gradient: 'from-blue-500 to-cyan-500' },
-        { id: 'placement', label: 'Placement', icon: BriefcaseIcon, gradient: 'from-violet-500 to-purple-500' },
-        { id: 'gate', label: 'GATE Prep', icon: BookOpenIcon, gradient: 'from-emerald-500 to-teal-500' }
+        { id: 'academics', label: 'Academics', icon: AcademicCapIcon, color: '#4A90E2' },
+        { id: 'placement', label: 'Placement', icon: BriefcaseIcon, color: '#8651F1' },
+        { id: 'gate', label: 'GATE Prep', icon: BookOpenIcon, color: '#A23CF4' }
     ];
 
     const getSubjects = () => {
@@ -144,7 +144,7 @@ const Resources = () => {
     return (
         <div className="min-h-screen pb-20 lg:pb-6">
             {/* Hero Header */}
-            <div className="relative overflow-hidden bg-gradient-to-br from-indigo-600 via-violet-600 to-purple-700 rounded-2xl mx-4 mt-4 p-8 lg:p-10">
+            <div className="relative overflow-hidden rounded-2xl mx-4 mt-4 p-8 lg:p-10" style={{ background: 'linear-gradient(135deg, #4A90E2 0%, #607BE7 20%, #7666EC 40%, #8651F1 60%, #A23CF4 80%, #B82FF8 90%, #CD13FC 100%)' }}>
                 <div className="absolute inset-0 opacity-10">
                     <div className="absolute top-0 left-0 w-72 h-72 bg-white rounded-full -translate-x-1/2 -translate-y-1/2"></div>
                     <div className="absolute bottom-0 right-0 w-96 h-96 bg-white rounded-full translate-x-1/3 translate-y-1/3"></div>
@@ -173,9 +173,10 @@ const Resources = () => {
                                 key={section.id}
                                 onClick={() => setActiveSection(section.id)}
                                 className={`flex items-center gap-2 px-5 py-3 rounded-xl font-medium whitespace-nowrap transition-all ${activeSection === section.id
-                                    ? `bg-gradient-to-r ${section.gradient} text-white shadow-lg`
+                                    ? 'text-white shadow-lg'
                                     : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'
                                     }`}
+                                style={activeSection === section.id ? { backgroundColor: section.color } : {}}
                             >
                                 <Icon className="w-5 h-5" />
                                 {section.label}
@@ -191,7 +192,7 @@ const Resources = () => {
                     {/* Department & Year Selection */}
                     <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
                         <h2 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
-                            <AcademicCapIcon className="w-5 h-5 text-indigo-600" />
+                            <AcademicCapIcon className="w-5 h-5" style={{ color: '#4A90E2' }} />
                             Select Your Stream
                         </h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -200,7 +201,10 @@ const Resources = () => {
                                 <select
                                     value={selectedDept}
                                     onChange={(e) => { setSelectedDept(e.target.value); setSelectedSubject(''); }}
-                                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-gray-50"
+                                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 bg-gray-50"
+                                    style={{ '--focus-ring-color': '#4A90E2' }}
+                                    onFocus={(e) => e.target.style.borderColor = '#4A90E2'}
+                                    onBlur={(e) => e.target.style.borderColor = ''}
                                 >
                                     <option value="">Choose department...</option>
                                     {departments.map(dept => (
@@ -213,7 +217,10 @@ const Resources = () => {
                                 <select
                                     value={selectedYear}
                                     onChange={(e) => { setSelectedYear(e.target.value); setSelectedSubject(''); }}
-                                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-gray-50"
+                                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 bg-gray-50"
+                                    style={{ '--focus-ring-color': '#4A90E2' }}
+                                    onFocus={(e) => e.target.style.borderColor = '#4A90E2'}
+                                    onBlur={(e) => e.target.style.borderColor = ''}
                                 >
                                     <option value="">Choose year...</option>
                                     {years.map(year => (
@@ -251,7 +258,7 @@ const Resources = () => {
                     {selectedDept && selectedYear && (
                         <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
                             <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
-                                <BookOpenIcon className="w-5 h-5 text-indigo-600" />
+                                <BookOpenIcon className="w-5 h-5" style={{ color: '#4A90E2' }} />
                                 Choose Subject
                             </h3>
                             <div className="flex flex-wrap gap-2">
@@ -260,9 +267,12 @@ const Resources = () => {
                                         key={idx}
                                         onClick={() => setSelectedSubject(subject)}
                                         className={`px-4 py-2.5 rounded-xl font-medium text-sm transition-all ${selectedSubject === subject
-                                                ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/30'
-                                                : 'bg-gray-100 text-gray-700 hover:bg-indigo-100 hover:text-indigo-700'
+                                            ? 'text-white shadow-lg'
+                                            : 'bg-gray-100 text-gray-700 hover:text-white'
                                             }`}
+                                        style={selectedSubject === subject ? { backgroundColor: '#4A90E2' } : {}}
+                                        onMouseEnter={(e) => { if (selectedSubject !== subject) e.target.style.backgroundColor = '#7666EC'; }}
+                                        onMouseLeave={(e) => { if (selectedSubject !== subject) e.target.style.backgroundColor = ''; }}
                                     >
                                         {subject}
                                     </button>
@@ -275,7 +285,7 @@ const Resources = () => {
                     {selectedSubject && (
                         <div className="space-y-4">
                             <h3 className="text-lg font-semibold text-gray-800 flex items-center gap-2 px-1">
-                                📚 Resources for <span className="text-indigo-600">{selectedSubject}</span>
+                                📚 Resources for <span style={{ color: '#4A90E2' }}>{selectedSubject}</span>
                             </h3>
 
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -367,9 +377,10 @@ const Resources = () => {
                                     key={tab.id}
                                     onClick={() => setPlacementTab(tab.id)}
                                     className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-medium text-sm whitespace-nowrap transition-all ${placementTab === tab.id
-                                        ? 'bg-violet-600 text-white'
+                                        ? 'text-white'
                                         : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'
                                         }`}
+                                    style={placementTab === tab.id ? { backgroundColor: '#8651F1' } : {}}
                                 >
                                     <Icon className="w-4 h-4" />
                                     {tab.label}
@@ -412,9 +423,9 @@ const Resources = () => {
             {/* GATE Section */}
             {activeSection === 'gate' && (
                 <div className="px-4 mt-6 space-y-6">
-                    <div className="bg-gradient-to-r from-emerald-50 to-teal-50 rounded-2xl p-6 border border-emerald-100">
-                        <h2 className="text-lg font-semibold text-emerald-800 mb-2">GATE Preparation Resources</h2>
-                        <p className="text-emerald-600 text-sm">Curated resources for GATE CS/IT preparation</p>
+                    <div className="rounded-2xl p-6 border" style={{ background: 'linear-gradient(to right, rgba(162, 60, 244, 0.1), rgba(184, 47, 248, 0.1))', borderColor: '#A23CF4' }}>
+                        <h2 className="text-lg font-semibold mb-2" style={{ color: '#A23CF4' }}>GATE Preparation Resources</h2>
+                        <p className="text-sm" style={{ color: '#8651F1' }}>Curated resources for GATE CS/IT preparation</p>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -424,24 +435,27 @@ const Resources = () => {
                                 href={resource.url}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm hover:shadow-md hover:border-emerald-200 transition-all group"
+                                className="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm hover:shadow-md transition-all group"
+                                style={{ '--hover-border-color': '#A23CF4' }}
+                                onMouseEnter={(e) => e.target.style.borderColor = '#A23CF4'}
+                                onMouseLeave={(e) => e.target.style.borderColor = ''}
                             >
                                 <div className="flex items-start gap-4">
-                                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center shrink-0">
+                                    <div className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0" style={{ background: 'linear-gradient(to bottom right, #A23CF4, #B82FF8)' }}>
                                         <BookOpenIcon className="w-6 h-6 text-white" />
                                     </div>
                                     <div className="flex-1 min-w-0">
                                         <div className="flex items-center gap-2 mb-1">
-                                            <h3 className="font-semibold text-gray-800 group-hover:text-emerald-600 transition-colors">
+                                            <h3 className="font-semibold text-gray-800 transition-colors group-hover:text-[#A23CF4]">
                                                 {resource.title}
                                             </h3>
-                                            <span className="px-2 py-0.5 bg-emerald-100 text-emerald-700 text-xs rounded-full">
+                                            <span className="px-2 py-0.5 text-xs rounded-full text-white" style={{ backgroundColor: '#A23CF4' }}>
                                                 {resource.category}
                                             </span>
                                         </div>
                                         <p className="text-sm text-gray-500">{resource.description}</p>
                                     </div>
-                                    <ArrowTopRightOnSquareIcon className="w-5 h-5 text-gray-400 group-hover:text-emerald-500 shrink-0" />
+                                    <ArrowTopRightOnSquareIcon className="w-5 h-5 text-gray-400 shrink-0 transition-colors group-hover:text-[#A23CF4]" />
                                 </div>
                             </a>
                         ))}

@@ -49,9 +49,9 @@ const MobileTopNav = () => {
                 .rainbow-text {
                     background: linear-gradient(
                         90deg,
-                        #9185D6,
-                        #D094B6,
-                        #F8BC26
+                        #4A90E2,
+                        #8651F1,
+                        #CD13FC
                     );
                     -webkit-background-clip: text;
                     background-clip: text;
@@ -60,9 +60,9 @@ const MobileTopNav = () => {
                 .rainbow-bg {
                     background: linear-gradient(
                         135deg,
-                        #9185D6,
-                        #D094B6,
-                        #F8BC26
+                        #4A90E2,
+                        #8651F1,
+                        #CD13FC
                     );
                 }
             `}</style>

@@ -68,13 +68,37 @@
 
     --transition-slow: 300ms cubic-bezier(0.4, 0, 0.2, 1);
 
-    /* Lavender-Pink-Yellow Palette (Light Theme - Mobile) */
-    --lavender-main: #9185D6;
-    --lavender-light: #D4DBEE;
-    --pink-soft: #D094B6;
-    --yellow-soft: #F9D079;
-    --yellow-accent: #F8BC26;
-    --cyan-soft: #BAF0E8;
+    /* Blue-to-Purple Gradient Palette (Android UI) */
+    --color-1: #4A90E2;
+    /* Sky Blue */
+    --color-2: #607BE7;
+    /* Royal Blue */
+    --color-3: #7666EC;
+    /* Indigo */
+    --color-4: #8651F1;
+    /* Purple */
+    --color-5: #A23CF4;
+    /* Vibrant Purple */
+    --color-6: #B82FF8;
+    /* Magenta Purple */
+    --color-7: #CD13FC;
+    /* Hot Magenta */
+
+    /* Primary gradient for hero sections */
+    --gradient-primary-new: linear-gradient(135deg, #4A90E2 0%, #607BE7 20%, #7666EC 40%, #8651F1 60%, #A23CF4 80%, #B82FF8 90%, #CD13FC 100%);
+
+    /* Accent colors for buttons and highlights */
+    --accent-blue: #4A90E2;
+    --accent-purple: #8651F1;
+    --accent-magenta: #CD13FC;
+
+    /* Legacy variables (kept for compatibility) */
+    --lavender-main: #8651F1;
+    --lavender-light: #7666EC;
+    --pink-soft: #A23CF4;
+    --yellow-soft: #B82FF8;
+    --yellow-accent: #CD13FC;
+    --cyan-soft: #4A90E2;
     --gray-purple: #736473;
 }
 
