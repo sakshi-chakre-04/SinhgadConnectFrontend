@@ -11,6 +11,7 @@ import {
 import { AnimatePresence, LayoutGroup, motion, useReducedMotion } from 'framer-motion';
 import { useSelector } from 'react-redux';
 import { selectToken } from '../features/auth/authSlice';
+import AIOrb from '../components/ai/AIOrb';
 
 // Suggestion chips
 const SUGGESTION_CHIPS = [
@@ -759,49 +760,9 @@ const AskAI = () => {
                 >
                     <div className="flex-1 flex flex-col items-center justify-center max-w-2xl mx-auto w-full">
 
-                        {/* AI Orb - Premium breathing glow with context-awareness */}
-                        <div className="relative mb-8">
-                            {/* Single expanding ripple wave */}
-                            {!isTyping && (
-                                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                                    <div
-                                        className="w-24 h-24 rounded-full border border-violet-400/20"
-                                        style={{ animation: 'ripple 3s ease-out infinite' }}
-                                    />
-                                </div>
-                            )}
-
-                            {/* Soft radial gradient backdrop */}
-                            <div
-                                className={`absolute inset-[-20px] rounded-full transition-opacity duration-500 ${isTyping ? 'opacity-0' : 'opacity-100'}`}
-                                style={{
-                                    background: 'radial-gradient(circle, rgba(139,92,246,0.08) 0%, rgba(217,70,239,0.04) 50%, transparent 70%)',
-                                }}
-                            />
-
-                            {/* Main orb with breathing animation + layered shadows */}
-                            <div
-                                className="relative w-24 h-24 rounded-full bg-white border-2 border-white flex items-center justify-center z-10"
-                                style={{
-                                    animation: isTyping ? 'none' : 'breathe 3s ease-in-out infinite',
-                                    boxShadow: '0 4px 6px -1px rgba(139,92,246,0.2), 0 10px 20px -5px rgba(139,92,246,0.15), 0 25px 50px -12px rgba(139,92,246,0.1)',
-                                }}
-                            >
-                                <div className="w-20 h-20 rounded-full bg-gradient-to-br from-violet-500 via-fuchsia-500 to-indigo-600 flex items-center justify-center shadow-lg">
-                                    <SparklesIcon className="w-10 h-10 text-white" />
-                                </div>
-                            </div>
-                            {/* CSS for animations */}
-                            <style>{`
-                                @keyframes breathe {
-                                    0%, 100% { opacity: 0.85; transform: scale(1); }
-                                    50% { opacity: 1; transform: scale(1.03); }
-                                }
-                                @keyframes ripple {
-                                    0% { transform: scale(1); opacity: 0.6; }
-                                    100% { transform: scale(2.2); opacity: 0; }
-                                }
-                            `}</style>
+                        {/* AI Orb - Advanced 3D animation */}
+                        <div className="mb-8">
+                            <AIOrb />
                         </div>
 
                         {/* Title */}
