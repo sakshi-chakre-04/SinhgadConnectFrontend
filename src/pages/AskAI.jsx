@@ -779,17 +779,22 @@ const AskAI = () => {
                             {!isInChat && (
                                 <motion.div
                                     layoutId="askai-search"
-                                    className="bg-white/75 backdrop-blur-xl rounded-2xl border border-white/50 shadow-xl overflow-hidden"
+                                    className="bg-white/90 backdrop-blur-xl rounded-2xl overflow-hidden"
+                                    style={{
+                                        border: '2px solid rgba(139, 92, 246, 0.3)',
+                                        boxShadow: '0 0 0 1px rgba(255,255,255,0.5), 0 4px 20px rgba(139, 92, 246, 0.15), 0 8px 40px rgba(217, 70, 239, 0.1), 0 0 60px rgba(139, 92, 246, 0.08)'
+                                    }}
                                     transition={handoffSpring}
                                 >
                                     <div className="relative">
                                         {/* Mini sparkle icon for brand consistency */}
                                         <div className="absolute left-4 top-1/2 -translate-y-1/2">
-                                            <svg className="w-5 h-5 text-violet-300" viewBox="0 0 24 24" fill="currentColor">
-                                                <path d="M12 2L13.09 8.26L19 9L13.09 9.74L12 16L10.91 9.74L5 9L10.91 8.26L12 2Z" />
-                                                <path d="M18 14L18.545 16.455L21 17L18.545 17.545L18 20L17.455 17.545L15 17L17.455 16.455L18 14Z" opacity="0.6" />
-                                                <path d="M6 14L6.364 15.636L8 16L6.364 16.364L6 18L5.636 16.364L4 16L5.636 15.636L6 14Z" opacity="0.4" />
-                                            </svg>
+                                            <SparklesIcon
+                                                className="w-5 h-5 text-violet-400"
+                                                style={{
+                                                    filter: 'drop-shadow(0 0 2px rgba(139, 92, 246, 0.5)) drop-shadow(0 0 4px rgba(217, 70, 239, 0.3))'
+                                                }}
+                                            />
                                         </div>
                                         <input
                                             ref={inputRef}
