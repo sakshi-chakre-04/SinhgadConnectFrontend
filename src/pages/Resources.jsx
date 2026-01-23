@@ -377,9 +377,10 @@ const Resources = () => {
                                     key={tab.id}
                                     onClick={() => setPlacementTab(tab.id)}
                                     className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-medium text-sm whitespace-nowrap transition-all ${placementTab === tab.id
-                                        ? 'bg-violet-600 text-white'
+                                        ? 'text-white'
                                         : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'
                                         }`}
+                                    style={placementTab === tab.id ? { backgroundColor: '#8651F1' } : {}}
                                 >
                                     <Icon className="w-4 h-4" />
                                     {tab.label}

@@ -108,7 +108,7 @@ const Profile = () => {
       {/* Profile Header Card with Gradient */}
       <div className="relative overflow-hidden rounded-2xl bg-white shadow-lg">
         {/* Gradient Banner */}
-        <div className={`h-32 bg-gradient-to-r ${getAvatarGradient(userData?.name)}`}>
+        <div className="h-32" style={{ background: 'linear-gradient(135deg, #4A90E2 0%, #607BE7 20%, #7666EC 40%, #8651F1 60%, #A23CF4 80%, #B82FF8 90%, #CD13FC 100%)' }}>
           <div className="absolute inset-0 opacity-20">
             <div className="absolute top-0 right-0 w-64 h-64 bg-white rounded-full -translate-y-1/2 translate-x-1/4"></div>
           </div>
@@ -125,14 +125,20 @@ const Profile = () => {
           <div className="flex justify-end pt-3 gap-2">
             <Link
               to="/edit-profile"
-              className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 transition-colors shadow-sm"
+              className="inline-flex items-center gap-2 px-4 py-2 text-white rounded-xl transition-all shadow-sm hover:shadow-md"
+              style={{ backgroundColor: '#4A90E2' }}
+              onMouseEnter={(e) => e.target.style.backgroundColor = '#607BE7'}
+              onMouseLeave={(e) => e.target.style.backgroundColor = '#4A90E2'}
             >
               <PencilIcon className="w-4 h-4" />
               Edit Profile
             </Link>
             <button
               onClick={handleSignOut}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 text-gray-500 rounded-xl hover:bg-red-50 hover:text-red-500 hover:border-red-200 transition-colors shadow-sm"
+              className="inline-flex items-center gap-2 px-4 py-2 text-white rounded-xl transition-all shadow-sm hover:shadow-md"
+              style={{ backgroundColor: '#CD13FC' }}
+              onMouseEnter={(e) => e.target.style.backgroundColor = '#B82FF8'}
+              onMouseLeave={(e) => e.target.style.backgroundColor = '#CD13FC'}
             >
               <ArrowRightOnRectangleIcon className="w-4 h-4" />
               Sign Out
