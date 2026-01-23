@@ -15,42 +15,42 @@ const departments = [
   {
     name: 'Computer',
     icon: ComputerDesktopIcon,
-    gradient: 'from-indigo-500 to-indigo-600',
+    gradient: 'from-[#4A90E2] to-[#607BE7]',
     description: 'Programming, AI/ML, Web Development',
     members: '500+'
   },
   {
     name: 'IT',
     icon: CpuChipIcon,
-    gradient: 'from-indigo-500 to-indigo-600',
+    gradient: 'from-[#607BE7] to-[#7666EC]',
     description: 'Networks, Security, Cloud Computing',
     members: '400+'
   },
   {
     name: 'Electronics',
     icon: BoltIcon,
-    gradient: 'from-indigo-500 to-indigo-600',
+    gradient: 'from-[#7666EC] to-[#8651F1]',
     description: 'VLSI, Embedded Systems, IoT',
     members: '350+'
   },
   {
     name: 'Electrical',
     icon: BoltIcon,
-    gradient: 'from-indigo-500 to-indigo-600',
+    gradient: 'from-[#8651F1] to-[#A23CF4]',
     description: 'Power Systems, Control, Machines',
     members: '300+'
   },
   {
     name: 'Mechanical',
     icon: WrenchScrewdriverIcon,
-    gradient: 'from-indigo-500 to-indigo-600',
+    gradient: 'from-[#A23CF4] to-[#B82FF8]',
     description: 'Design, Manufacturing, Thermal',
     members: '450+'
   },
   {
     name: 'Civil',
     icon: BuildingOfficeIcon,
-    gradient: 'from-indigo-500 to-indigo-600',
+    gradient: 'from-[#B82FF8] to-[#CD13FC]',
     description: 'Structures, Construction, Planning',
     members: '350+'
   },
@@ -63,7 +63,7 @@ export default function Community() {
     <div className="space-y-8">
       {/* Hero Section - Compact & Glass */}
       <div className="relative overflow-hidden rounded-3xl p-6 text-white shadow-2xl hover-glow transition-all duration-500 group">
-        <div className="absolute inset-0 bg-gradient-to-r from-indigo-600 to-purple-600 animate-gradient-x"></div>
+        <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, #4A90E2 0%, #607BE7 20%, #7666EC 40%, #8651F1 60%, #A23CF4 80%, #B82FF8 90%, #CD13FC 100%)' }}></div>
         <div className="absolute inset-0 opacity-20 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] mix-blend-overlay"></div>
 
         <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
@@ -98,11 +98,11 @@ export default function Community() {
                 <Icon className="w-8 h-8" />
               </div>
 
-              <h3 className="text-xl font-bold text-gray-900 group-hover:text-indigo-700 transition-colors">
+              <h3 className="text-xl font-bold text-gray-900 transition-colors" style={{ '--hover-color': '#8651F1' }} onMouseEnter={(e) => e.target.style.color = '#8651F1'} onMouseLeave={(e) => e.target.style.color = ''}>
                 {dept.name}
               </h3>
 
-              <div className="flex items-center text-sm font-medium text-indigo-600 group-hover:translate-x-1 transition-transform mt-auto">
+              <div className="flex items-center text-sm font-medium transition-transform mt-auto" style={{ color: '#8651F1' }}>
                 <span>View Discussions</span>
                 <ArrowRightIcon className="w-4 h-4 ml-1" />
               </div>

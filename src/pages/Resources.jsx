@@ -129,9 +129,9 @@ const Resources = () => {
     const [placementTab, setPlacementTab] = useState('dsa');
 
     const sections = [
-        { id: 'academics', label: 'Academics', icon: AcademicCapIcon, gradient: 'from-blue-500 to-cyan-500' },
-        { id: 'placement', label: 'Placement', icon: BriefcaseIcon, gradient: 'from-violet-500 to-purple-500' },
-        { id: 'gate', label: 'GATE Prep', icon: BookOpenIcon, gradient: 'from-emerald-500 to-teal-500' }
+        { id: 'academics', label: 'Academics', icon: AcademicCapIcon, color: '#4A90E2' },
+        { id: 'placement', label: 'Placement', icon: BriefcaseIcon, color: '#8651F1' },
+        { id: 'gate', label: 'GATE Prep', icon: BookOpenIcon, color: '#A23CF4' }
     ];
 
     const getSubjects = () => {
@@ -144,7 +144,7 @@ const Resources = () => {
     return (
         <div className="min-h-screen pb-20 lg:pb-6">
             {/* Hero Header */}
-            <div className="relative overflow-hidden bg-gradient-to-br from-indigo-600 via-violet-600 to-purple-700 rounded-2xl mx-4 mt-4 p-8 lg:p-10">
+            <div className="relative overflow-hidden rounded-2xl mx-4 mt-4 p-8 lg:p-10" style={{ background: 'linear-gradient(135deg, #4A90E2 0%, #607BE7 20%, #7666EC 40%, #8651F1 60%, #A23CF4 80%, #B82FF8 90%, #CD13FC 100%)' }}>
                 <div className="absolute inset-0 opacity-10">
                     <div className="absolute top-0 left-0 w-72 h-72 bg-white rounded-full -translate-x-1/2 -translate-y-1/2"></div>
                     <div className="absolute bottom-0 right-0 w-96 h-96 bg-white rounded-full translate-x-1/3 translate-y-1/3"></div>
@@ -173,9 +173,10 @@ const Resources = () => {
                                 key={section.id}
                                 onClick={() => setActiveSection(section.id)}
                                 className={`flex items-center gap-2 px-5 py-3 rounded-xl font-medium whitespace-nowrap transition-all ${activeSection === section.id
-                                    ? `bg-gradient-to-r ${section.gradient} text-white shadow-lg`
+                                    ? 'text-white shadow-lg'
                                     : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'
                                     }`}
+                                style={activeSection === section.id ? { backgroundColor: section.color } : {}}
                             >
                                 <Icon className="w-5 h-5" />
                                 {section.label}
@@ -191,7 +192,7 @@ const Resources = () => {
                     {/* Department & Year Selection */}
                     <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
                         <h2 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
-                            <AcademicCapIcon className="w-5 h-5 text-indigo-600" />
+                            <AcademicCapIcon className="w-5 h-5" style={{ color: '#4A90E2' }} />
                             Select Your Stream
                         </h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -200,7 +201,10 @@ const Resources = () => {
                                 <select
                                     value={selectedDept}
                                     onChange={(e) => { setSelectedDept(e.target.value); setSelectedSubject(''); }}
-                                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-gray-50"
+                                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 bg-gray-50"
+                                    style={{ '--focus-ring-color': '#4A90E2' }}
+                                    onFocus={(e) => e.target.style.borderColor = '#4A90E2'}
+                                    onBlur={(e) => e.target.style.borderColor = ''}
                                 >
                                     <option value="">Choose department...</option>
                                     {departments.map(dept => (
@@ -213,7 +217,10 @@ const Resources = () => {
                                 <select
                                     value={selectedYear}
                                     onChange={(e) => { setSelectedYear(e.target.value); setSelectedSubject(''); }}
-                                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-gray-50"
+                                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 bg-gray-50"
+                                    style={{ '--focus-ring-color': '#4A90E2' }}
+                                    onFocus={(e) => e.target.style.borderColor = '#4A90E2'}
+                                    onBlur={(e) => e.target.style.borderColor = ''}
                                 >
                                     <option value="">Choose year...</option>
                                     {years.map(year => (
@@ -251,7 +258,7 @@ const Resources = () => {
                     {selectedDept && selectedYear && (
                         <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
                             <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
-                                <BookOpenIcon className="w-5 h-5 text-indigo-600" />
+                                <BookOpenIcon className="w-5 h-5" style={{ color: '#4A90E2' }} />
                                 Choose Subject
                             </h3>
                             <div className="flex flex-wrap gap-2">
@@ -260,9 +267,12 @@ const Resources = () => {
                                         key={idx}
                                         onClick={() => setSelectedSubject(subject)}
                                         className={`px-4 py-2.5 rounded-xl font-medium text-sm transition-all ${selectedSubject === subject
-                                                ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/30'
-                                                : 'bg-gray-100 text-gray-700 hover:bg-indigo-100 hover:text-indigo-700'
+                                            ? 'text-white shadow-lg'
+                                            : 'bg-gray-100 text-gray-700 hover:text-white'
                                             }`}
+                                        style={selectedSubject === subject ? { backgroundColor: '#4A90E2' } : {}}
+                                        onMouseEnter={(e) => { if (selectedSubject !== subject) e.target.style.backgroundColor = '#7666EC'; }}
+                                        onMouseLeave={(e) => { if (selectedSubject !== subject) e.target.style.backgroundColor = ''; }}
                                     >
                                         {subject}
                                     </button>
@@ -275,7 +285,7 @@ const Resources = () => {
                     {selectedSubject && (
                         <div className="space-y-4">
                             <h3 className="text-lg font-semibold text-gray-800 flex items-center gap-2 px-1">
-                                📚 Resources for <span className="text-indigo-600">{selectedSubject}</span>
+                                📚 Resources for <span style={{ color: '#4A90E2' }}>{selectedSubject}</span>
                             </h3>
 
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">

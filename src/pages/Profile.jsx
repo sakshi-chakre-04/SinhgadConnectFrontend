@@ -18,11 +18,11 @@ import { api } from '../services/api/api';
 // Avatar gradient based on name
 const getAvatarGradient = (name) => {
   const gradients = [
-    'from-blue-500 to-indigo-600',
-    'from-purple-500 to-pink-500',
-    'from-cyan-500 to-blue-500',
-    'from-green-500 to-emerald-500',
-    'from-orange-500 to-red-500'
+    'from-[#4A90E2] to-[#607BE7]',
+    'from-[#7666EC] to-[#8651F1]',
+    'from-[#A23CF4] to-[#B82FF8]',
+    'from-[#607BE7] to-[#7666EC]',
+    'from-[#8651F1] to-[#A23CF4]'
   ];
   const index = name?.charCodeAt(0) % gradients.length || 0;
   return gradients[index];
@@ -161,15 +161,15 @@ const Profile = () => {
           {/* Stats Row */}
           <div className="grid grid-cols-3 gap-4 mt-6 p-4 bg-gray-50 rounded-xl">
             <div className="text-center">
-              <p className="text-2xl font-bold text-indigo-600">{stats.totalPosts}</p>
+              <p className="text-2xl font-bold" style={{ color: '#4A90E2' }}>{stats.totalPosts}</p>
               <p className="text-xs text-gray-500 font-medium">Posts</p>
             </div>
             <div className="text-center border-x border-gray-200">
-              <p className="text-2xl font-bold text-green-600">{stats.totalComments}</p>
+              <p className="text-2xl font-bold" style={{ color: '#8651F1' }}>{stats.totalComments}</p>
               <p className="text-xs text-gray-500 font-medium">Comments</p>
             </div>
             <div className="text-center">
-              <p className="text-2xl font-bold text-orange-500">{stats.totalUpvotes}</p>
+              <p className="text-2xl font-bold" style={{ color: '#CD13FC' }}>{stats.totalUpvotes}</p>
               <p className="text-xs text-gray-500 font-medium">Upvotes</p>
             </div>
           </div>
@@ -187,15 +187,17 @@ const Profile = () => {
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
                 className={`flex-1 flex items-center justify-center gap-2 px-4 py-4 text-sm font-medium transition-all ${activeTab === tab.id
-                  ? 'text-indigo-600 border-b-2 border-indigo-600 bg-indigo-50/50'
+                  ? 'border-b-2 bg-opacity-50'
                   : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
                   }`}
+                style={activeTab === tab.id ? { color: '#8651F1', borderBottomColor: '#8651F1', backgroundColor: 'rgba(134, 81, 241, 0.05)' } : {}}
               >
                 <Icon className="w-5 h-5" />
                 {tab.label}
                 {tab.count !== undefined && (
-                  <span className={`px-2 py-0.5 text-xs rounded-full ${activeTab === tab.id ? 'bg-indigo-100 text-indigo-600' : 'bg-gray-100 text-gray-600'
-                    }`}>
+                  <span className={`px-2 py-0.5 text-xs rounded-full ${activeTab === tab.id ? 'text-white' : 'bg-gray-100 text-gray-600'
+                    }`}
+                    style={activeTab === tab.id ? { backgroundColor: '#8651F1' } : {}}>
                     {tab.count}
                   </span>
                 )}
