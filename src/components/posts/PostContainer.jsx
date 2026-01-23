@@ -34,8 +34,8 @@ const SELECT_CLASS = "w-full px-3 py-2 border border-gray-300 rounded-lg focus:r
 
 // Reusable wrapper component
 const PageWrapper = ({ children }) => (
-  <div className="min-h-screen bg-gray-50 p-6">
-    <div className="max-w-4xl mx-auto">{children}</div>
+  <div className="min-h-screen" style={{ background: 'linear-gradient(180deg, #faf5ff 0%, #f5f3ff 50%, #ffffff 100%)' }}>
+    <div className="max-w-4xl mx-auto p-4">{children}</div>
   </div>
 );
 
@@ -112,7 +112,15 @@ const PostsContainer = () => {
   return (
     <PageWrapper>
       {/* Compact Header with Inline Filters */}
-      <div className="glass-panel rounded-xl p-4 mb-4">
+      <div
+        className="rounded-2xl p-4 mb-5"
+        style={{
+          background: 'rgba(255, 255, 255, 0.8)',
+          backdropFilter: 'blur(12px)',
+          border: '1px solid rgba(139, 92, 246, 0.15)',
+          boxShadow: '0 4px 20px rgba(139, 92, 246, 0.08)'
+        }}
+      >
         <div className="flex flex-col md:flex-row md:items-center gap-3">
           <h1 className="text-lg font-bold text-gray-800 flex-shrink-0">All Posts</h1>
 

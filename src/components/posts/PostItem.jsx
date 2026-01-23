@@ -15,22 +15,21 @@ import {
 import { ChatBubbleLeftIcon as ChatBubbleLeftIconSolid, SparklesIcon as SparklesIconSolid } from '@heroicons/react/24/solid';
 
 // Post type configuration
-// Post type configuration
 const POST_TYPE_CONFIG = {
-  question: { icon: '❓', label: 'Question', className: 'bg-[var(--cyan-soft)] text-white' },
-  discussion: { icon: '💬', label: 'Discussion', className: 'bg-[var(--lavender-main)] text-white' },
-  announcement: { icon: '📢', label: 'Announcement', className: 'bg-[var(--yellow-soft)] text-[var(--text-primary)]' },
-  resource: { icon: '📚', label: 'Resource', className: 'bg-[var(--pink-soft)] text-white' },
+  question: { icon: '❓', label: 'Question', className: 'bg-gradient-to-r from-cyan-500 to-blue-500 text-white' },
+  discussion: { icon: '💬', label: 'Discussion', className: 'bg-gradient-to-r from-violet-500 to-purple-500 text-white' },
+  announcement: { icon: '📢', label: 'Announcement', className: 'bg-gradient-to-r from-amber-400 to-orange-400 text-white' },
+  resource: { icon: '📚', label: 'Resource', className: 'bg-gradient-to-r from-pink-500 to-rose-500 text-white' },
 };
 
 // Avatar gradient based on user ID
 const getAvatarGradient = (name) => {
   const gradients = [
-    'bg-gradient-to-br from-[var(--lavender-main)] to-[var(--pink-soft)]',
-    'bg-gradient-to-br from-[var(--cyan-soft)] to-[var(--lavender-light)]',
-    'bg-gradient-to-br from-[var(--yellow-soft)] to-[var(--yellow-accent)]',
-    'bg-gradient-to-br from-[var(--pink-soft)] to-[var(--yellow-soft)]',
-    'bg-gradient-to-br from-[var(--lavender-light)] to-[var(--lavender-main)]'
+    'bg-gradient-to-br from-violet-500 to-purple-600',
+    'bg-gradient-to-br from-fuchsia-500 to-pink-600',
+    'bg-gradient-to-br from-indigo-500 to-violet-600',
+    'bg-gradient-to-br from-purple-500 to-indigo-600',
+    'bg-gradient-to-br from-pink-500 to-rose-600'
   ];
   const index = name?.charCodeAt(0) % gradients.length || 0;
   return gradients[index];
@@ -129,7 +128,13 @@ const PostItem = ({ post, show, onToggleComments, onVote, onCommentCountUpdate, 
   const netScore = upvotes - downvotes;
 
   return (
-    <article className="modern-card animate-fadeIn p-6 mb-6">
+    <article
+      className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 mb-5 transition-all duration-300 hover:shadow-lg"
+      style={{
+        border: '1px solid rgba(139, 92, 246, 0.1)',
+        boxShadow: '0 4px 20px rgba(139, 92, 246, 0.06)'
+      }}
+    >
       {/* Header */}
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-center gap-3">
