@@ -164,10 +164,13 @@ const StyledWrapper = styled.div`
   }
 
   .sparkle-icon {
-    width: 28px;
-    height: 28px;
-    color: white;
-    filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.8));
+    width: 30px;
+    height: 30px;
+    color: #f5f3ff;
+    filter: drop-shadow(0 2px 3px rgba(88, 28, 135, 0.5))
+            drop-shadow(0 -1px 1px rgba(255, 255, 255, 0.8))
+            drop-shadow(0 0 10px rgba(167, 139, 250, 0.7))
+            drop-shadow(0 0 20px rgba(139, 92, 246, 0.4));
   }
 
   .container-rings::before {
