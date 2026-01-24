@@ -252,7 +252,7 @@ const PostItem = ({ post, show, onToggleComments, onVote, onCommentCountUpdate, 
       )}
 
       {/* Actions */}
-      <div className="flex items-center justify-between pt-4 border-t border-[var(--border)]">
+      <div className="flex items-center justify-between mt-3">
         <div className="flex items-center gap-1">
           {/* Upvote */}
           <button
