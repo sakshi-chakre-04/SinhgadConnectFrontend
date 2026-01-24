@@ -66,9 +66,8 @@ export default function Community() {
       style={{ background: 'linear-gradient(180deg, #faf5ff 0%, #f5f3ff 50%, #ffffff 100%)' }}
     >
       {/* Hero Section */}
-      {/* Hero Section */}
       <div
-        className="relative overflow-hidden rounded-b-3xl md:rounded-3xl p-6 text-white shadow-2xl transition-all duration-500 group mx-0"
+        className="relative overflow-hidden rounded-2xl p-6 text-white shadow-2xl transition-all duration-500 group mx-3 md:mx-4"
         style={{
           background: 'linear-gradient(135deg, #7c3aed 0%, #8b5cf6 25%, #a855f7 50%, #c026d3 75%, #d946ef 100%)',
           boxShadow: '0 10px 40px rgba(139, 92, 246, 0.3), 0 0 60px rgba(217, 70, 239, 0.15)'
