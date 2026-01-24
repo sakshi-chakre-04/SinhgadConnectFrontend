@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeftIcon, TrophyIcon, PlayIcon } from '@heroicons/react/24/outline';
+import { ArrowLeftIcon, TrophyIcon, PlayIcon, SparklesIcon } from '@heroicons/react/24/outline';
 import { TrophyIcon as TrophyIconSolid } from '@heroicons/react/24/solid';
 
 // Hall of Fame videos - Add your YouTube video URLs here
@@ -49,7 +49,15 @@ const VideoCard = ({ video, onPlay }) => {
     const thumbnailUrl = video.thumbnail || `https://img.youtube.com/vi/${cleanId}/maxresdefault.jpg`;
 
     return (
-        <div className="group bg-white/80 backdrop-blur-sm rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-white/50 hover:-translate-y-1">
+        <div
+            className="group rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:scale-[1.02]"
+            style={{
+                background: 'rgba(255, 255, 255, 0.8)',
+                backdropFilter: 'blur(12px)',
+                border: '1px solid rgba(139, 92, 246, 0.15)',
+                boxShadow: '0 4px 20px rgba(139, 92, 246, 0.08)'
+            }}
+        >
             {/* Video Thumbnail */}
             <div
                 className="relative aspect-video cursor-pointer overflow-hidden"
@@ -64,25 +72,45 @@ const VideoCard = ({ video, onPlay }) => {
                     }}
                 />
                 {/* Play Button Overlay */}
-                <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors flex items-center justify-center">
-                    <div className="w-16 h-16 bg-white/90 rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
-                        <PlayIcon className="w-8 h-8 text-indigo-600 ml-1" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/20 to-transparent group-hover:from-black/60 transition-colors flex items-center justify-center">
+                    <div
+                        className="w-16 h-16 rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform"
+                        style={{
+                            background: 'linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%)',
+                            boxShadow: '0 8px 25px rgba(139, 92, 246, 0.4)'
+                        }}
+                    >
+                        <PlayIcon className="w-8 h-8 text-white ml-1" />
                     </div>
                 </div>
                 {/* Company Badge */}
-                <div className="absolute top-3 left-3 px-3 py-1 bg-white/90 backdrop-blur-sm rounded-full text-xs font-semibold" style={{ color: '#8651F1' }}>
+                <div
+                    className="absolute top-3 left-3 px-3 py-1.5 backdrop-blur-sm rounded-full text-xs font-semibold text-white"
+                    style={{
+                        background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.9) 0%, rgba(168, 85, 247, 0.9) 100%)',
+                        boxShadow: '0 4px 12px rgba(139, 92, 246, 0.3)'
+                    }}
+                >
                     {video.company}
                 </div>
             </div>
 
             {/* Card Content */}
-            <div className="p-4">
-                <h3 className="font-semibold text-gray-900 text-lg">{video.name}</h3>
-                <p className="text-indigo-600 font-medium text-sm">{video.role}</p>
-                <div className="flex items-center gap-2 mt-2 text-xs text-gray-500">
-                    <span className="px-2 py-0.5 bg-gray-100 rounded-full">{video.department}</span>
-                    <span>•</span>
-                    <span>Batch {video.year}</span>
+            <div className="p-5">
+                <h3 className="font-semibold text-gray-900 text-lg group-hover:text-violet-600 transition-colors">{video.name}</h3>
+                <p className="text-violet-600 font-medium text-sm">{video.role}</p>
+                <div className="flex items-center gap-2 mt-3 text-xs text-gray-500">
+                    <span
+                        className="px-2.5 py-1 rounded-full font-medium"
+                        style={{
+                            background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(217, 70, 239, 0.1) 100%)',
+                            color: '#7c3aed'
+                        }}
+                    >
+                        {video.department}
+                    </span>
+                    <span className="text-violet-300">•</span>
+                    <span className="text-gray-600">Batch {video.year}</span>
                 </div>
             </div>
         </div>
@@ -100,89 +128,152 @@ const HallOfFame = () => {
         : hallOfFameVideos.filter(v => v.year === filterYear);
 
     return (
-        <div className="max-w-5xl mx-auto space-y-6">
-            {/* Header */}
-            <div className="relative overflow-hidden rounded-2xl p-8 text-white" style={{ background: 'linear-gradient(135deg, #4A90E2 0%, #607BE7 20%, #7666EC 40%, #8651F1 60%, #A23CF4 80%, #B82FF8 90%, #CD13FC 100%)' }}>
-                <div className="absolute inset-0 bg-black/10"></div>
-                <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/4 blur-3xl"></div>
-                <div className="absolute bottom-0 left-0 w-48 h-48 bg-yellow-300/20 rounded-full translate-y-1/2 -translate-x-1/4 blur-2xl"></div>
+        <div
+            className="min-h-screen pb-20 lg:pb-6"
+            style={{ background: 'linear-gradient(180deg, #faf5ff 0%, #f5f3ff 50%, #ffffff 100%)' }}
+        >
+            {/* Hero Header */}
+            <div
+                className="relative overflow-hidden rounded-3xl mx-4 mt-4 p-8 lg:p-10"
+                style={{
+                    background: 'linear-gradient(135deg, #7c3aed 0%, #8b5cf6 25%, #a855f7 50%, #c026d3 75%, #d946ef 100%)',
+                    boxShadow: '0 10px 40px rgba(139, 92, 246, 0.3), 0 0 60px rgba(217, 70, 239, 0.15)'
+                }}
+            >
+                {/* Background Effects */}
+                <div className="absolute inset-0 opacity-30 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] mix-blend-overlay"></div>
+                <div className="absolute -top-24 -right-24 w-72 h-72 bg-white/20 blur-3xl rounded-full"></div>
+                <div className="absolute -bottom-24 -left-24 w-72 h-72 bg-fuchsia-400/30 blur-3xl rounded-full"></div>
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-yellow-300/10 blur-3xl rounded-full"></div>
 
                 <div className="relative z-10">
-                    <Link to="/dashboard" className="inline-flex items-center gap-2 text-white/80 hover:text-white mb-4 text-sm">
+                    <Link
+                        to="/dashboard"
+                        className="inline-flex items-center gap-2 text-white/80 hover:text-white mb-4 text-sm transition-colors"
+                    >
                         <ArrowLeftIcon className="w-4 h-4" />
                         Back to Dashboard
                     </Link>
 
-                    <div className="flex items-center gap-3 mb-2">
-                        <TrophyIconSolid className="w-10 h-10 text-yellow-300 animate-pulse" />
-                        <h1 className="text-3xl font-bold">Hall of Fame</h1>
+                    <div className="flex items-center gap-4 mb-3">
+                        <div
+                            className="w-16 h-16 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center"
+                            style={{ boxShadow: '0 4px 15px rgba(0,0,0,0.1)' }}
+                        >
+                            <TrophyIconSolid className="w-9 h-9 text-yellow-300 drop-shadow-lg" />
+                        </div>
+                        <div>
+                            <h1 className="text-3xl lg:text-4xl font-bold text-white drop-shadow-lg flex items-center gap-2">
+                                Hall of Fame
+                                <SparklesIcon className="w-6 h-6 text-yellow-300 animate-pulse" />
+                            </h1>
+                            <p className="text-violet-100 text-sm">Celebrating our successful alumni</p>
+                        </div>
                     </div>
-                    <p className="text-white/80 text-lg">Celebrating our successful alumni who cracked their dream placements</p>
                 </div>
             </div>
 
-            {/* Year Filter */}
-            <div className="flex gap-2 overflow-x-auto pb-2">
-                {years.map(year => (
-                    <button
-                        key={year}
-                        onClick={() => setFilterYear(year)}
-                        className={`px-4 py-2 rounded-xl text-sm font-medium whitespace-nowrap transition-all ${filterYear === year
-                            ? 'text-white shadow-lg'
-                            : 'bg-white border border-gray-200 text-gray-600 hover:text-white'
-                            }`}
-                        style={filterYear === year ? { backgroundColor: '#8651F1' } : {}}
-                        onMouseEnter={(e) => { if (filterYear !== year) e.target.style.backgroundColor = '#A23CF4'; }}
-                        onMouseLeave={(e) => { if (filterYear !== year) e.target.style.backgroundColor = ''; }}
+            <div className="max-w-5xl mx-auto px-4 mt-6 space-y-6">
+                {/* Year Filter */}
+                <div className="flex gap-2 overflow-x-auto pb-2">
+                    {years.map(year => (
+                        <button
+                            key={year}
+                            onClick={() => setFilterYear(year)}
+                            className={`px-5 py-2.5 rounded-xl text-sm font-semibold whitespace-nowrap transition-all ${filterYear === year
+                                ? 'text-white shadow-lg'
+                                : 'bg-white/80 text-violet-600 hover:bg-violet-50 border border-violet-200'
+                                }`}
+                            style={filterYear === year ? {
+                                background: 'linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%)',
+                                boxShadow: '0 4px 15px rgba(139, 92, 246, 0.3)'
+                            } : {}}
+                        >
+                            {year === 'all' ? 'All Years' : `Batch ${year}`}
+                        </button>
+                    ))}
+                </div>
+
+                {/* Stats */}
+                <div className="grid grid-cols-3 gap-4">
+                    <div
+                        className="rounded-2xl p-5 text-center backdrop-blur-sm"
+                        style={{
+                            background: 'rgba(255, 255, 255, 0.8)',
+                            border: '2px solid rgba(139, 92, 246, 0.3)',
+                            boxShadow: '0 4px 20px rgba(139, 92, 246, 0.1)'
+                        }}
                     >
-                        {year === 'all' ? 'All Years' : `Batch ${year}`}
-                    </button>
-                ))}
-            </div>
+                        <div className="text-3xl font-bold text-violet-600">{hallOfFameVideos.length}</div>
+                        <div className="text-sm text-gray-600 mt-1 font-medium">Success Stories</div>
+                    </div>
+                    <div
+                        className="rounded-2xl p-5 text-center backdrop-blur-sm"
+                        style={{
+                            background: 'rgba(255, 255, 255, 0.8)',
+                            border: '2px solid rgba(168, 85, 247, 0.3)',
+                            boxShadow: '0 4px 20px rgba(168, 85, 247, 0.1)'
+                        }}
+                    >
+                        <div className="text-3xl font-bold text-purple-600">{new Set(hallOfFameVideos.map(v => v.company)).size}</div>
+                        <div className="text-sm text-gray-600 mt-1 font-medium">Companies</div>
+                    </div>
+                    <div
+                        className="rounded-2xl p-5 text-center backdrop-blur-sm"
+                        style={{
+                            background: 'rgba(255, 255, 255, 0.8)',
+                            border: '2px solid rgba(217, 70, 239, 0.3)',
+                            boxShadow: '0 4px 20px rgba(217, 70, 239, 0.1)'
+                        }}
+                    >
+                        <div className="text-3xl font-bold text-fuchsia-600">{new Set(hallOfFameVideos.map(v => v.year)).size}</div>
+                        <div className="text-sm text-gray-600 mt-1 font-medium">Batches</div>
+                    </div>
+                </div>
 
-            {/* Stats */}
-            <div className="grid grid-cols-3 gap-4">
-                <div className="rounded-2xl p-4 text-center border" style={{ background: 'linear-gradient(to bottom right, rgba(74, 144, 226, 0.1), rgba(96, 123, 231, 0.1))', borderColor: '#4A90E2' }}>
-                    <div className="text-2xl font-bold" style={{ color: '#4A90E2' }}>{hallOfFameVideos.length}</div>
-                    <div className="text-xs text-gray-600 mt-1">Success Stories</div>
+                {/* Video Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {filteredVideos.map(video => (
+                        <VideoCard
+                            key={video.id}
+                            video={video}
+                            onPlay={setSelectedVideo}
+                        />
+                    ))}
                 </div>
-                <div className="rounded-2xl p-4 text-center border" style={{ background: 'linear-gradient(to bottom right, rgba(134, 81, 241, 0.1), rgba(162, 60, 244, 0.1))', borderColor: '#8651F1' }}>
-                    <div className="text-2xl font-bold" style={{ color: '#8651F1' }}>{new Set(hallOfFameVideos.map(v => v.company)).size}</div>
-                    <div className="text-xs text-gray-600 mt-1">Companies</div>
-                </div>
-                <div className="rounded-2xl p-4 text-center border" style={{ background: 'linear-gradient(to bottom right, rgba(205, 19, 252, 0.1), rgba(184, 47, 248, 0.1))', borderColor: '#CD13FC' }}>
-                    <div className="text-2xl font-bold" style={{ color: '#CD13FC' }}>{new Set(hallOfFameVideos.map(v => v.year)).size}</div>
-                    <div className="text-xs text-gray-600 mt-1">Batches</div>
-                </div>
-            </div>
 
-            {/* Video Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredVideos.map(video => (
-                    <VideoCard
-                        key={video.id}
-                        video={video}
-                        onPlay={setSelectedVideo}
-                    />
-                ))}
+                {filteredVideos.length === 0 && (
+                    <div
+                        className="text-center py-16 rounded-2xl"
+                        style={{
+                            background: 'rgba(255, 255, 255, 0.8)',
+                            backdropFilter: 'blur(12px)',
+                            border: '1px solid rgba(139, 92, 246, 0.15)'
+                        }}
+                    >
+                        <div
+                            className="w-20 h-20 mx-auto rounded-2xl flex items-center justify-center mb-4"
+                            style={{
+                                background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(217, 70, 239, 0.1) 100%)'
+                            }}
+                        >
+                            <TrophyIcon className="w-10 h-10 text-violet-400" />
+                        </div>
+                        <p className="text-gray-700 font-semibold text-lg">No videos for this year</p>
+                        <p className="text-gray-500 text-sm mt-1">Check back later!</p>
+                    </div>
+                )}
             </div>
-
-            {filteredVideos.length === 0 && (
-                <div className="text-center py-12 bg-white rounded-2xl shadow-sm">
-                    <TrophyIcon className="w-16 h-16 mx-auto text-gray-300 mb-4" />
-                    <p className="text-gray-500 font-medium">No videos for this year</p>
-                    <p className="text-gray-400 text-sm mt-1">Check back later!</p>
-                </div>
-            )}
 
             {/* Video Modal */}
             {selectedVideo && (
                 <div
-                    className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+                    className="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4"
                     onClick={() => setSelectedVideo(null)}
                 >
                     <div
-                        className="w-full max-w-4xl aspect-video bg-black rounded-2xl overflow-hidden shadow-2xl"
+                        className="w-full max-w-4xl aspect-video bg-black rounded-2xl overflow-hidden"
+                        style={{ boxShadow: '0 25px 50px rgba(0,0,0,0.5), 0 0 100px rgba(139, 92, 246, 0.2)' }}
                         onClick={e => e.stopPropagation()}
                     >
                         <iframe
@@ -197,7 +288,7 @@ const HallOfFame = () => {
                         ></iframe>
                     </div>
                     <button
-                        className="absolute top-4 right-4 text-white/80 hover:text-white text-sm flex items-center gap-2"
+                        className="absolute top-6 right-6 px-4 py-2 rounded-xl text-white/90 hover:text-white text-sm font-medium flex items-center gap-2 transition-all hover:bg-white/10"
                         onClick={() => setSelectedVideo(null)}
                     >
                         Close ✕
