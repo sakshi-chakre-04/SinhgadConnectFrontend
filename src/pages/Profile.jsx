@@ -117,12 +117,12 @@ const Profile = () => {
 
   return (
     <div
-      className="min-h-screen pb-20 lg:pb-6"
+      className="min-h-screen pb-20 lg:pb-6 pt-3"
       style={{ background: 'linear-gradient(180deg, #faf5ff 0%, #f5f3ff 50%, #ffffff 100%)' }}
     >
       {/* Profile Header Card with Gradient */}
       <div
-        className="relative overflow-hidden rounded-b-3xl md:rounded-3xl mx-0 mt-0 md:mx-4 md:mt-4"
+        className="relative overflow-hidden rounded-2xl mx-3 md:mx-4"
         style={{
           background: 'rgba(255, 255, 255, 0.8)',
           backdropFilter: 'blur(12px)',

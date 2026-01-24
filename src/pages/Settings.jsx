@@ -24,12 +24,12 @@ const Settings = () => {
 
   return (
     <div
-      className="min-h-screen pb-20 lg:pb-6"
+      className="min-h-screen pb-20 lg:pb-6 pt-3"
       style={{ background: 'linear-gradient(180deg, #faf5ff 0%, #f5f3ff 50%, #ffffff 100%)' }}
     >
       {/* Hero Header */}
       <div
-        className="relative overflow-hidden rounded-b-3xl md:rounded-3xl mx-0 mt-0 md:mx-4 md:mt-4 p-8 lg:p-10"
+        className="relative overflow-hidden rounded-2xl mx-3 md:mx-4 p-8 lg:p-10"
         style={{
           background: 'linear-gradient(135deg, #7c3aed 0%, #8b5cf6 25%, #a855f7 50%, #c026d3 75%, #d946ef 100%)',
           boxShadow: '0 10px 40px rgba(139, 92, 246, 0.3), 0 0 60px rgba(217, 70, 239, 0.15)'
