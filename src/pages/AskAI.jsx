@@ -744,7 +744,7 @@ const AskAI = () => {
 
     return (
         <LayoutGroup>
-            <div className="h-[calc(100dvh-10rem)] lg:h-auto lg:min-h-screen flex flex-col relative overflow-hidden bg-[#F9FAFB] -mx-4 lg:mx-0 -mt-4 lg:mt-0">
+            <div className="h-[calc(100dvh-10rem)] lg:h-auto lg:min-h-screen flex flex-col relative overflow-hidden bg-[#F9FAFB] lg:mx-0 lg:mt-0">
                 {/* === BACKGROUND === */}
                 <div className={`absolute inset-0 pointer-events-none transition-opacity duration-700 ${isInChat ? 'opacity-20' : 'opacity-100'}`}>
                     <div className="absolute inset-0 bg-gradient-to-br from-violet-100 via-fuchsia-50 to-cyan-50" />

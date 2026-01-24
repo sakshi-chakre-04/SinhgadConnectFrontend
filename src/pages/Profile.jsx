@@ -122,7 +122,7 @@ const Profile = () => {
     >
       {/* Profile Header Card with Gradient */}
       <div
-        className="relative overflow-hidden rounded-3xl mx-4 mt-4"
+        className="relative overflow-hidden rounded-b-3xl md:rounded-3xl mx-0 mt-0 md:mx-4 md:mt-4"
         style={{
           background: 'rgba(255, 255, 255, 0.8)',
           backdropFilter: 'blur(12px)',
@@ -220,7 +220,7 @@ const Profile = () => {
 
       {/* Tabs Card */}
       <div
-        className="mx-4 mt-6 rounded-2xl overflow-hidden"
+        className="mx-4 mt-6 rounded-2xl overflow-hidden md:mx-4"
         style={{
           background: 'rgba(255, 255, 255, 0.8)',
           backdropFilter: 'blur(12px)',

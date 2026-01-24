@@ -184,9 +184,9 @@ export default function Notifications() {
       className="min-h-screen pb-20"
       style={{ background: 'linear-gradient(180deg, #faf5ff 0%, #f5f3ff 50%, #ffffff 100%)' }}
     >
-      <div className="max-w-4xl mx-auto pt-6 px-4">
+      <div className="max-w-4xl mx-auto pt-0 md:pt-6 px-0 md:px-4">
         <div
-          className="rounded-3xl overflow-hidden"
+          className="rounded-b-3xl md:rounded-3xl overflow-hidden"
           style={{
             background: 'rgba(255, 255, 255, 0.85)',
             backdropFilter: 'blur(12px)',

@@ -134,7 +134,7 @@ const HallOfFame = () => {
         >
             {/* Hero Header */}
             <div
-                className="relative overflow-hidden rounded-3xl mx-4 mt-4 p-8 lg:p-10"
+                className="relative overflow-hidden rounded-b-3xl md:rounded-3xl mx-0 mt-4 md:mx-4 p-8 lg:p-10"
                 style={{
                     background: 'linear-gradient(135deg, #7c3aed 0%, #8b5cf6 25%, #a855f7 50%, #c026d3 75%, #d946ef 100%)',
                     boxShadow: '0 10px 40px rgba(139, 92, 246, 0.3), 0 0 60px rgba(217, 70, 239, 0.15)'

@@ -27,7 +27,7 @@ const Dashboard = () => {
   return (
     <div className="space-y-6 min-h-screen" style={{ background: 'linear-gradient(180deg, #faf5ff 0%, #f5f3ff 50%, #ffffff 100%)' }}>
       {/* Futuristic Hero Section */}
-      <div className="relative overflow-hidden rounded-3xl p-6 text-white shadow-2xl transition-all duration-500 group"
+      <div className="relative overflow-hidden rounded-b-3xl md:rounded-3xl p-6 text-white shadow-2xl transition-all duration-500 group mx-0"
         style={{
           background: 'linear-gradient(135deg, #7c3aed 0%, #8b5cf6 25%, #a855f7 50%, #c026d3 75%, #d946ef 100%)',
           boxShadow: '0 10px 40px rgba(139, 92, 246, 0.3), 0 0 60px rgba(217, 70, 239, 0.15)'
@@ -75,7 +75,7 @@ const Dashboard = () => {
       </div>
 
       {/* Search Section - Matching AI Page Style */}
-      <div className="relative w-full">
+      <div className="relative w-full px-4 md:px-0">
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -114,7 +114,7 @@ const Dashboard = () => {
       </div>
 
       {/* Latest Discussions */}
-      <div>
+      <div className="px-4 md:px-0">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-bold text-gray-900 flex items-center gap-2">
             <SparklesIcon className="w-5 h-5 text-violet-500" />
