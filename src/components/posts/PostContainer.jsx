@@ -35,7 +35,7 @@ const SELECT_CLASS = "w-full px-3 py-2 border border-gray-300 rounded-lg focus:r
 // Reusable wrapper component
 const PageWrapper = ({ children }) => (
   <div className="min-h-screen" style={{ background: 'linear-gradient(180deg, #faf5ff 0%, #f5f3ff 50%, #ffffff 100%)' }}>
-    <div className="max-w-4xl mx-auto p-4">{children}</div>
+    <div className="w-full px-0 md:px-2">{children}</div>
   </div>
 );
 

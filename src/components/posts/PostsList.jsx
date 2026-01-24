@@ -17,17 +17,21 @@ const PostsList = ({ posts, showComments, onToggleComments, onVote, onCommentCou
   }
 
   return (
-    <div className="space-y-6">
-      {posts.map((post) => (
-        <PostItem
-          key={post._id}
-          post={post}
-          show={!!showComments[post._id]}
-          onToggleComments={onToggleComments}
-          onVote={onVote}
-          onCommentCountUpdate={onCommentCountUpdate}
-          onSuccessRefresh={onSuccessRefresh}
-        />
+    <div className="bg-white rounded-xl overflow-hidden" style={{ border: '1px solid rgba(139, 92, 246, 0.1)' }}>
+      {posts.map((post, index) => (
+        <React.Fragment key={post._id}>
+          <PostItem
+            post={post}
+            show={!!showComments[post._id]}
+            onToggleComments={onToggleComments}
+            onVote={onVote}
+            onCommentCountUpdate={onCommentCountUpdate}
+            onSuccessRefresh={onSuccessRefresh}
+          />
+          {index < posts.length - 1 && (
+            <div className="border-t border-gray-200" />
+          )}
+        </React.Fragment>
       ))}
     </div>
   );

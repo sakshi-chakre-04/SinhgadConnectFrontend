@@ -129,11 +129,7 @@ const PostItem = ({ post, show, onToggleComments, onVote, onCommentCountUpdate, 
 
   return (
     <article
-      className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 mb-5 transition-all duration-300 hover:shadow-lg"
-      style={{
-        border: '1px solid rgba(139, 92, 246, 0.1)',
-        boxShadow: '0 4px 20px rgba(139, 92, 246, 0.06)'
-      }}
+      className="bg-white p-5 transition-all duration-200 hover:bg-gray-50/50"
     >
       {/* Header */}
       <div className="flex items-start justify-between mb-4">
