@@ -129,7 +129,7 @@ const HallOfFame = () => {
 
     return (
         <div
-            className="min-h-screen pb-20 lg:pb-6"
+            className="min-h-screen pb-20 lg:pb-6 pt-3"
             style={{ background: 'linear-gradient(180deg, #faf5ff 0%, #f5f3ff 50%, #ffffff 100%)' }}
         >
             {/* Hero Header */}

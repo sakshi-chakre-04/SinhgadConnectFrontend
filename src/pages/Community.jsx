@@ -62,7 +62,7 @@ export default function Community() {
 
   return (
     <div
-      className="space-y-8 min-h-screen pb-8"
+      className="space-y-8 min-h-screen pb-8 pt-3"
       style={{ background: 'linear-gradient(180deg, #faf5ff 0%, #f5f3ff 50%, #ffffff 100%)' }}
     >
       {/* Hero Section */}

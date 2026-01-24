@@ -25,7 +25,7 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="space-y-6 min-h-screen" style={{ background: 'linear-gradient(180deg, #faf5ff 0%, #f5f3ff 50%, #ffffff 100%)' }}>
+    <div className="space-y-6 min-h-screen pt-3" style={{ background: 'linear-gradient(180deg, #faf5ff 0%, #f5f3ff 50%, #ffffff 100%)' }}>
       {/* Futuristic Hero Section */}
       <div className="relative overflow-hidden rounded-2xl p-6 text-white shadow-2xl transition-all duration-500 group mx-3 md:mx-4"
         style={{
