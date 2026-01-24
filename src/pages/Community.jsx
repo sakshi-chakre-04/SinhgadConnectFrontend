@@ -61,10 +61,7 @@ export default function Community() {
   const navigate = useNavigate();
 
   return (
-    <div
-      className="space-y-8 min-h-screen pb-8 pt-3"
-      style={{ background: 'linear-gradient(180deg, #faf5ff 0%, #f5f3ff 50%, #ffffff 100%)' }}
-    >
+    <div className="space-y-8 pb-8">
       {/* Hero Section */}
       <div
         className="relative overflow-hidden rounded-2xl p-6 text-white shadow-2xl transition-all duration-500 group mx-3 md:mx-4"

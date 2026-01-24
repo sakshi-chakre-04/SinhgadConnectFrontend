@@ -64,7 +64,10 @@ const AuthenticatedLayout = ({ children }) => {
       <MobileTopNav />
 
       {/* Main Content Area */}
-      <main className="lg:ml-[var(--sidebar-width)] xl:mr-[var(--right-sidebar-width)] min-h-screen pt-16 lg:pt-4 pb-24 lg:pb-8 px-0 sm:px-4 lg:px-8">
+      <main
+        className="lg:ml-[var(--sidebar-width)] xl:mr-[var(--right-sidebar-width)] min-h-screen pt-16 lg:pt-4 pb-24 lg:pb-8 px-0 sm:px-4 lg:px-8"
+        style={{ background: 'linear-gradient(180deg, #faf5ff 0%, #f5f3ff 50%, #ffffff 100%)' }}
+      >
         <div className="max-w-3xl mx-auto">
           {children}
         </div>

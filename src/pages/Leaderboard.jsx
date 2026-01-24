@@ -75,10 +75,7 @@ const Leaderboard = () => {
         leaderboard.some(u => u.userId === currentUserRank.userId);
 
     return (
-        <div
-            className="min-h-screen pb-20 pt-3"
-            style={{ background: 'linear-gradient(180deg, #faf5ff 0%, #f5f3ff 50%, #ffffff 100%)' }}
-        >
+        <div className="pb-20">
             <div className="max-w-4xl mx-auto px-0 md:px-4 space-y-6">
                 {/* Header */}
                 <div
