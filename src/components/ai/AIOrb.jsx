@@ -28,8 +28,8 @@ const AIOrb = ({ onClick }) => {
 const StyledWrapper = styled.div`
   .orb-container {
     position: relative;
-    width: 80px;
-    height: 80px;
+    width: 130px; /* Increased from 80px */
+    height: 130px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -56,10 +56,10 @@ const StyledWrapper = styled.div`
 
   .ball {
     display: flex;
-    width: 64px;
-    height: 64px;
+    width: 100px; /* Increased from 64px */
+    height: 100px;
     flex-shrink: 0;
-    border-radius: 50px;
+    border-radius: 50%;
     background: linear-gradient(135deg, #8b5cf6 0%, #d946ef 50%, #6366f1 100%);
     filter: url(#gooey);
     animation: circle2 4.2s ease-in-out infinite;
@@ -80,8 +80,8 @@ const StyledWrapper = styled.div`
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 100px;
-    height: 100px;
+    width: 160px; /* Increased from 100px */
+    height: 160px;
     background-image: radial-gradient(
       ellipse at center,
       rgba(255, 255, 255, 0.75) 15%,
@@ -93,6 +93,19 @@ const StyledWrapper = styled.div`
     );
     animation: animation-ball 15s both ease infinite;
     pointer-events: none;
+  }
+
+  /* ... */
+
+  .sparkle-icon {
+    width: 50px; /* Increased from 30px */
+    height: 50px;
+    color: #ffffff;
+    filter:
+      drop-shadow(0 0 2px rgba(255, 255, 255, 0.8))
+      drop-shadow(0 0 6px rgba(217, 70, 239, 0.45))
+      drop-shadow(0 0 14px rgba(99, 102, 241, 0.35));
+    opacity: 0.96;
   }
 
   @keyframes animation-ball {
@@ -164,8 +177,8 @@ const StyledWrapper = styled.div`
   }
 
   .sparkle-icon {
-    width: 30px;
-    height: 30px;
+    width: 50px;
+    height: 50px;
     color: #ffffff;
     filter:
       drop-shadow(0 0 2px rgba(255, 255, 255, 0.8))

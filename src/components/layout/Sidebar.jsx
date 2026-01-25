@@ -26,33 +26,19 @@ import {
 
 const navigation = [
     { name: 'Home', href: '/dashboard', icon: HomeIcon, activeIcon: HomeIconSolid },
-    { name: 'Notifications', href: '/notifications', icon: BellIcon, activeIcon: BellIconSolid },
-    { name: 'Ask AI', href: '/ask-ai', icon: SparklesIcon, activeIcon: SparklesIconSolid },
     { name: 'Leaderboard', href: '/leaderboard', icon: ChartBarIcon, activeIcon: ChartBarIconSolid },
     { name: 'Hall of Fame', href: '/hall-of-fame', icon: TrophyIcon, activeIcon: TrophyIconSolid },
     { name: 'Resources', href: '/resources', icon: BookOpenIcon, activeIcon: BookOpenIconSolid },
     { name: 'Community', href: '/community', icon: ChatBubbleLeftRightIcon, activeIcon: ChatBubbleLeftRightIconSolid },
-    { name: 'Profile', href: '/profile', icon: UserIcon, activeIcon: UserIconSolid },
 ];
 
 const Sidebar = ({ onCreatePost }) => {
     const location = useLocation();
 
     return (
-        <nav className="hidden lg:flex flex-col fixed left-4 top-4 bottom-4 w-[240px] glass-panel rounded-3xl p-4 z-30 transition-all duration-300">
-            {/* Logo */}
-            <div className="flex items-center gap-3 px-3 mb-8">
-                <div className="w-10 h-10 rounded-xl gradient-primary flex items-center justify-center">
-                    <span className="text-white font-bold text-xl">S</span>
-                </div>
-                <div>
-                    <h1 className="font-bold text-lg text-gray-900">Sinhgad</h1>
-                    <span className="text-xs text-primary-500 font-medium">Connect</span>
-                </div>
-            </div>
-
+        <nav className="hidden lg:flex flex-col fixed left-4 top-24 bottom-4 w-[260px] glass-panel rounded-[2rem] p-5 z-30 transition-all duration-300 border border-white/60 shadow-2xl shadow-indigo-500/10">
             {/* Navigation Items */}
-            <div className="space-y-1 flex-1">
+            <div className="space-y-2 flex-1 overflow-y-auto scrollbar-hide py-2 mt-2">
                 {navigation.map((item) => {
                     const isActive = location.pathname === item.href ||
                         (item.href !== '/dashboard' && location.pathname.startsWith(item.href));
@@ -62,26 +48,40 @@ const Sidebar = ({ onCreatePost }) => {
                         <NavLink
                             key={item.name}
                             to={item.href}
-                            className={`flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-all duration-200 ${isActive
-                                ? 'bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-md'
-                                : 'text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 hover:translate-x-1'
+                            className={`group relative flex items-center gap-4 px-4 py-3.5 rounded-2xl transition-all duration-300 ease-out
+                                ${isActive
+                                    ? 'bg-gradient-to-r from-indigo-600 via-purple-600 to-purple-700 text-white shadow-lg shadow-indigo-500/25 scale-[1.02]'
+                                    : 'text-slate-500 hover:bg-indigo-50/80 hover:text-indigo-600 hover:shadow-sm'
                                 }`}
                         >
-                            <Icon className="w-5 h-5" />
-                            <span>{item.name}</span>
+                            {isActive && (
+                                <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-indigo-600 to-purple-600 blur-sm opacity-20 -z-10"></div>
+                            )}
+                            <Icon className={`w-6 h-6 transition-transform duration-300 ${isActive ? 'scale-110 drop-shadow-md' : 'group-hover:scale-110'}`} />
+                            <span className="font-medium text-[0.95rem] tracking-wide">{item.name}</span>
+
+                            {/* Active Indicator Dot (Optional decorative element) */}
+                            {!isActive && (
+                                <div className="absolute right-4 w-1.5 h-1.5 rounded-full bg-indigo-500 opacity-0 transform translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300"></div>
+                            )}
                         </NavLink>
                     );
                 })}
             </div>
 
             {/* Create Post Button */}
-            <button
-                onClick={() => onCreatePost('Create Post')}
-                className="mt-4 flex items-center justify-center gap-2 w-full py-3.5 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all"
-            >
-                <PlusCircleIcon className="w-5 h-5" />
-                <span>Create Post</span>
-            </button>
+            <div className="mt-6 pt-6 border-t border-gray-100">
+                <button
+                    onClick={() => onCreatePost('Create Post')}
+                    className="relative group w-full py-4 px-6 rounded-2xl overflow-hidden transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl hover:shadow-indigo-500/30 active:scale-95"
+                >
+                    <div className="absolute inset-0 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 group-hover:bg-[length:200%_200%] animate-gradient-xy transition-all duration-300"></div>
+                    <div className="relative flex items-center justify-center gap-3 text-white font-bold tracking-wide">
+                        <PlusCircleIcon className="w-6 h-6 group-hover:rotate-90 transition-transform duration-500" />
+                        <span>Create Post</span>
+                    </div>
+                </button>
+            </div>
         </nav>
     );
 };
