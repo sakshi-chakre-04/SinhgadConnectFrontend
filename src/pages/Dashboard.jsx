@@ -74,8 +74,8 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* Search Section - Matching AI Page Style */}
-      <div className="relative w-full px-4 md:px-0">
+      {/* Search Section - Matching AI Page Style (Hidden on desktop - navbar has search) */}
+      <div className="relative w-full px-4 md:px-0 lg:hidden">
         <form
           onSubmit={(e) => {
             e.preventDefault();

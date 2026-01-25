@@ -13,7 +13,8 @@ const NotificationBadge = () => {
   const socket = useSocket();
 
   const unreadCount = allNotifications.filter(n => !n.read).length;
-  const displayedNotifications = allNotifications.slice(0, 5);
+  // Dropdown shows only unread notifications (up to 5), full page shows all
+  const displayedNotifications = allNotifications.filter(n => !n.read).slice(0, 5);
 
   // Listen for real-time notifications
   useEffect(() => {
@@ -67,9 +68,13 @@ const NotificationBadge = () => {
   };
 
   const handleMarkAllAsRead = async () => {
-    const unreadIds = allNotifications.filter(n => !n.read).map(n => n._id);
-    if (unreadIds.length > 0) {
-      await updateNotificationsRead(unreadIds, true);
+    // Optimistically update UI
+    setAllNotifications(prev => prev.map(n => ({ ...n, read: true })));
+    try {
+      await notificationsAPI.markAllAsRead();
+    } catch (error) {
+      console.error('Error marking all as read:', error);
+      fetchNotifications(); // Revert on error
     }
   };
 

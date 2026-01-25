@@ -63,8 +63,8 @@ const Search = () => {
 
     return (
         <div className="max-w-4xl mx-auto px-4 py-6">
-            {/* Search Bar - Always visible */}
-            <div className="mb-8">
+            {/* Search Bar - Hidden on desktop (navbar has search) */}
+            <div className="mb-8 lg:hidden">
                 <form onSubmit={handleSearch} className="relative">
                     <div className="relative">
                         <MagnifyingGlassIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />

@@ -7,12 +7,10 @@ import { BellIcon, CheckIcon } from '@heroicons/react/24/outline';
 
 const NotificationItem = ({ notification, onMarkAsRead }) => {
   const navigate = useNavigate();
-  const [isRead, setIsRead] = useState(notification.read);
 
   const handleClick = async () => {
-    if (!isRead) {
+    if (!notification.read) {
       await onMarkAsRead(notification._id);
-      setIsRead(true);
     }
     if (notification.post) {
       navigate(`/posts/${notification.post._id}`);
@@ -52,7 +50,7 @@ const NotificationItem = ({ notification, onMarkAsRead }) => {
 
   return (
     <div
-      className={`p-5 transition-all duration-300 cursor-pointer border-l-4 hover:pl-6 ${!isRead
+      className={`p-5 transition-all duration-300 cursor-pointer border-l-4 hover:pl-6 ${!notification.read
         ? 'bg-violet-50/50 border-violet-500'
         : 'bg-transparent border-transparent hover:bg-violet-50/30'
         }`}
@@ -61,7 +59,7 @@ const NotificationItem = ({ notification, onMarkAsRead }) => {
       <div className="flex items-start gap-4">
         <div className="text-2xl mt-1 filter drop-shadow-sm">{getNotificationIcon()}</div>
         <div className="flex-1">
-          <p className={`text-gray-900 leading-snug ${!isRead ? 'font-semibold' : 'font-medium'}`}>
+          <p className={`text-gray-900 leading-snug ${!notification.read ? 'font-semibold' : 'font-medium'}`}>
             {getNotificationMessage()}
           </p>
           <p className="text-sm text-gray-500 mt-1.5 font-medium flex items-center gap-1">
@@ -69,7 +67,7 @@ const NotificationItem = ({ notification, onMarkAsRead }) => {
             {new Date(notification.createdAt).toLocaleString()}
           </p>
         </div>
-        {!isRead && (
+        {!notification.read && (
           <div className="w-2.5 h-2.5 bg-violet-500 rounded-full mt-2 animate-pulse shadow-lg shadow-violet-500/40"></div>
         )}
       </div>
