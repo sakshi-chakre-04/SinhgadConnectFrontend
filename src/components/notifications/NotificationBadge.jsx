@@ -78,7 +78,7 @@ const NotificationBadge = () => {
     }
   };
 
-  if (loading) return null;
+  // Don't hide the icon during loading - just show without badge
 
   return (
     <div className="relative">
