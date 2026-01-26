@@ -318,9 +318,10 @@ const PostItem = ({ post, show, onToggleComments, onVote, onCommentCountUpdate, 
 
         {/* Score */}
         <div className="flex items-center gap-2">
-          <span className={`text-sm font-medium px-2.5 py-1 rounded-full ${netScore > 0 ? 'bg-[var(--lavender-light)] text-[var(--lavender-main)]' :
-            netScore < 0 ? 'bg-red-100 text-red-500' :
-              'bg-gray-100 text-[var(--gray-purple)]'
+          <span className={`text-sm font-medium px-2.5 py-1 rounded-full transition-all ${post.userVote === 1 ? 'bg-green-500/10 text-green-600 border border-green-500/20' :
+              netScore > 0 ? 'bg-[var(--lavender-light)] text-[var(--lavender-main)]' :
+                netScore < 0 ? 'bg-red-100 text-red-500' :
+                  'bg-gray-100 text-[var(--gray-purple)]'
             }`}>
             {netScore > 0 ? '+' : ''}{netScore} pts
           </span>
