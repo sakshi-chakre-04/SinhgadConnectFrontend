@@ -50,14 +50,20 @@ const RightSidebar = () => {
 
     const fetchTopContributor = async () => {
         try {
-            // This is a placeholder - you'll need to implement the actual API endpoint
-            // For now, we'll use mock data
-            setTopContributor({
-                name: 'Top User',
-                department: 'Computer',
-                posts: 42,
-                upvotes: 156
+            const response = await api.get('/leaderboard', {
+                params: { timeRange: 'all', limit: 1 }
             });
+
+            const leaderboard = response.data.leaderboard || [];
+            if (leaderboard.length > 0) {
+                const topUser = leaderboard[0];
+                setTopContributor({
+                    name: topUser.name,
+                    department: topUser.department,
+                    posts: topUser.postCount || 0,
+                    upvotes: topUser.totalUpvotes || 0
+                });
+            }
         } catch (error) {
             console.error('Error fetching top contributor:', error);
         }
