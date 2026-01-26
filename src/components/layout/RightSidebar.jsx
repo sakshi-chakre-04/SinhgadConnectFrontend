@@ -6,7 +6,7 @@ import {
     DocumentTextIcon,
     ChatBubbleLeftIcon,
     HandThumbUpIcon,
-    SparklesIcon
+    FireIcon
 } from '@heroicons/react/24/outline';
 import { api } from '../../services/api/api';
 
@@ -55,79 +55,83 @@ const RightSidebar = () => {
 
     return (
         <aside className="right-sidebar hidden xl:block !top-24">
-            {/* Quick Stats */}
-            <div className="stats-card mb-6">
-                <h3 className="font-semibold text-gray-800 mb-4 flex items-center gap-2">
-                    <SparklesIcon className="w-5 h-5 text-primary-500" />
-                    Quick Stats
-                </h3>
+            {/* Quick Stats - Modern Gradient Card */}
+            <div className="relative overflow-hidden rounded-2xl mb-6 p-5 bg-white border border-gray-100 shadow-lg hover:shadow-xl transition-all duration-300">
+                {/* Subtle gradient overlay */}
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 via-purple-50/30 to-pink-50/20 pointer-events-none"></div>
 
-                <div className="space-y-3">
-                    <div className="stat-item">
-                        <div className="stat-icon bg-indigo-100">
-                            <DocumentTextIcon className="w-5 h-5 text-indigo-600" />
+                <div className="relative z-10">
+                    <h3 className="font-bold text-gray-800 mb-4 flex items-center gap-2 text-base">
+                        <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+                            <FireIcon className="w-4 h-4 text-white" />
                         </div>
-                        <div>
-                            <p className="text-2xl font-bold text-gray-900">{stats.totalPosts}</p>
-                            <p className="text-xs text-gray-500">Posts</p>
-                        </div>
-                    </div>
+                        Quick Stats
+                    </h3>
 
-                    <div className="stat-item">
-                        <div className="stat-icon bg-green-100">
-                            <ChatBubbleLeftIcon className="w-5 h-5 text-green-600" />
+                    <div className="space-y-3">
+                        {/* Posts */}
+                        <div className="flex items-center gap-3 p-3 rounded-xl bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100/50 hover:scale-[1.02] transition-transform">
+                            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-md">
+                                <DocumentTextIcon className="w-5 h-5 text-white" />
+                            </div>
+                            <div>
+                                <p className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">{stats.totalPosts}</p>
+                                <p className="text-xs text-gray-600 font-medium">Posts</p>
+                            </div>
                         </div>
-                        <div>
-                            <p className="text-2xl font-bold text-gray-900">{stats.totalComments}</p>
-                            <p className="text-xs text-gray-500">Comments</p>
-                        </div>
-                    </div>
 
-                    <div className="stat-item">
-                        <div className="stat-icon bg-orange-100">
-                            <HandThumbUpIcon className="w-5 h-5 text-orange-500" />
+                        {/* Comments */}
+                        <div className="flex items-center gap-3 p-3 rounded-xl bg-gradient-to-r from-purple-50 to-pink-50 border border-purple-100/50 hover:scale-[1.02] transition-transform">
+                            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center shadow-md">
+                                <ChatBubbleLeftIcon className="w-5 h-5 text-white" />
+                            </div>
+                            <div>
+                                <p className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">{stats.totalComments}</p>
+                                <p className="text-xs text-gray-600 font-medium">Comments</p>
+                            </div>
                         </div>
-                        <div>
-                            <p className="text-2xl font-bold text-gray-900">{stats.totalUpvotes}</p>
-                            <p className="text-xs text-gray-500">Upvotes</p>
+
+                        {/* Upvotes */}
+                        <div className="flex items-center gap-3 p-3 rounded-xl bg-gradient-to-r from-violet-50 to-purple-50 border border-violet-100/50 hover:scale-[1.02] transition-transform">
+                            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center shadow-md">
+                                <HandThumbUpIcon className="w-5 h-5 text-white" />
+                            </div>
+                            <div>
+                                <p className="text-2xl font-bold bg-gradient-to-r from-violet-600 to-purple-600 bg-clip-text text-transparent">{stats.totalUpvotes}</p>
+                                <p className="text-xs text-gray-600 font-medium">Upvotes</p>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            {/* Trending Topics */}
-            <div className="card-flat p-4">
-                <h3 className="font-semibold text-gray-800 mb-4">🔥 Trending Topics</h3>
-                <div className="space-y-1">
-                    {trendingTopics.map((topic) => (
-                        <Link
-                            key={topic}
-                            to={`/search?q=${topic}`}
-                            className="trending-item text-sm"
-                        >
-                            {topic}
-                        </Link>
-                    ))}
-                </div>
-            </div>
+            {/* Trending Topics - Modern Gradient Card */}
+            <div className="relative overflow-hidden rounded-2xl p-5 bg-white border border-gray-100 shadow-lg hover:shadow-xl transition-all duration-300">
+                {/* Subtle gradient overlay */}
+                <div className="absolute inset-0 bg-gradient-to-br from-orange-50/40 via-pink-50/30 to-purple-50/20 pointer-events-none"></div>
 
-            {/* AI Assistant Promo */}
-            <div className="mt-6 p-4 rounded-xl gradient-primary text-white">
-                <div className="flex items-center gap-3 mb-3">
-                    <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
-                        <SparklesIcon className="w-5 h-5" />
-                    </div>
-                    <div>
-                        <p className="font-semibold">AI Assistant</p>
-                        <p className="text-xs text-white/80">Powered by Gemini</p>
+                <div className="relative z-10">
+                    <h3 className="font-bold text-gray-800 mb-4 flex items-center gap-2 text-base">
+                        <span className="text-xl">🔥</span>
+                        Trending Topics
+                    </h3>
+                    <div className="space-y-2">
+                        {trendingTopics.map((topic, index) => (
+                            <Link
+                                key={topic}
+                                to={`/search?q=${topic}`}
+                                className="group flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 transition-all duration-200 border border-transparent hover:border-purple-100"
+                            >
+                                <span className="text-xs font-bold text-transparent bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text">
+                                    #{index + 1}
+                                </span>
+                                <span className="text-sm text-gray-700 group-hover:text-purple-700 font-medium transition-colors">
+                                    {topic}
+                                </span>
+                            </Link>
+                        ))}
                     </div>
                 </div>
-                <p className="text-sm text-white/90 mb-3">
-                    Ask questions about placements, academics, or campus life!
-                </p>
-                <p className="text-xs text-white/70">
-                    Click the chat bubble at bottom right →
-                </p>
             </div>
         </aside>
     );
