@@ -106,50 +106,44 @@ const RightSidebar = () => {
                     </div>
                 </div>
 
-                {/* Your Activity Card */}
-                <div className="relative overflow-hidden rounded-2xl p-5 bg-white border border-gray-100 shadow-lg hover:shadow-xl transition-all duration-300">
+                {/* Your Activity Card - Compact Horizontal Layout */}
+                <div className="relative overflow-hidden rounded-2xl p-4 bg-white border border-gray-100 shadow-lg hover:shadow-xl transition-all duration-300">
                     <div className="absolute inset-0 bg-gradient-to-br from-green-50/50 via-emerald-50/30 to-teal-50/20 pointer-events-none"></div>
 
                     <div className="relative z-10">
-                        <h3 className="font-bold text-gray-800 mb-4 flex items-center gap-2 text-base">
-                            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center">
-                                <FireIcon className="w-4 h-4 text-white" />
+                        <h3 className="font-bold text-gray-800 mb-3 flex items-center gap-2 text-sm">
+                            <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center">
+                                <FireIcon className="w-3 h-3 text-white" />
                             </div>
                             Your Activity
                         </h3>
 
-                        <div className="space-y-3">
+                        <div className="grid grid-cols-3 gap-2">
                             {/* Posts */}
-                            <div className="flex items-center gap-3 p-3 rounded-xl bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100/50">
-                                <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-md">
-                                    <DocumentTextIcon className="w-5 h-5 text-white" />
+                            <div className="flex flex-col items-center p-2 rounded-lg bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100/50">
+                                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-sm mb-1">
+                                    <DocumentTextIcon className="w-4 h-4 text-white" />
                                 </div>
-                                <div>
-                                    <p className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">{stats.totalPosts}</p>
-                                    <p className="text-xs text-gray-600 font-medium">Posts</p>
-                                </div>
+                                <p className="text-lg font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">{stats.totalPosts}</p>
+                                <p className="text-xs text-gray-600 font-medium">Posts</p>
                             </div>
 
                             {/* Comments */}
-                            <div className="flex items-center gap-3 p-3 rounded-xl bg-gradient-to-r from-purple-50 to-pink-50 border border-purple-100/50">
-                                <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center shadow-md">
-                                    <ChatBubbleLeftIcon className="w-5 h-5 text-white" />
+                            <div className="flex flex-col items-center p-2 rounded-lg bg-gradient-to-r from-purple-50 to-pink-50 border border-purple-100/50">
+                                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center shadow-sm mb-1">
+                                    <ChatBubbleLeftIcon className="w-4 h-4 text-white" />
                                 </div>
-                                <div>
-                                    <p className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">{stats.totalComments}</p>
-                                    <p className="text-xs text-gray-600 font-medium">Comments</p>
-                                </div>
+                                <p className="text-lg font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">{stats.totalComments}</p>
+                                <p className="text-xs text-gray-600 font-medium">Comments</p>
                             </div>
 
                             {/* Upvotes */}
-                            <div className="flex items-center gap-3 p-3 rounded-xl bg-gradient-to-r from-violet-50 to-purple-50 border border-violet-100/50">
-                                <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center shadow-md">
-                                    <HandThumbUpIcon className="w-5 h-5 text-white" />
+                            <div className="flex flex-col items-center p-2 rounded-lg bg-gradient-to-r from-violet-50 to-purple-50 border border-violet-100/50">
+                                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center shadow-sm mb-1">
+                                    <HandThumbUpIcon className="w-4 h-4 text-white" />
                                 </div>
-                                <div>
-                                    <p className="text-2xl font-bold bg-gradient-to-r from-violet-600 to-purple-600 bg-clip-text text-transparent">{stats.totalUpvotes}</p>
-                                    <p className="text-xs text-gray-600 font-medium">Upvotes</p>
-                                </div>
+                                <p className="text-lg font-bold bg-gradient-to-r from-violet-600 to-purple-600 bg-clip-text text-transparent">{stats.totalUpvotes}</p>
+                                <p className="text-xs text-gray-600 font-medium">Upvotes</p>
                             </div>
                         </div>
                     </div>
