@@ -11,6 +11,7 @@ import {
 import { AnimatePresence, LayoutGroup, motion, useReducedMotion } from 'framer-motion';
 import { useSelector } from 'react-redux';
 import { selectToken } from '../features/auth/authSlice';
+import AIOrb from '../components/ai/AIOrb';
 
 // Suggestion chips
 const SUGGESTION_CHIPS = [
@@ -743,9 +744,9 @@ const AskAI = () => {
 
     return (
         <LayoutGroup>
-            <div className="h-[calc(100dvh-10rem)] lg:h-auto lg:min-h-screen flex flex-col relative overflow-hidden bg-[#F9FAFB] -mx-4 lg:mx-0 -mt-4 lg:mt-0">
+            <div className="min-h-[100dvh] flex flex-col relative overflow-hidden bg-[#F9FAFB]">
                 {/* === BACKGROUND === */}
-                <div className={`absolute inset-0 pointer-events-none transition-opacity duration-700 ${isInChat ? 'opacity-20' : 'opacity-100'}`}>
+                <div className={`fixed inset-0 pointer-events-none transition-opacity duration-700 ${isInChat ? 'opacity-20' : 'opacity-100'}`}>
                     <div className="absolute inset-0 bg-gradient-to-br from-violet-100 via-fuchsia-50 to-cyan-50" />
                     <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-gradient-to-br from-violet-300/50 to-purple-400/30 rounded-full blur-[100px] -translate-x-1/4 -translate-y-1/4" />
                     <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-gradient-to-tl from-cyan-300/40 to-teal-200/30 rounded-full blur-[80px] translate-x-1/4 translate-y-1/4" />
@@ -759,49 +760,9 @@ const AskAI = () => {
                 >
                     <div className="flex-1 flex flex-col items-center justify-center max-w-2xl mx-auto w-full">
 
-                        {/* AI Orb - Premium breathing glow with context-awareness */}
-                        <div className="relative mb-8">
-                            {/* Single expanding ripple wave */}
-                            {!isTyping && (
-                                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                                    <div
-                                        className="w-24 h-24 rounded-full border border-violet-400/20"
-                                        style={{ animation: 'ripple 3s ease-out infinite' }}
-                                    />
-                                </div>
-                            )}
-
-                            {/* Soft radial gradient backdrop */}
-                            <div
-                                className={`absolute inset-[-20px] rounded-full transition-opacity duration-500 ${isTyping ? 'opacity-0' : 'opacity-100'}`}
-                                style={{
-                                    background: 'radial-gradient(circle, rgba(139,92,246,0.08) 0%, rgba(217,70,239,0.04) 50%, transparent 70%)',
-                                }}
-                            />
-
-                            {/* Main orb with breathing animation + layered shadows */}
-                            <div
-                                className="relative w-24 h-24 rounded-full bg-white border-2 border-white flex items-center justify-center z-10"
-                                style={{
-                                    animation: isTyping ? 'none' : 'breathe 3s ease-in-out infinite',
-                                    boxShadow: '0 4px 6px -1px rgba(139,92,246,0.2), 0 10px 20px -5px rgba(139,92,246,0.15), 0 25px 50px -12px rgba(139,92,246,0.1)',
-                                }}
-                            >
-                                <div className="w-20 h-20 rounded-full bg-gradient-to-br from-violet-500 via-fuchsia-500 to-indigo-600 flex items-center justify-center shadow-lg">
-                                    <SparklesIcon className="w-10 h-10 text-white" />
-                                </div>
-                            </div>
-                            {/* CSS for animations */}
-                            <style>{`
-                                @keyframes breathe {
-                                    0%, 100% { opacity: 0.85; transform: scale(1); }
-                                    50% { opacity: 1; transform: scale(1.03); }
-                                }
-                                @keyframes ripple {
-                                    0% { transform: scale(1); opacity: 0.6; }
-                                    100% { transform: scale(2.2); opacity: 0; }
-                                }
-                            `}</style>
+                        {/* AI Orb - Advanced 3D animation */}
+                        <div className="mb-8">
+                            <AIOrb />
                         </div>
 
                         {/* Title */}
@@ -818,17 +779,22 @@ const AskAI = () => {
                             {!isInChat && (
                                 <motion.div
                                     layoutId="askai-search"
-                                    className="bg-white/75 backdrop-blur-xl rounded-2xl border border-white/50 shadow-xl overflow-hidden"
+                                    className="bg-white/90 backdrop-blur-xl rounded-2xl overflow-hidden"
+                                    style={{
+                                        border: '2px solid rgba(139, 92, 246, 0.3)',
+                                        boxShadow: '0 0 0 1px rgba(255,255,255,0.5), 0 4px 20px rgba(139, 92, 246, 0.15), 0 8px 40px rgba(217, 70, 239, 0.1), 0 0 60px rgba(139, 92, 246, 0.08)'
+                                    }}
                                     transition={handoffSpring}
                                 >
                                     <div className="relative">
                                         {/* Mini sparkle icon for brand consistency */}
                                         <div className="absolute left-4 top-1/2 -translate-y-1/2">
-                                            <svg className="w-5 h-5 text-violet-300" viewBox="0 0 24 24" fill="currentColor">
-                                                <path d="M12 2L13.09 8.26L19 9L13.09 9.74L12 16L10.91 9.74L5 9L10.91 8.26L12 2Z" />
-                                                <path d="M18 14L18.545 16.455L21 17L18.545 17.545L18 20L17.455 17.545L15 17L17.455 16.455L18 14Z" opacity="0.6" />
-                                                <path d="M6 14L6.364 15.636L8 16L6.364 16.364L6 18L5.636 16.364L4 16L5.636 15.636L6 14Z" opacity="0.4" />
-                                            </svg>
+                                            <SparklesIcon
+                                                className="w-5 h-5 text-violet-400"
+                                                style={{
+                                                    filter: 'drop-shadow(0 0 2px rgba(139, 92, 246, 0.5)) drop-shadow(0 0 4px rgba(217, 70, 239, 0.3))'
+                                                }}
+                                            />
                                         </div>
                                         <input
                                             ref={inputRef}

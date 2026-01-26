@@ -10,7 +10,8 @@ import {
     CalculatorIcon,
     ArrowTopRightOnSquareIcon,
     ChevronDownIcon,
-    FolderOpenIcon
+    FolderOpenIcon,
+    SparklesIcon
 } from '@heroicons/react/24/outline';
 
 // ============================================
@@ -57,24 +58,15 @@ const subjectData = {
     }
 };
 
-// Resource links structure - YOU WILL FILL THESE
-// Format: { title: 'Resource Name', url: 'https://...', type: 'pdf/video/link' }
+// Resource links structure
 const academicResources = {
-    // Notes - organized by subject
-    // Add your Google Drive links here
-    notes: {
-        // Example: 'Data Structures': [{ title: 'Complete Notes', url: 'https://drive.google.com/...', type: 'pdf' }]
-    },
-
-    // Syllabus by year
+    notes: {},
     syllabus: {
         FE: { url: 'https://www.unipune.ac.in/', title: 'FE Syllabus 2024' },
         SE: { url: 'https://www.unipune.ac.in/', title: 'SE Syllabus 2024' },
         TE: { url: 'https://www.unipune.ac.in/', title: 'TE Syllabus 2024' },
         BE: { url: 'https://www.unipune.ac.in/', title: 'BE Syllabus 2024' }
     },
-
-    // Previous Year Questions
     pyq: {
         url: 'https://www.studocu.com/',
         title: 'Previous Year Question Papers'
@@ -129,9 +121,9 @@ const Resources = () => {
     const [placementTab, setPlacementTab] = useState('dsa');
 
     const sections = [
-        { id: 'academics', label: 'Academics', icon: AcademicCapIcon, color: '#4A90E2' },
-        { id: 'placement', label: 'Placement', icon: BriefcaseIcon, color: '#8651F1' },
-        { id: 'gate', label: 'GATE Prep', icon: BookOpenIcon, color: '#A23CF4' }
+        { id: 'academics', label: 'Academics', icon: AcademicCapIcon },
+        { id: 'placement', label: 'Placement', icon: BriefcaseIcon },
+        { id: 'gate', label: 'GATE Prep', icon: BookOpenIcon }
     ];
 
     const getSubjects = () => {
@@ -142,24 +134,33 @@ const Resources = () => {
     };
 
     return (
-        <div className="min-h-screen pb-20 lg:pb-6">
+        <div className="pb-20 lg:pb-6">
             {/* Hero Header */}
-            <div className="relative overflow-hidden rounded-2xl mx-4 mt-4 p-8 lg:p-10" style={{ background: 'linear-gradient(135deg, #4A90E2 0%, #607BE7 20%, #7666EC 40%, #8651F1 60%, #A23CF4 80%, #B82FF8 90%, #CD13FC 100%)' }}>
-                <div className="absolute inset-0 opacity-10">
-                    <div className="absolute top-0 left-0 w-72 h-72 bg-white rounded-full -translate-x-1/2 -translate-y-1/2"></div>
-                    <div className="absolute bottom-0 right-0 w-96 h-96 bg-white rounded-full translate-x-1/3 translate-y-1/3"></div>
-                </div>
+            <div
+                className="relative overflow-hidden rounded-2xl mx-3 md:mx-4 p-8 lg:p-10"
+                style={{
+                    background: 'linear-gradient(135deg, #7c3aed 0%, #8b5cf6 25%, #a855f7 50%, #c026d3 75%, #d946ef 100%)',
+                    boxShadow: '0 10px 40px rgba(139, 92, 246, 0.3), 0 0 60px rgba(217, 70, 239, 0.15)'
+                }}
+            >
+                {/* Background Effects */}
+                <div className="absolute inset-0 opacity-30 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] mix-blend-overlay"></div>
+                <div className="absolute -top-24 -right-24 w-72 h-72 bg-white/20 blur-3xl rounded-full"></div>
+                <div className="absolute -bottom-24 -left-24 w-72 h-72 bg-fuchsia-400/30 blur-3xl rounded-full"></div>
 
                 <div className="relative z-10">
                     <div className="flex items-center gap-3 mb-3">
-                        <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm">
-                            <FolderOpenIcon className="w-6 h-6 text-white" />
+                        <div
+                            className="w-14 h-14 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center"
+                            style={{ boxShadow: '0 4px 15px rgba(0,0,0,0.1)' }}
+                        >
+                            <FolderOpenIcon className="w-7 h-7 text-white" />
                         </div>
-                        <h1 className="text-3xl lg:text-4xl font-bold text-white">Resources Hub</h1>
+                        <div>
+                            <h1 className="text-3xl lg:text-4xl font-bold text-white drop-shadow-lg">Resources Hub</h1>
+                            <p className="text-violet-100 text-sm">Everything you need in one place</p>
+                        </div>
                     </div>
-                    <p className="text-indigo-100 text-lg max-w-2xl">
-                        Everything you need for academics, placements, and GATE preparation - all in one place.
-                    </p>
                 </div>
             </div>
 
@@ -172,11 +173,14 @@ const Resources = () => {
                             <button
                                 key={section.id}
                                 onClick={() => setActiveSection(section.id)}
-                                className={`flex items-center gap-2 px-5 py-3 rounded-xl font-medium whitespace-nowrap transition-all ${activeSection === section.id
+                                className={`flex items-center gap-2 px-5 py-3 rounded-xl font-semibold whitespace-nowrap transition-all ${activeSection === section.id
                                     ? 'text-white shadow-lg'
-                                    : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'
+                                    : 'bg-white/80 text-violet-600 hover:bg-violet-50 border border-violet-200'
                                     }`}
-                                style={activeSection === section.id ? { backgroundColor: section.color } : {}}
+                                style={activeSection === section.id ? {
+                                    background: 'linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%)',
+                                    boxShadow: '0 4px 15px rgba(139, 92, 246, 0.3)'
+                                } : {}}
                             >
                                 <Icon className="w-5 h-5" />
                                 {section.label}
@@ -190,9 +194,17 @@ const Resources = () => {
             {activeSection === 'academics' && (
                 <div className="px-4 mt-6 space-y-6">
                     {/* Department & Year Selection */}
-                    <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
+                    <div
+                        className="rounded-2xl p-6"
+                        style={{
+                            background: 'rgba(255, 255, 255, 0.8)',
+                            backdropFilter: 'blur(12px)',
+                            border: '1px solid rgba(139, 92, 246, 0.15)',
+                            boxShadow: '0 4px 20px rgba(139, 92, 246, 0.08)'
+                        }}
+                    >
                         <h2 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
-                            <AcademicCapIcon className="w-5 h-5" style={{ color: '#4A90E2' }} />
+                            <AcademicCapIcon className="w-5 h-5 text-violet-500" />
                             Select Your Stream
                         </h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -201,10 +213,7 @@ const Resources = () => {
                                 <select
                                     value={selectedDept}
                                     onChange={(e) => { setSelectedDept(e.target.value); setSelectedSubject(''); }}
-                                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 bg-gray-50"
-                                    style={{ '--focus-ring-color': '#4A90E2' }}
-                                    onFocus={(e) => e.target.style.borderColor = '#4A90E2'}
-                                    onBlur={(e) => e.target.style.borderColor = ''}
+                                    className="w-full px-4 py-3 border-2 border-violet-100 rounded-xl focus:outline-none focus:border-violet-400 bg-white/50 transition-colors"
                                 >
                                     <option value="">Choose department...</option>
                                     {departments.map(dept => (
@@ -217,10 +226,7 @@ const Resources = () => {
                                 <select
                                     value={selectedYear}
                                     onChange={(e) => { setSelectedYear(e.target.value); setSelectedSubject(''); }}
-                                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 bg-gray-50"
-                                    style={{ '--focus-ring-color': '#4A90E2' }}
-                                    onFocus={(e) => e.target.style.borderColor = '#4A90E2'}
-                                    onBlur={(e) => e.target.style.borderColor = ''}
+                                    className="w-full px-4 py-3 border-2 border-violet-100 rounded-xl focus:outline-none focus:border-violet-400 bg-white/50 transition-colors"
                                 >
                                     <option value="">Choose year...</option>
                                     {years.map(year => (
@@ -231,16 +237,21 @@ const Resources = () => {
                         </div>
                     </div>
 
-                    {/* Year Syllabus - shown when year is selected */}
+                    {/* Year Syllabus */}
                     {selectedYear && (
                         <a
                             href={academicResources.syllabus[selectedYear]?.url || '#'}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="block bg-gradient-to-r from-green-50 to-emerald-50 rounded-2xl p-5 border border-green-100 hover:shadow-md hover:border-green-200 transition-all group"
+                            className="block rounded-2xl p-5 transition-all group hover:scale-[1.01]"
+                            style={{
+                                background: 'linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(16, 185, 129, 0.1) 100%)',
+                                border: '1px solid rgba(34, 197, 94, 0.3)',
+                                boxShadow: '0 4px 15px rgba(34, 197, 94, 0.1)'
+                            }}
                         >
                             <div className="flex items-center gap-4">
-                                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-green-500 to-emerald-500 flex items-center justify-center">
+                                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-green-500 to-emerald-500 flex items-center justify-center shadow-lg">
                                     <ClipboardDocumentListIcon className="w-6 h-6 text-white" />
                                 </div>
                                 <div className="flex-1">
@@ -249,16 +260,24 @@ const Resources = () => {
                                     </h3>
                                     <p className="text-sm text-gray-500">SPPU Official Syllabus PDF</p>
                                 </div>
-                                <ArrowTopRightOnSquareIcon className="w-5 h-5 text-gray-400 group-hover:text-green-500" />
+                                <ArrowTopRightOnSquareIcon className="w-5 h-5 text-gray-400 group-hover:text-green-500 transition-colors" />
                             </div>
                         </a>
                     )}
 
-                    {/* Subject Selection - shown when both dept and year selected */}
+                    {/* Subject Selection */}
                     {selectedDept && selectedYear && (
-                        <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
+                        <div
+                            className="rounded-2xl p-6"
+                            style={{
+                                background: 'rgba(255, 255, 255, 0.8)',
+                                backdropFilter: 'blur(12px)',
+                                border: '1px solid rgba(139, 92, 246, 0.15)',
+                                boxShadow: '0 4px 20px rgba(139, 92, 246, 0.08)'
+                            }}
+                        >
                             <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
-                                <BookOpenIcon className="w-5 h-5" style={{ color: '#4A90E2' }} />
+                                <BookOpenIcon className="w-5 h-5 text-violet-500" />
                                 Choose Subject
                             </h3>
                             <div className="flex flex-wrap gap-2">
@@ -268,11 +287,11 @@ const Resources = () => {
                                         onClick={() => setSelectedSubject(subject)}
                                         className={`px-4 py-2.5 rounded-xl font-medium text-sm transition-all ${selectedSubject === subject
                                             ? 'text-white shadow-lg'
-                                            : 'bg-gray-100 text-gray-700 hover:text-white'
+                                            : 'bg-violet-50 text-violet-700 hover:bg-violet-100'
                                             }`}
-                                        style={selectedSubject === subject ? { backgroundColor: '#4A90E2' } : {}}
-                                        onMouseEnter={(e) => { if (selectedSubject !== subject) e.target.style.backgroundColor = '#7666EC'; }}
-                                        onMouseLeave={(e) => { if (selectedSubject !== subject) e.target.style.backgroundColor = ''; }}
+                                        style={selectedSubject === subject ? {
+                                            background: 'linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%)'
+                                        } : {}}
                                     >
                                         {subject}
                                     </button>
@@ -281,23 +300,32 @@ const Resources = () => {
                         </div>
                     )}
 
-                    {/* Subject Resources - shown when subject is selected */}
+                    {/* Subject Resources */}
                     {selectedSubject && (
                         <div className="space-y-4">
                             <h3 className="text-lg font-semibold text-gray-800 flex items-center gap-2 px-1">
-                                📚 Resources for <span style={{ color: '#4A90E2' }}>{selectedSubject}</span>
+                                <SparklesIcon className="w-5 h-5 text-violet-500" />
+                                Resources for <span className="text-violet-600">{selectedSubject}</span>
                             </h3>
 
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                 {/* Notes Card */}
-                                <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-md hover:border-blue-200 transition-all group cursor-pointer">
-                                    <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center mb-4 shadow-lg shadow-blue-500/30">
+                                <div
+                                    className="rounded-2xl p-6 transition-all group cursor-pointer hover:scale-[1.02]"
+                                    style={{
+                                        background: 'rgba(255, 255, 255, 0.8)',
+                                        backdropFilter: 'blur(12px)',
+                                        border: '1px solid rgba(139, 92, 246, 0.15)',
+                                        boxShadow: '0 4px 20px rgba(139, 92, 246, 0.08)'
+                                    }}
+                                >
+                                    <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center mb-4 shadow-lg" style={{ boxShadow: '0 8px 20px rgba(139, 92, 246, 0.3)' }}>
                                         <DocumentTextIcon className="w-7 h-7 text-white" />
                                     </div>
-                                    <h4 className="font-semibold text-gray-800 mb-1 group-hover:text-blue-600 transition-colors">Notes</h4>
+                                    <h4 className="font-semibold text-gray-800 mb-1 group-hover:text-violet-600 transition-colors">Notes</h4>
                                     <p className="text-sm text-gray-500 mb-4">Lecture notes & study material</p>
                                     {academicResources.notes[selectedSubject] ? (
-                                        <a href={academicResources.notes[selectedSubject][0]?.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-blue-600 text-sm font-medium hover:underline">
+                                        <a href={academicResources.notes[selectedSubject][0]?.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-violet-600 text-sm font-medium hover:underline">
                                             View Notes <ArrowTopRightOnSquareIcon className="w-4 h-4" />
                                         </a>
                                     ) : (
@@ -310,9 +338,15 @@ const Resources = () => {
                                     href={academicResources.pyq.url}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-md hover:border-orange-200 transition-all group"
+                                    className="rounded-2xl p-6 transition-all group hover:scale-[1.02]"
+                                    style={{
+                                        background: 'rgba(255, 255, 255, 0.8)',
+                                        backdropFilter: 'blur(12px)',
+                                        border: '1px solid rgba(251, 146, 60, 0.2)',
+                                        boxShadow: '0 4px 20px rgba(251, 146, 60, 0.08)'
+                                    }}
                                 >
-                                    <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center mb-4 shadow-lg shadow-orange-500/30">
+                                    <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center mb-4 shadow-lg" style={{ boxShadow: '0 8px 20px rgba(251, 146, 60, 0.3)' }}>
                                         <ClipboardDocumentListIcon className="w-7 h-7 text-white" />
                                     </div>
                                     <h4 className="font-semibold text-gray-800 mb-1 group-hover:text-orange-600 transition-colors">Previous Year Papers</h4>
@@ -327,9 +361,15 @@ const Resources = () => {
                                     href={`https://www.youtube.com/results?search_query=${encodeURIComponent(selectedSubject + ' SPPU lectures')}`}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-md hover:border-red-200 transition-all group"
+                                    className="rounded-2xl p-6 transition-all group hover:scale-[1.02]"
+                                    style={{
+                                        background: 'rgba(255, 255, 255, 0.8)',
+                                        backdropFilter: 'blur(12px)',
+                                        border: '1px solid rgba(239, 68, 68, 0.2)',
+                                        boxShadow: '0 4px 20px rgba(239, 68, 68, 0.08)'
+                                    }}
                                 >
-                                    <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-red-500 to-pink-500 flex items-center justify-center mb-4 shadow-lg shadow-red-500/30">
+                                    <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-red-500 to-pink-500 flex items-center justify-center mb-4 shadow-lg" style={{ boxShadow: '0 8px 20px rgba(239, 68, 68, 0.3)' }}>
                                         <svg className="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 24 24">
                                             <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
                                         </svg>
@@ -346,16 +386,29 @@ const Resources = () => {
 
                     {/* Prompt if not selected */}
                     {(!selectedDept || !selectedYear) && (
-                        <div className="text-center py-12 bg-white rounded-2xl border border-gray-100">
-                            <AcademicCapIcon className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+                        <div
+                            className="text-center py-12 rounded-2xl"
+                            style={{
+                                background: 'rgba(255, 255, 255, 0.8)',
+                                backdropFilter: 'blur(12px)',
+                                border: '1px solid rgba(139, 92, 246, 0.15)'
+                            }}
+                        >
+                            <AcademicCapIcon className="w-16 h-16 text-violet-300 mx-auto mb-4" />
                             <p className="text-gray-500 text-lg">Select your department and year to view subjects</p>
                         </div>
                     )}
 
                     {/* Prompt to select subject */}
                     {selectedDept && selectedYear && !selectedSubject && (
-                        <div className="text-center py-8 bg-gradient-to-r from-indigo-50 to-violet-50 rounded-2xl border border-indigo-100">
-                            <p className="text-indigo-600">👆 Select a subject above to see Notes, PYQs & Videos</p>
+                        <div
+                            className="text-center py-8 rounded-2xl"
+                            style={{
+                                background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(217, 70, 239, 0.1) 100%)',
+                                border: '1px solid rgba(139, 92, 246, 0.2)'
+                            }}
+                        >
+                            <p className="text-violet-600 font-medium">👆 Select a subject above to see Notes, PYQs & Videos</p>
                         </div>
                     )}
                 </div>
@@ -377,10 +430,13 @@ const Resources = () => {
                                     key={tab.id}
                                     onClick={() => setPlacementTab(tab.id)}
                                     className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-medium text-sm whitespace-nowrap transition-all ${placementTab === tab.id
-                                        ? 'text-white'
-                                        : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'
+                                        ? 'text-white shadow-lg'
+                                        : 'bg-white/80 text-violet-600 hover:bg-violet-50 border border-violet-200'
                                         }`}
-                                    style={placementTab === tab.id ? { backgroundColor: '#8651F1' } : {}}
+                                    style={placementTab === tab.id ? {
+                                        background: 'linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%)',
+                                        boxShadow: '0 4px 15px rgba(139, 92, 246, 0.3)'
+                                    } : {}}
                                 >
                                     <Icon className="w-4 h-4" />
                                     {tab.label}
@@ -399,10 +455,16 @@ const Resources = () => {
                                     href={resource.url}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm hover:shadow-md hover:border-violet-200 transition-all group"
+                                    className="rounded-2xl p-5 transition-all group hover:scale-[1.01]"
+                                    style={{
+                                        background: 'rgba(255, 255, 255, 0.8)',
+                                        backdropFilter: 'blur(12px)',
+                                        border: '1px solid rgba(139, 92, 246, 0.15)',
+                                        boxShadow: '0 4px 20px rgba(139, 92, 246, 0.08)'
+                                    }}
                                 >
                                     <div className="flex items-center gap-4">
-                                        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-violet-500 to-purple-500 flex items-center justify-center shrink-0">
+                                        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center shrink-0 shadow-lg" style={{ boxShadow: '0 6px 15px rgba(139, 92, 246, 0.3)' }}>
                                             <Icon className="w-6 h-6 text-white" />
                                         </div>
                                         <div className="flex-1 min-w-0">
@@ -411,7 +473,7 @@ const Resources = () => {
                                             </h3>
                                             <p className="text-sm text-gray-500 truncate">{resource.description}</p>
                                         </div>
-                                        <ArrowTopRightOnSquareIcon className="w-5 h-5 text-gray-400 group-hover:text-violet-500 shrink-0" />
+                                        <ArrowTopRightOnSquareIcon className="w-5 h-5 text-gray-400 group-hover:text-violet-500 shrink-0 transition-colors" />
                                     </div>
                                 </a>
                             );
@@ -423,9 +485,18 @@ const Resources = () => {
             {/* GATE Section */}
             {activeSection === 'gate' && (
                 <div className="px-4 mt-6 space-y-6">
-                    <div className="rounded-2xl p-6 border" style={{ background: 'linear-gradient(to right, rgba(162, 60, 244, 0.1), rgba(184, 47, 248, 0.1))', borderColor: '#A23CF4' }}>
-                        <h2 className="text-lg font-semibold mb-2" style={{ color: '#A23CF4' }}>GATE Preparation Resources</h2>
-                        <p className="text-sm" style={{ color: '#8651F1' }}>Curated resources for GATE CS/IT preparation</p>
+                    <div
+                        className="rounded-2xl p-6"
+                        style={{
+                            background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.15) 0%, rgba(217, 70, 239, 0.15) 100%)',
+                            border: '1px solid rgba(139, 92, 246, 0.3)'
+                        }}
+                    >
+                        <h2 className="text-lg font-semibold text-violet-700 mb-2 flex items-center gap-2">
+                            <BookOpenIcon className="w-5 h-5" />
+                            GATE Preparation Resources
+                        </h2>
+                        <p className="text-sm text-violet-600">Curated resources for GATE CS/IT preparation</p>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -435,27 +506,33 @@ const Resources = () => {
                                 href={resource.url}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm hover:shadow-md transition-all group"
-                                style={{ '--hover-border-color': '#A23CF4' }}
-                                onMouseEnter={(e) => e.target.style.borderColor = '#A23CF4'}
-                                onMouseLeave={(e) => e.target.style.borderColor = ''}
+                                className="rounded-2xl p-5 transition-all group hover:scale-[1.01]"
+                                style={{
+                                    background: 'rgba(255, 255, 255, 0.8)',
+                                    backdropFilter: 'blur(12px)',
+                                    border: '1px solid rgba(139, 92, 246, 0.15)',
+                                    boxShadow: '0 4px 20px rgba(139, 92, 246, 0.08)'
+                                }}
                             >
                                 <div className="flex items-start gap-4">
-                                    <div className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0" style={{ background: 'linear-gradient(to bottom right, #A23CF4, #B82FF8)' }}>
+                                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-violet-500 to-fuchsia-600 flex items-center justify-center shrink-0 shadow-lg" style={{ boxShadow: '0 6px 15px rgba(139, 92, 246, 0.3)' }}>
                                         <BookOpenIcon className="w-6 h-6 text-white" />
                                     </div>
                                     <div className="flex-1 min-w-0">
                                         <div className="flex items-center gap-2 mb-1">
-                                            <h3 className="font-semibold text-gray-800 transition-colors group-hover:text-[#A23CF4]">
+                                            <h3 className="font-semibold text-gray-800 group-hover:text-violet-600 transition-colors">
                                                 {resource.title}
                                             </h3>
-                                            <span className="px-2 py-0.5 text-xs rounded-full text-white" style={{ backgroundColor: '#A23CF4' }}>
+                                            <span
+                                                className="px-2 py-0.5 text-xs rounded-full text-white font-medium"
+                                                style={{ background: 'linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%)' }}
+                                            >
                                                 {resource.category}
                                             </span>
                                         </div>
                                         <p className="text-sm text-gray-500">{resource.description}</p>
                                     </div>
-                                    <ArrowTopRightOnSquareIcon className="w-5 h-5 text-gray-400 shrink-0 transition-colors group-hover:text-[#A23CF4]" />
+                                    <ArrowTopRightOnSquareIcon className="w-5 h-5 text-gray-400 shrink-0 group-hover:text-violet-500 transition-colors" />
                                 </div>
                             </a>
                         ))}

@@ -31,6 +31,8 @@ import AskAI from './pages/AskAI';
 
 import { SocketProvider } from './context/SocketContext';
 
+import DesktopNavbar from './components/navbar/DesktopNavbar';
+
 // Layout wrapper for authenticated routes
 const AuthenticatedLayout = ({ children }) => {
   const { isModalOpen, openModal, closeModal } = useModal();
@@ -57,6 +59,9 @@ const AuthenticatedLayout = ({ children }) => {
 
   return (
     <div className="min-h-screen bg-transparent">
+      {/* Desktop Top Navbar */}
+      <DesktopNavbar />
+
       {/* Left Sidebar */}
       <Sidebar onCreatePost={openModal} />
 
@@ -64,8 +69,10 @@ const AuthenticatedLayout = ({ children }) => {
       <MobileTopNav />
 
       {/* Main Content Area */}
-      <main className="lg:ml-[var(--sidebar-width)] xl:mr-[var(--right-sidebar-width)] min-h-screen pt-16 lg:pt-4 pb-24 lg:pb-8 px-4 lg:px-8">
-        <div className="max-w-3xl mx-auto">
+      <main
+        className="lg:ml-[var(--sidebar-width)] xl:mr-[var(--right-sidebar-width)] min-h-screen pt-16 lg:pt-24 pb-24 lg:pb-8 px-0 sm:px-4 lg:px-8 bg-[linear-gradient(180deg,#faf5ff_0%,#f5f3ff_50%,#ffffff_100%)] lg:bg-none"
+      >
+        <div className="w-full max-w-lg md:max-w-2xl lg:max-w-4xl xl:max-w-5xl mx-auto transition-all duration-300">
           {children}
         </div>
       </main>

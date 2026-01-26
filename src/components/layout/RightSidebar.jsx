@@ -54,7 +54,7 @@ const RightSidebar = () => {
     };
 
     return (
-        <aside className="right-sidebar hidden xl:block">
+        <aside className="right-sidebar hidden xl:block !top-24">
             {/* Quick Stats */}
             <div className="stats-card mb-6">
                 <h3 className="font-semibold text-gray-800 mb-4 flex items-center gap-2">

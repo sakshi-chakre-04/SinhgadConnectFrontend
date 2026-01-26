@@ -1,26 +1,25 @@
 import React from 'react';
 
-const FormField = ({ 
-  id, 
-  label, 
-  type = 'text', 
-  required = false, 
-  error, 
-  register, 
+const FormField = ({
+  id,
+  label,
+  type = 'text',
+  required = false,
+  error,
+  register,
   validation,
   placeholder,
   rows
 }) => {
-  const fieldClassName = `w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
-    error ? 'border-red-500' : 'border-gray-300'
-  }`;
+  const fieldClassName = `w-full p-3 border-2 rounded-xl focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-violet-500 transition-colors ${error ? 'border-red-400 bg-red-50/50' : 'border-violet-100 hover:border-violet-200 bg-white'
+    }`;
 
   const Element = type === 'textarea' ? 'textarea' : 'input';
 
   return (
     <div>
       <label htmlFor={id} className="block text-sm font-medium text-gray-700 mb-2">
-        {label} {required && '*'}
+        {label} {required && <span className="text-red-500">*</span>}
       </label>
       <Element
         id={id}

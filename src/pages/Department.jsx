@@ -101,11 +101,11 @@ const Department = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div className="min-h-screen bg-gray-50 p-0 md:p-6">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
-        <div className="bg-white rounded-xl shadow-lg p-8 mb-6">
-          <h1 className="text-3xl font-bold text-gray-800 mb-2">{departmentName} Department</h1>
+        <div className="bg-white rounded-none md:rounded-xl shadow-lg p-6 md:p-8 mb-2 md:mb-6 border-b md:border-0">
+          <h1 className="text-2xl md:text-3xl font-bold text-gray-800 mb-2">{departmentName} Department</h1>
           <p className="text-gray-600">Posts from the {departmentName} community</p>
         </div>
 
