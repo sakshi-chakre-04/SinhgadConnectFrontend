@@ -20,7 +20,7 @@ const RightSidebar = () => {
         totalComments: 0,
         totalUpvotes: 0
     });
-    const [topContributor, setTopContributor] = useState(null);
+    const [topContributors, setTopContributors] = useState([]);
 
     useEffect(() => {
         if (user?.id) {
@@ -48,22 +48,15 @@ const RightSidebar = () => {
         }
     };
 
+
     const fetchTopContributor = async () => {
         try {
             const response = await api.get('/leaderboard', {
-                params: { timeRange: 'all', limit: 1 }
+                params: { timeRange: 'all', limit: 3 }
             });
 
             const leaderboard = response.data.leaderboard || [];
-            if (leaderboard.length > 0) {
-                const topUser = leaderboard[0];
-                setTopContributor({
-                    name: topUser.name,
-                    department: topUser.department,
-                    posts: topUser.postCount || 0,
-                    upvotes: topUser.totalUpvotes || 0
-                });
-            }
+            setTopContributors(leaderboard);
         } catch (error) {
             console.error('Error fetching top contributor:', error);
         }
@@ -155,48 +148,62 @@ const RightSidebar = () => {
                     </div>
                 </div>
 
-                {/* Top Contributor Card */}
-                <div className="relative overflow-hidden rounded-2xl p-5 bg-white border border-gray-100 shadow-lg hover:shadow-xl transition-all duration-300">
+
+                {/* Top Contributors Card - Motivation & Social Proof */}
+                <div className="relative overflow-hidden rounded-2xl p-4 bg-white border border-gray-100 shadow-lg hover:shadow-xl transition-all duration-300">
                     <div className="absolute inset-0 bg-gradient-to-br from-yellow-50/50 via-orange-50/30 to-amber-50/20 pointer-events-none"></div>
 
                     <div className="relative z-10">
-                        <h3 className="font-bold text-gray-800 mb-4 flex items-center gap-2 text-base">
-                            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-yellow-500 to-orange-600 flex items-center justify-center">
-                                <TrophyIcon className="w-4 h-4 text-white" />
+                        <h3 className="font-bold text-gray-800 mb-3 flex items-center gap-2 text-sm">
+                            <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-yellow-500 to-orange-600 flex items-center justify-center">
+                                <TrophyIcon className="w-3 h-3 text-white" />
                             </div>
-                            Top Contributor
+                            Top Contributors
                         </h3>
 
-                        {topContributor ? (
-                            <div className="space-y-3">
-                                <div className="flex items-center gap-3 p-3 rounded-xl bg-gradient-to-r from-yellow-50 to-orange-50 border border-yellow-100/50">
-                                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-yellow-500 to-orange-600 flex items-center justify-center shadow-md">
-                                        <UserIcon className="w-6 h-6 text-white" />
-                                    </div>
-                                    <div className="flex-1">
-                                        <p className="text-sm font-bold text-gray-800">{topContributor.name}</p>
-                                        <p className="text-xs text-gray-600">{topContributor.department}</p>
-                                    </div>
-                                </div>
+                        {topContributors.length > 0 ? (
+                            <div className="space-y-2">
+                                {topContributors.map((user, index) => {
+                                    const medals = ['🥇', '🥈', '🥉'];
+                                    const gradients = [
+                                        'from-yellow-500 to-amber-600',
+                                        'from-gray-400 to-gray-600',
+                                        'from-orange-500 to-amber-700'
+                                    ];
 
-                                <div className="grid grid-cols-2 gap-2">
-                                    <div className="p-2 rounded-lg bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-100/50 text-center">
-                                        <p className="text-lg font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">{topContributor.posts}</p>
-                                        <p className="text-xs text-gray-600">Posts</p>
-                                    </div>
-                                    <div className="p-2 rounded-lg bg-gradient-to-br from-purple-50 to-pink-50 border border-purple-100/50 text-center">
-                                        <p className="text-lg font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">{topContributor.upvotes}</p>
-                                        <p className="text-xs text-gray-600">Upvotes</p>
-                                    </div>
-                                </div>
+                                    return (
+                                        <Link
+                                            key={user.userId}
+                                            to={`/user/${user.userId}`}
+                                            className="flex items-center gap-2 p-2 rounded-lg bg-gradient-to-r from-white to-gray-50 border border-gray-100 hover:border-yellow-200 hover:shadow-sm transition-all group"
+                                        >
+                                            <div className={`w-7 h-7 rounded-lg bg-gradient-to-br ${gradients[index]} flex items-center justify-center shadow-sm flex-shrink-0`}>
+                                                <span className="text-sm">{medals[index]}</span>
+                                            </div>
+                                            <div className="flex-1 min-w-0">
+                                                <p className="text-xs font-bold text-gray-800 truncate group-hover:text-yellow-700 transition-colors">
+                                                    {user.name}
+                                                </p>
+                                                <p className="text-xs text-gray-500">{user.department}</p>
+                                            </div>
+                                            <div className="text-right flex-shrink-0">
+                                                <p className="text-xs font-bold text-yellow-600">{user.totalUpvotes}</p>
+                                                <p className="text-xs text-gray-400">pts</p>
+                                            </div>
+                                        </Link>
+                                    );
+                                })}
 
-                                <Link to="/hall-of-fame" className="block w-full text-center py-2 px-4 rounded-lg bg-gradient-to-r from-yellow-500 to-orange-600 text-white text-sm font-medium hover:shadow-md transition-all">
-                                    View Leaderboard
+                                <Link
+                                    to="/leaderboard"
+                                    className="block w-full text-center py-2 px-3 rounded-lg bg-gradient-to-r from-yellow-500 to-orange-600 text-white text-xs font-medium hover:shadow-md transition-all mt-3"
+                                >
+                                    View Full Leaderboard
                                 </Link>
                             </div>
                         ) : (
-                            <div className="text-center py-6 text-gray-500 text-sm">
-                                Loading top contributor...
+                            <div className="text-center py-4 text-gray-500 text-xs">
+                                Loading top contributors...
                             </div>
                         )}
                     </div>
