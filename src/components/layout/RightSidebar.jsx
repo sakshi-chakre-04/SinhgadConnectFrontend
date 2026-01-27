@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { selectUser } from '../../features/auth/authSlice';
 import {
@@ -8,11 +8,58 @@ import {
     HandThumbUpIcon,
     FireIcon,
     TrophyIcon,
-    SparklesIcon
+    SparklesIcon,
+    BookOpenIcon
 } from '@heroicons/react/24/outline';
 import { api } from '../../services/api/api';
+import { postsAPI } from '../../services/api/postsService';
+
+// Resource mapping - same as ForYouCard
+const getResourceForUser = (department, year) => {
+    const resourceMap = {
+        Computer: {
+            FE: { title: 'Engineering Mathematics-I Notes', subject: 'Engineering Mathematics-I' },
+            SE: { title: 'Data Structures Guide', subject: 'Data Structures' },
+            TE: { title: 'DBMS Study Material', subject: 'Database Management Systems' },
+            BE: { title: 'Machine Learning Resources', subject: 'Machine Learning' }
+        },
+        IT: {
+            FE: { title: 'Engineering Physics Notes', subject: 'Engineering Physics' },
+            SE: { title: 'Web Technology Guide', subject: 'Web Technology' },
+            TE: { title: 'Operating Systems Notes', subject: 'Operating Systems' },
+            BE: { title: 'Cloud Computing Resources', subject: 'Cloud Computing' }
+        },
+        Electronics: {
+            FE: { title: 'Basic Electrical Engineering', subject: 'Basic Electrical Engineering' },
+            SE: { title: 'Digital Electronics Guide', subject: 'Digital Electronics' },
+            TE: { title: 'Microprocessors Study Material', subject: 'Microprocessors' },
+            BE: { title: 'Wireless Communication Notes', subject: 'Wireless Communication' }
+        },
+        Mechanical: {
+            FE: { title: 'Engineering Mechanics Notes', subject: 'Engineering Mechanics' },
+            SE: { title: 'Thermodynamics Guide', subject: 'Thermodynamics' },
+            TE: { title: 'Heat Transfer Study Material', subject: 'Heat Transfer' },
+            BE: { title: 'Automobile Engineering Resources', subject: 'Automobile Engineering' }
+        },
+        Civil: {
+            FE: { title: 'Engineering Chemistry Notes', subject: 'Engineering Chemistry' },
+            SE: { title: 'Surveying Complete Guide', subject: 'Surveying' },
+            TE: { title: 'Structural Analysis Notes', subject: 'Structural Analysis' },
+            BE: { title: 'Construction Management Resources', subject: 'Construction Management' }
+        },
+        Electrical: {
+            FE: { title: 'Basic Electrical Engineering', subject: 'Basic Electrical Engineering' },
+            SE: { title: 'Circuit Theory Guide', subject: 'Circuit Theory' },
+            TE: { title: 'Power Systems Study Material', subject: 'Power Systems' },
+            BE: { title: 'Smart Grid Resources', subject: 'Smart Grid' }
+        }
+    };
+
+    return resourceMap[department]?.[year] || null;
+};
 
 const RightSidebar = () => {
+    const navigate = useNavigate();
     const user = useSelector(selectUser);
     const [stats, setStats] = useState({
         totalPosts: 0,
@@ -20,13 +67,39 @@ const RightSidebar = () => {
         totalUpvotes: 0
     });
     const [topContributor, setTopContributor] = useState(null);
+    const [personalizedPosts, setPersonalizedPosts] = useState([]);
+    const [recommendedResource, setRecommendedResource] = useState(null);
+    const [loadingPersonalized, setLoadingPersonalized] = useState(true);
 
     useEffect(() => {
         if (user?.id) {
             fetchStats();
+            fetchPersonalizedContent();
         }
         fetchTopContributor();
     }, [user]);
+
+    const fetchPersonalizedContent = async () => {
+        try {
+            setLoadingPersonalized(true);
+            const response = await postsAPI.getPersonalizedPosts();
+            setPersonalizedPosts(response.posts || []);
+
+            // Get recommended resource
+            if (response.personalizationInfo) {
+                const resource = getResourceForUser(
+                    response.personalizationInfo.department,
+                    response.personalizationInfo.year
+                );
+                setRecommendedResource(resource);
+            }
+        } catch (error) {
+            console.error('Failed to fetch personalized content:', error);
+            setPersonalizedPosts([]);
+        } finally {
+            setLoadingPersonalized(false);
+        }
+    };
 
     const fetchStats = async () => {
         try {
@@ -71,7 +144,7 @@ const RightSidebar = () => {
     return (
         <aside className="right-sidebar hidden xl:block !top-24">
             <div className="space-y-4">
-                {/* For You Card - Vibrant Blue Theme */}
+                {/* For You Card - Vibrant Blue Theme with Dynamic Content */}
                 <div className="relative overflow-hidden rounded-2xl p-5 bg-gradient-to-br from-blue-500 via-indigo-500 to-purple-600 shadow-xl hover:shadow-2xl transition-all duration-300 group">
                     {/* Animated background effects */}
                     <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
@@ -86,31 +159,55 @@ const RightSidebar = () => {
                             <h3 className="font-bold text-white text-lg">For You</h3>
                         </div>
 
-                        <div className="space-y-2">
-                            <Link to="/posts" className="block p-3 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 hover:scale-[1.02] transition-all group/item">
-                                <div className="flex items-center gap-2 mb-1">
-                                    <FireIcon className="w-4 h-4 text-yellow-300 group-hover/item:animate-bounce" />
-                                    <p className="text-sm font-semibold text-white">Latest Discussions</p>
-                                </div>
-                                <p className="text-xs text-white/80">Check out the newest posts</p>
-                            </Link>
+                        {loadingPersonalized ? (
+                            <div className="space-y-2">
+                                <div className="h-16 rounded-xl bg-white/10 animate-pulse"></div>
+                                <div className="h-16 rounded-xl bg-white/10 animate-pulse"></div>
+                                <div className="h-16 rounded-xl bg-white/10 animate-pulse"></div>
+                            </div>
+                        ) : (
+                            <div className="space-y-2">
+                                {/* 2 Personalized/Trending Posts */}
+                                {personalizedPosts.map((post, index) => (
+                                    <div
+                                        key={post._id}
+                                        onClick={() => navigate(`/posts/${post._id}`)}
+                                        className="block p-3 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 hover:scale-[1.02] transition-all cursor-pointer group/item"
+                                    >
+                                        <div className="flex items-start gap-2 mb-1">
+                                            <span className="text-xs px-2 py-0.5 rounded-full bg-white/20 text-white/90 font-medium flex-shrink-0">
+                                                {post.matchLabel}
+                                            </span>
+                                        </div>
+                                        <p className="text-sm font-semibold text-white line-clamp-2 leading-tight">
+                                            {post.title}
+                                        </p>
+                                        <p className="text-xs text-white/70 mt-1">
+                                            {post.author?.name}
+                                        </p>
+                                    </div>
+                                ))}
 
-                            <Link to="/hall-of-fame" className="block p-3 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 hover:scale-[1.02] transition-all group/item">
-                                <div className="flex items-center gap-2 mb-1">
-                                    <TrophyIcon className="w-4 h-4 text-yellow-300 group-hover/item:animate-bounce" />
-                                    <p className="text-sm font-semibold text-white">Hall of Fame</p>
-                                </div>
-                                <p className="text-xs text-white/80">Top performers this month</p>
-                            </Link>
-
-                            <Link to="/resources" className="block p-3 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 hover:scale-[1.02] transition-all group/item">
-                                <div className="flex items-center gap-2 mb-1">
-                                    <DocumentTextIcon className="w-4 h-4 text-yellow-300 group-hover/item:animate-bounce" />
-                                    <p className="text-sm font-semibold text-white">Resources</p>
-                                </div>
-                                <p className="text-xs text-white/80">Study materials & guides</p>
-                            </Link>
-                        </div>
+                                {/* 1 Resource */}
+                                {recommendedResource && (
+                                    <div
+                                        onClick={() => navigate('/resources')}
+                                        className="block p-3 rounded-xl bg-emerald-500/20 backdrop-blur-sm border border-emerald-400/30 hover:bg-emerald-500/30 hover:scale-[1.02] transition-all cursor-pointer group/item"
+                                    >
+                                        <div className="flex items-center gap-2 mb-1">
+                                            <BookOpenIcon className="w-4 h-4 text-emerald-200 group-hover/item:animate-bounce" />
+                                            <p className="text-xs font-semibold text-emerald-100">📚 Your Department</p>
+                                        </div>
+                                        <p className="text-sm font-semibold text-white line-clamp-1">
+                                            {recommendedResource.title}
+                                        </p>
+                                        <p className="text-xs text-white/80 line-clamp-1">
+                                            {recommendedResource.subject}
+                                        </p>
+                                    </div>
+                                )}
+                            </div>
+                        )}
                     </div>
                 </div>
 
