@@ -789,3 +789,40 @@ body {
 .pause-animation {
     animation-play-state: paused;
 }
+
+/* ===== FUTURISTIC ANIMATIONS FOR FOR YOU CARD ===== */
+
+/* Slide In Up - Staggered entrance animation (Linear inspired) */
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Shimmer - Loading state animation (Nothing OS inspired) */
+@keyframes shimmer {
+    0% {
+        transform: translateX(-100%);
+    }
+
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+/* Shine - Hover effect animation (Vision Pro inspired) */
+@keyframes shine {
+    0% {
+        transform: translateX(-100%) skewX(-15deg);
+    }
+
+    100% {
+        transform: translateX(200%) skewX(-15deg);
+    }
+}

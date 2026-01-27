@@ -11,6 +11,7 @@ import {
   MagnifyingGlassIcon
 } from '@heroicons/react/24/outline';
 import PostContainer from '../components/posts/PostContainer';
+import ForYouCard from '../components/posts/ForYouCard';
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -112,6 +113,9 @@ const Dashboard = () => {
           </div>
         </form>
       </div>
+
+      {/* Personalized "For You" Discovery Card */}
+      <ForYouCard />
 
       {/* Latest Discussions */}
       <div>
