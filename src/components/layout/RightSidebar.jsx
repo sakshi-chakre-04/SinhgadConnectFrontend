@@ -77,12 +77,15 @@ const RightSidebar = () => {
             fetchPersonalizedContent();
         }
         fetchTopContributor();
-    }, [user]);
+    }, [user?.id]); // Add user.id as dependency
 
     const fetchPersonalizedContent = async () => {
         try {
             setLoadingPersonalized(true);
+            console.log('Fetching personalized content...');
             const response = await postsAPI.getPersonalizedPosts();
+            console.log('Personalized response:', response);
+
             setPersonalizedPosts(response.posts || []);
 
             // Get recommended resource
@@ -164,6 +167,11 @@ const RightSidebar = () => {
                                 <div className="h-16 rounded-xl bg-white/10 animate-pulse"></div>
                                 <div className="h-16 rounded-xl bg-white/10 animate-pulse"></div>
                                 <div className="h-16 rounded-xl bg-white/10 animate-pulse"></div>
+                            </div>
+                        ) : personalizedPosts.length === 0 && !recommendedResource ? (
+                            <div className="text-center py-6 text-white/80 text-sm">
+                                <p className="mb-2">Start Your Journey</p>
+                                <p className="text-xs text-white/60">Upvote posts to get personalized recommendations</p>
                             </div>
                         ) : (
                             <div className="space-y-2">
