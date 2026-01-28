@@ -21,7 +21,7 @@ const RightSidebar = () => {
         totalComments: 0,
         totalUpvotes: 0
     });
-    const [topContributor, setTopContributor] = useState(null);
+    const [topContributor, setTopContributor] = useState([]);
     const [personalizedPosts, setPersonalizedPosts] = useState([]);
     const [loadingPersonalized, setLoadingPersonalized] = useState(true);
 
@@ -30,7 +30,7 @@ const RightSidebar = () => {
             fetchStats();
             fetchPersonalizedContent();
         }
-        fetchTopContributor();
+        fetchTopContributors();
     }, [user?.id]); // Add user.id as dependency
 
     const fetchPersonalizedContent = async () => {
@@ -68,24 +68,24 @@ const RightSidebar = () => {
         }
     };
 
-    const fetchTopContributor = async () => {
+
+    const fetchTopContributors = async () => {
         try {
             const response = await api.get('/leaderboard', {
-                params: { timeRange: 'all', limit: 1 }
+                params: { timeRange: 'all', limit: 3 }
             });
 
             const leaderboard = response.data.leaderboard || [];
             if (leaderboard.length > 0) {
-                const topUser = leaderboard[0];
-                setTopContributor({
-                    name: topUser.name,
-                    department: topUser.department,
-                    posts: topUser.postCount || 0,
-                    upvotes: topUser.totalUpvotes || 0
-                });
+                setTopContributor(leaderboard.map(user => ({
+                    name: user.name,
+                    department: user.department,
+                    posts: user.postCount || 0,
+                    upvotes: user.totalUpvotes || 0
+                })));
             }
         } catch (error) {
-            console.error('Error fetching top contributor:', error);
+            console.error('Error fetching top contributors:', error);
         }
     };
 
@@ -183,7 +183,7 @@ const RightSidebar = () => {
                     </div>
                 </div>
 
-                {/* Top Contributor Card - Compact */}
+                {/* Top Contributors Card - Compact */}
                 <div className="relative overflow-hidden rounded-2xl p-4 bg-gradient-to-br from-orange-500 via-amber-500 to-yellow-600 shadow-xl hover:shadow-2xl transition-all duration-300 group">
                     {/* Animated background effects */}
                     <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
@@ -194,24 +194,22 @@ const RightSidebar = () => {
                             <div className="w-8 h-8 rounded-lg bg-white/20 backdrop-blur-sm flex items-center justify-center">
                                 <TrophyIcon className="w-4 h-4 text-white" />
                             </div>
-                            <h3 className="font-bold text-white text-base">Top Contributor</h3>
+                            <h3 className="font-bold text-white text-base">Top Contributors</h3>
                         </div>
 
-                        {topContributor ? (
-                            <Link to="/leaderboard" className="flex items-center gap-3 p-3 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 transition-all">
-                                <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center shadow-lg flex-shrink-0">
-                                    <span className="text-xl">🥇</span>
-                                </div>
-                                <div className="flex-1 min-w-0">
-                                    <p className="text-sm font-bold text-white truncate">
-                                        {topContributor.name}
-                                    </p>
-                                    <p className="text-xs text-white/80">{topContributor.department}</p>
-                                </div>
-                                <div className="text-right flex-shrink-0">
-                                    <p className="text-lg font-bold text-white">{topContributor.upvotes}</p>
-                                    <p className="text-xs text-white/80">pts</p>
-                                </div>
+                        {topContributor.length > 0 ? (
+                            <Link to="/leaderboard" className="space-y-2 block">
+                                {topContributor.map((contributor, index) => (
+                                    <div key={index} className="flex items-center gap-2 p-2 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 transition-all">
+                                        <span className="text-lg w-6 text-center">{['🥇', '🥈', '🥉'][index]}</span>
+                                        <div className="flex-1 min-w-0">
+                                            <p className="text-sm font-bold text-white truncate">{contributor.name}</p>
+                                        </div>
+                                        <div className="text-right flex-shrink-0">
+                                            <p className="text-sm font-bold text-white">{contributor.upvotes} pts</p>
+                                        </div>
+                                    </div>
+                                ))}
                             </Link>
                         ) : (
                             <div className="text-center py-4 text-white/80 text-sm">
