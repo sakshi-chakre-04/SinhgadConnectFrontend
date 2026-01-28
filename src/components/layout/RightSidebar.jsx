@@ -90,21 +90,19 @@ const RightSidebar = () => {
     };
 
     return (
-        <aside className="right-sidebar hidden xl:block !top-24 max-h-[calc(100vh-120px)] overflow-y-auto scrollbar-thin scrollbar-thumb-violet-500/30 scrollbar-track-transparent">
-            <div className="space-y-3">
-                {/* For You Card - Vibrant Blue Theme with Dynamic Content */}
-                <div className="relative overflow-hidden rounded-2xl p-4 bg-gradient-to-br from-blue-500 via-indigo-500 to-purple-600 shadow-xl hover:shadow-2xl transition-all duration-300 group">
+        <aside className="right-sidebar hidden xl:block !top-24 max-h-[calc(100vh-110px)] overflow-y-auto scrollbar-thin scrollbar-thumb-violet-500/30 scrollbar-track-transparent">
+            <div className="space-y-2">
+                {/* For You Card - Ultra Compact */}
+                <div className="relative overflow-hidden rounded-xl p-3 bg-gradient-to-br from-blue-500 via-indigo-500 to-purple-600 shadow-xl">
                     {/* Animated background effects */}
                     <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                     <div className="absolute -top-20 -right-20 w-40 h-40 bg-white/10 rounded-full blur-3xl"></div>
                     <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-purple-400/20 rounded-full blur-3xl"></div>
 
                     <div className="relative z-10">
-                        <div className="flex items-center gap-2 mb-3">
-                            <div className="w-8 h-8 rounded-lg bg-white/20 backdrop-blur-sm flex items-center justify-center">
-                                <SparklesIcon className="w-4 h-4 text-white" />
-                            </div>
-                            <h3 className="font-bold text-white text-base">For You</h3>
+                        <div className="flex items-center gap-2 mb-2">
+                            <SparklesIcon className="w-4 h-4 text-white" />
+                            <h3 className="font-bold text-white text-sm">For You</h3>
                         </div>
 
                         {loadingPersonalized ? (
@@ -147,18 +145,12 @@ const RightSidebar = () => {
                     </div>
                 </div>
 
-                {/* Your Activity Card - Compact Horizontal Design */}
-                <div className="relative overflow-hidden rounded-2xl p-4 bg-gradient-to-br from-emerald-500 via-teal-500 to-cyan-600 shadow-xl hover:shadow-2xl transition-all duration-300 group">
-                    {/* Animated background effects */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                    <div className="absolute -top-20 -right-20 w-40 h-40 bg-white/10 rounded-full blur-3xl"></div>
-
+                {/* Your Activity - Ultra Compact */}
+                <div className="relative overflow-hidden rounded-xl p-3 bg-gradient-to-br from-emerald-500 via-teal-500 to-cyan-600 shadow-xl">
                     <div className="relative z-10">
-                        <div className="flex items-center gap-2 mb-3">
-                            <div className="w-8 h-8 rounded-lg bg-white/20 backdrop-blur-sm flex items-center justify-center">
-                                <FireIcon className="w-4 h-4 text-white" />
-                            </div>
-                            <h3 className="font-bold text-white text-base">Your Activity</h3>
+                        <div className="flex items-center gap-2 mb-2">
+                            <FireIcon className="w-4 h-4 text-white" />
+                            <h3 className="font-bold text-white text-sm">Your Activity</h3>
                         </div>
 
                         <div className="flex justify-between items-center gap-2">
@@ -183,18 +175,12 @@ const RightSidebar = () => {
                     </div>
                 </div>
 
-                {/* Top Contributors Card - Compact */}
-                <div className="relative overflow-hidden rounded-2xl p-4 bg-gradient-to-br from-orange-500 via-amber-500 to-yellow-600 shadow-xl hover:shadow-2xl transition-all duration-300 group">
-                    {/* Animated background effects */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                    <div className="absolute -top-20 -right-20 w-40 h-40 bg-white/10 rounded-full blur-3xl"></div>
-
+                {/* Top Contributors - Ultra Compact */}
+                <div className="relative overflow-hidden rounded-xl p-3 bg-gradient-to-br from-orange-500 via-amber-500 to-yellow-600 shadow-xl">
                     <div className="relative z-10">
-                        <div className="flex items-center gap-2 mb-3">
-                            <div className="w-8 h-8 rounded-lg bg-white/20 backdrop-blur-sm flex items-center justify-center">
-                                <TrophyIcon className="w-4 h-4 text-white" />
-                            </div>
-                            <h3 className="font-bold text-white text-base">Top Contributors</h3>
+                        <div className="flex items-center gap-2 mb-2">
+                            <TrophyIcon className="w-4 h-4 text-white" />
+                            <h3 className="font-bold text-white text-sm">Top Contributors</h3>
                         </div>
 
                         {topContributor.length > 0 ? (
