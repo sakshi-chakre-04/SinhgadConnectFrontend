@@ -181,18 +181,28 @@ const RightSidebar = () => {
                         </div>
 
                         {topContributor.length > 0 ? (
-                            <Link to="/leaderboard" className="space-y-2 block">
-                                {topContributor.map((contributor, index) => (
-                                    <div key={index} className="flex items-center gap-2 p-2 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 transition-all">
-                                        <span className="text-lg w-6 text-center">{['🥇', '🥈', '🥉'][index]}</span>
-                                        <div className="flex-1 min-w-0">
-                                            <p className="text-sm font-bold text-white truncate">{contributor.name}</p>
+                            <Link to="/leaderboard" className="space-y-1.5 block">
+                                {topContributor.map((contributor, index) => {
+                                    const styles = [
+                                        'bg-white/25 border-white/40', // 1st - brightest
+                                        'bg-white/15 border-white/25', // 2nd - medium
+                                        'bg-white/10 border-white/15'  // 3rd - subtle
+                                    ];
+                                    const textStyles = [
+                                        'text-white font-bold',     // 1st
+                                        'text-white/90 font-semibold', // 2nd
+                                        'text-white/80 font-medium'  // 3rd
+                                    ];
+                                    return (
+                                        <div key={index} className={`flex items-center gap-2 p-2 rounded-lg ${styles[index]} backdrop-blur-sm border hover:bg-white/30 transition-all`}>
+                                            <span className="text-base w-5 text-center">{['🥇', '🥈', '🥉'][index]}</span>
+                                            <div className="flex-1 min-w-0">
+                                                <p className={`text-sm truncate ${textStyles[index]}`}>{contributor.name}</p>
+                                            </div>
+                                            <p className={`text-xs flex-shrink-0 ${textStyles[index]}`}>{contributor.upvotes} pts</p>
                                         </div>
-                                        <div className="text-right flex-shrink-0">
-                                            <p className="text-sm font-bold text-white">{contributor.upvotes} pts</p>
-                                        </div>
-                                    </div>
-                                ))}
+                                    );
+                                })}
                             </Link>
                         ) : (
                             <div className="text-center py-4 text-white/80 text-sm">
