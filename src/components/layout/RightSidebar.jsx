@@ -8,55 +8,10 @@ import {
     HandThumbUpIcon,
     FireIcon,
     TrophyIcon,
-    SparklesIcon,
-    BookOpenIcon
+    SparklesIcon
 } from '@heroicons/react/24/outline';
 import { api } from '../../services/api/api';
 import { postsAPI } from '../../services/api/postsService';
-
-// Resource mapping - same as ForYouCard
-const getResourceForUser = (department, year) => {
-    const resourceMap = {
-        Computer: {
-            FE: { title: 'Engineering Mathematics-I Notes', subject: 'Engineering Mathematics-I' },
-            SE: { title: 'Data Structures Guide', subject: 'Data Structures' },
-            TE: { title: 'DBMS Study Material', subject: 'Database Management Systems' },
-            BE: { title: 'Machine Learning Resources', subject: 'Machine Learning' }
-        },
-        IT: {
-            FE: { title: 'Engineering Physics Notes', subject: 'Engineering Physics' },
-            SE: { title: 'Web Technology Guide', subject: 'Web Technology' },
-            TE: { title: 'Operating Systems Notes', subject: 'Operating Systems' },
-            BE: { title: 'Cloud Computing Resources', subject: 'Cloud Computing' }
-        },
-        Electronics: {
-            FE: { title: 'Basic Electrical Engineering', subject: 'Basic Electrical Engineering' },
-            SE: { title: 'Digital Electronics Guide', subject: 'Digital Electronics' },
-            TE: { title: 'Microprocessors Study Material', subject: 'Microprocessors' },
-            BE: { title: 'Wireless Communication Notes', subject: 'Wireless Communication' }
-        },
-        Mechanical: {
-            FE: { title: 'Engineering Mechanics Notes', subject: 'Engineering Mechanics' },
-            SE: { title: 'Thermodynamics Guide', subject: 'Thermodynamics' },
-            TE: { title: 'Heat Transfer Study Material', subject: 'Heat Transfer' },
-            BE: { title: 'Automobile Engineering Resources', subject: 'Automobile Engineering' }
-        },
-        Civil: {
-            FE: { title: 'Engineering Chemistry Notes', subject: 'Engineering Chemistry' },
-            SE: { title: 'Surveying Complete Guide', subject: 'Surveying' },
-            TE: { title: 'Structural Analysis Notes', subject: 'Structural Analysis' },
-            BE: { title: 'Construction Management Resources', subject: 'Construction Management' }
-        },
-        Electrical: {
-            FE: { title: 'Basic Electrical Engineering', subject: 'Basic Electrical Engineering' },
-            SE: { title: 'Circuit Theory Guide', subject: 'Circuit Theory' },
-            TE: { title: 'Power Systems Study Material', subject: 'Power Systems' },
-            BE: { title: 'Smart Grid Resources', subject: 'Smart Grid' }
-        }
-    };
-
-    return resourceMap[department]?.[year] || null;
-};
 
 const RightSidebar = () => {
     const navigate = useNavigate();
@@ -68,7 +23,6 @@ const RightSidebar = () => {
     });
     const [topContributor, setTopContributor] = useState(null);
     const [personalizedPosts, setPersonalizedPosts] = useState([]);
-    const [recommendedResource, setRecommendedResource] = useState(null);
     const [loadingPersonalized, setLoadingPersonalized] = useState(true);
 
     useEffect(() => {
@@ -87,15 +41,6 @@ const RightSidebar = () => {
             console.log('Personalized response:', response);
 
             setPersonalizedPosts(response.posts || []);
-
-            // Get recommended resource
-            if (response.personalizationInfo) {
-                const resource = getResourceForUser(
-                    response.personalizationInfo.department,
-                    response.personalizationInfo.year
-                );
-                setRecommendedResource(resource);
-            }
         } catch (error) {
             console.error('Failed to fetch personalized content:', error);
             setPersonalizedPosts([]);
@@ -168,7 +113,7 @@ const RightSidebar = () => {
                                 <div className="h-16 rounded-xl bg-white/10 animate-pulse"></div>
                                 <div className="h-16 rounded-xl bg-white/10 animate-pulse"></div>
                             </div>
-                        ) : personalizedPosts.length === 0 && !recommendedResource ? (
+                        ) : personalizedPosts.length === 0 ? (
                             <div className="text-center py-6 text-white/80 text-sm">
                                 <p className="mb-2">Start Your Journey</p>
                                 <p className="text-xs text-white/60">Upvote posts to get personalized recommendations</p>
@@ -196,24 +141,7 @@ const RightSidebar = () => {
                                     </div>
                                 ))}
 
-                                {/* 1 Resource */}
-                                {recommendedResource && (
-                                    <div
-                                        onClick={() => navigate('/resources')}
-                                        className="block p-3 rounded-xl bg-emerald-500/20 backdrop-blur-sm border border-emerald-400/30 hover:bg-emerald-500/30 hover:scale-[1.02] transition-all cursor-pointer group/item"
-                                    >
-                                        <div className="flex items-center gap-2 mb-1">
-                                            <BookOpenIcon className="w-4 h-4 text-emerald-200 group-hover/item:animate-bounce" />
-                                            <p className="text-xs font-semibold text-emerald-100">📚 Your Department</p>
-                                        </div>
-                                        <p className="text-sm font-semibold text-white line-clamp-1">
-                                            {recommendedResource.title}
-                                        </p>
-                                        <p className="text-xs text-white/80 line-clamp-1">
-                                            {recommendedResource.subject}
-                                        </p>
-                                    </div>
-                                )}
+
                             </div>
                         )}
                     </div>
