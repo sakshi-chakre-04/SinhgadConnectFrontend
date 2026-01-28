@@ -133,9 +133,6 @@ const RightSidebar = () => {
                                         <p className="text-sm font-semibold text-white line-clamp-2 leading-tight">
                                             {post.title}
                                         </p>
-                                        <p className="text-xs text-white/70 mt-1">
-                                            {post.author?.name}
-                                        </p>
                                     </div>
                                 ))}
 
