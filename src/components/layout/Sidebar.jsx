@@ -38,7 +38,7 @@ const Sidebar = ({ onCreatePost }) => {
     return (
         <nav className="hidden lg:flex flex-col fixed left-4 top-[72px] bottom-4 w-[260px] glass-panel rounded-[2rem] p-5 z-30 transition-all duration-300 border border-white/60 shadow-2xl shadow-indigo-500/10">
             {/* Navigation Items */}
-            <div className="space-y-2 flex-1 overflow-y-auto scrollbar-hide py-2 mt-2">
+            <div className="space-y-1.5 flex-1 overflow-y-auto scrollbar-hide py-2 mt-2">
                 {navigation.map((item) => {
                     const isActive = location.pathname === item.href ||
                         (item.href !== '/dashboard' && location.pathname.startsWith(item.href));
@@ -55,7 +55,7 @@ const Sidebar = ({ onCreatePost }) => {
                                 }`}
                         >
                             {isActive && (
-                                <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-indigo-600 to-purple-600 blur-sm opacity-20 -z-10"></div>
+                                <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-indigo-600 to-purple-600 blur-md opacity-30 -z-10"></div>
                             )}
                             <Icon className={`w-6 h-6 transition-transform duration-300 ${isActive ? 'scale-110 drop-shadow-md' : 'group-hover:scale-110'}`} />
                             <span className="font-medium text-[0.95rem] tracking-wide">{item.name}</span>
@@ -73,9 +73,10 @@ const Sidebar = ({ onCreatePost }) => {
             <div className="mt-6 pt-6 border-t border-gray-100">
                 <button
                     onClick={() => onCreatePost('Create Post')}
-                    className="relative group w-full py-4 px-6 rounded-2xl overflow-hidden transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl hover:shadow-indigo-500/30 active:scale-95"
+                    className="relative group w-full py-4 px-6 rounded-2xl overflow-hidden transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl hover:shadow-indigo-500/40 active:scale-95"
                 >
                     <div className="absolute inset-0 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 group-hover:bg-[length:200%_200%] animate-gradient-xy transition-all duration-300"></div>
+                    <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" style={{ boxShadow: 'inset 0 0 20px rgba(255,255,255,0.15)' }}></div>
                     <div className="relative flex items-center justify-center gap-3 text-white font-bold tracking-wide">
                         <PlusCircleIcon className="w-6 h-6 group-hover:rotate-90 transition-transform duration-500" />
                         <span>Create Post</span>

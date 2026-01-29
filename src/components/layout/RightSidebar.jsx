@@ -91,7 +91,7 @@ const RightSidebar = () => {
 
     return (
         <aside className="right-sidebar hidden xl:block !top-24 max-h-[calc(100vh-110px)] overflow-y-auto scrollbar-thin scrollbar-thumb-violet-500/30 scrollbar-track-transparent">
-            <div className="space-y-2">
+            <div className="space-y-3">
                 {/* For You Card - Ultra Compact */}
                 <div className="relative overflow-hidden rounded-xl p-3 bg-gradient-to-br from-blue-500 via-indigo-500 to-purple-600 shadow-xl">
                     {/* Animated background effects */}
@@ -123,7 +123,7 @@ const RightSidebar = () => {
                                     <div
                                         key={post._id}
                                         onClick={() => navigate(`/posts/${post._id}`)}
-                                        className="block p-3 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 hover:scale-[1.02] transition-all cursor-pointer group/item"
+                                        className="block p-3 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/25 hover:scale-[1.02] hover:shadow-lg hover:shadow-white/10 transition-all duration-200 cursor-pointer group/item"
                                     >
                                         <div className="flex items-start gap-2 mb-1">
                                             <span className="text-xs px-2 py-0.5 rounded-full bg-white/20 text-white/90 font-medium flex-shrink-0">
@@ -152,19 +152,19 @@ const RightSidebar = () => {
 
                         <div className="flex justify-between items-center gap-2">
                             {/* Posts */}
-                            <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 flex-1 justify-center" title="Posts">
+                            <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 flex-1 justify-center hover:bg-white/20 hover:scale-105 transition-all duration-200 cursor-default" title="Posts">
                                 <DocumentTextIcon className="w-4 h-4 text-white/80" />
                                 <span className="text-lg font-bold text-white">{stats.totalPosts}</span>
                             </div>
 
                             {/* Comments */}
-                            <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 flex-1 justify-center" title="Comments">
+                            <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 flex-1 justify-center hover:bg-white/20 hover:scale-105 transition-all duration-200 cursor-default" title="Comments">
                                 <ChatBubbleLeftIcon className="w-4 h-4 text-white/80" />
                                 <span className="text-lg font-bold text-white">{stats.totalComments}</span>
                             </div>
 
                             {/* Upvotes */}
-                            <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 flex-1 justify-center" title="Upvotes">
+                            <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 flex-1 justify-center hover:bg-white/20 hover:scale-105 transition-all duration-200 cursor-default" title="Upvotes">
                                 <HandThumbUpIcon className="w-4 h-4 text-white/80" />
                                 <span className="text-lg font-bold text-white">{stats.totalUpvotes}</span>
                             </div>
@@ -194,7 +194,7 @@ const RightSidebar = () => {
                                         'text-white/80 font-medium'  // 3rd
                                     ];
                                     return (
-                                        <div key={index} className={`flex items-center gap-2 p-2 rounded-lg ${styles[index]} backdrop-blur-sm border hover:bg-white/30 transition-all`}>
+                                        <div key={index} className={`flex items-center gap-2 p-2 rounded-lg ${styles[index]} backdrop-blur-sm border hover:bg-white/35 hover:scale-[1.02] hover:shadow-md hover:shadow-white/10 transition-all duration-200`}>
                                             <span className="text-base w-5 text-center">{['🥇', '🥈', '🥉'][index]}</span>
                                             <div className="flex-1 min-w-0">
                                                 <p className={`text-sm truncate ${textStyles[index]}`}>{contributor.name}</p>

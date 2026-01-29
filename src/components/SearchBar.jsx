@@ -179,7 +179,7 @@ const SearchBar = ({ className = "" }) => {
           onChange={(e) => setQuery(e.target.value)}
           onKeyDown={handleKeyDown}
           onFocus={() => setIsFocused(true)}
-          className="block w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-xl bg-gray-100 focus:bg-white text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:shadow-lg transition-all duration-300 ease-out"
+          className="block w-full pl-10 pr-4 py-2.5 border border-gray-300/60 rounded-xl bg-white/70 shadow-[inset_0_1px_4px_rgba(0,0,0,0.06)] focus:bg-white focus:border-indigo-300 text-gray-700 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/25 focus:shadow-lg transition-all duration-300 ease-out"
           placeholder="Search SinhgadConnect..."
           autoComplete="off"
         />
