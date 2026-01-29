@@ -90,7 +90,7 @@ const RightSidebar = () => {
     };
 
     return (
-        <aside className="right-sidebar hidden xl:block !top-24 max-h-[calc(100vh-110px)] overflow-y-auto scrollbar-thin scrollbar-thumb-violet-500/30 scrollbar-track-transparent">
+        <aside className="hidden xl:flex flex-col fixed right-4 top-[72px] bottom-4 w-[280px] overflow-y-auto scrollbar-thin scrollbar-thumb-violet-500/30 scrollbar-track-transparent z-30">
             <div className="space-y-3">
                 {/* For You Card - Ultra Compact */}
                 <div className="relative overflow-hidden rounded-xl p-3 bg-gradient-to-br from-blue-500 via-indigo-500 to-purple-600 shadow-xl">

@@ -36,7 +36,7 @@ const Sidebar = ({ onCreatePost }) => {
     const location = useLocation();
 
     return (
-        <nav className="hidden lg:flex flex-col fixed left-4 top-[72px] bottom-4 w-[260px] glass-panel rounded-[2rem] p-5 z-30 transition-all duration-300 border border-white/60 shadow-2xl shadow-indigo-500/10">
+        <nav className="hidden lg:flex flex-col fixed left-4 top-[72px] bottom-4 w-[240px] glass-panel rounded-[2rem] p-5 z-30 transition-all duration-300 border border-white/60 shadow-2xl shadow-indigo-500/10">
             {/* Navigation Items */}
             <div className="space-y-1.5 flex-1 overflow-y-auto scrollbar-hide py-2 mt-2">
                 {navigation.map((item) => {
