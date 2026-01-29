@@ -78,6 +78,7 @@ const RightSidebar = () => {
             const leaderboard = response.data.leaderboard || [];
             if (leaderboard.length > 0) {
                 setTopContributor(leaderboard.map(user => ({
+                    id: user._id || user.id,
                     name: user.name,
                     department: user.department,
                     posts: user.postCount || 0,
@@ -125,11 +126,6 @@ const RightSidebar = () => {
                                         onClick={() => navigate(`/posts/${post._id}`)}
                                         className="block p-3 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/25 hover:scale-[1.02] hover:shadow-lg hover:shadow-white/10 transition-all duration-200 cursor-pointer group/item"
                                     >
-                                        <div className="flex items-start gap-2 mb-1">
-                                            <span className="text-xs px-2 py-0.5 rounded-full bg-white/20 text-white/90 font-medium flex-shrink-0">
-                                                {post.matchLabel}
-                                            </span>
-                                        </div>
                                         <p className="text-sm font-semibold text-white line-clamp-2 leading-tight">
                                             {post.title}
                                         </p>
@@ -181,7 +177,7 @@ const RightSidebar = () => {
                         </div>
 
                         {topContributor.length > 0 ? (
-                            <Link to="/leaderboard" className="space-y-1.5 block">
+                            <div className="space-y-1.5">
                                 {topContributor.map((contributor, index) => {
                                     const styles = [
                                         'bg-white/25 border-white/40', // 1st - brightest
@@ -194,7 +190,14 @@ const RightSidebar = () => {
                                         'text-white/80 font-medium'  // 3rd
                                     ];
                                     return (
-                                        <div key={index} className={`flex items-center gap-2 p-2 rounded-lg ${styles[index]} backdrop-blur-sm border hover:bg-white/35 hover:scale-[1.02] hover:shadow-md hover:shadow-white/10 transition-all duration-200`}>
+                                        <div
+                                            key={contributor.id || index}
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                if (contributor.id) navigate(`/user/${contributor.id}`);
+                                            }}
+                                            className={`flex items-center gap-2 p-2 rounded-lg ${styles[index]} backdrop-blur-sm border hover:bg-white/35 hover:scale-[1.02] hover:shadow-md hover:shadow-white/10 transition-all duration-200 cursor-pointer`}
+                                        >
                                             <span className="text-base w-5 text-center">{['🥇', '🥈', '🥉'][index]}</span>
                                             <div className="flex-1 min-w-0">
                                                 <p className={`text-sm truncate ${textStyles[index]}`}>{contributor.name}</p>
@@ -203,7 +206,7 @@ const RightSidebar = () => {
                                         </div>
                                     );
                                 })}
-                            </Link>
+                            </div>
                         ) : (
                             <div className="text-center py-4 text-white/80 text-sm">
                                 Loading...
