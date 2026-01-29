@@ -79,90 +79,37 @@ const Leaderboard = () => {
             <div className="max-w-4xl mx-auto px-0 md:px-4 space-y-6">
                 {/* Header */}
                 <div
-                    className="relative overflow-hidden rounded-2xl mx-3 md:mx-0 p-8 text-white"
+                    className="relative overflow-hidden rounded-2xl mx-3 md:mx-0 p-5 text-white"
                     style={{
                         background: 'linear-gradient(135deg, #7c3aed 0%, #8b5cf6 25%, #a855f7 50%, #c026d3 75%, #d946ef 100%)',
-                        boxShadow: '0 10px 40px rgba(139, 92, 246, 0.3), 0 0 60px rgba(217, 70, 239, 0.15)'
+                        boxShadow: '0 8px 30px rgba(139, 92, 246, 0.25)'
                     }}
                 >
                     {/* Background Effects */}
                     <div className="absolute inset-0 opacity-30 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] mix-blend-overlay"></div>
-                    <div className="absolute -top-24 -right-24 w-72 h-72 bg-white/20 blur-3xl rounded-full"></div>
-                    <div className="absolute -bottom-24 -left-24 w-72 h-72 bg-fuchsia-400/30 blur-3xl rounded-full"></div>
+                    <div className="absolute -top-24 -right-24 w-72 h-72 bg-white/15 blur-3xl rounded-full"></div>
+                    <div className="absolute -bottom-24 -left-24 w-72 h-72 bg-fuchsia-400/20 blur-3xl rounded-full"></div>
+                    {/* Frosted overlay to de-emphasize gradient */}
+                    <div className="absolute inset-0 bg-white/[0.08]"></div>
 
                     <div className="relative z-10">
-                        <Link to="/dashboard" className="inline-flex items-center gap-2 text-white/80 hover:text-white mb-4 text-sm transition-colors">
-                            <ArrowLeftIcon className="w-4 h-4" />
-                            Back to Dashboard
-                        </Link>
-
-                        <div className="flex items-center gap-3 mb-2">
+                        <div className="flex items-center gap-3">
                             <div
-                                className="w-14 h-14 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center"
-                                style={{ boxShadow: '0 4px 15px rgba(0,0,0,0.1)' }}
+                                className="w-10 h-10 rounded-xl bg-white/15 backdrop-blur-sm flex items-center justify-center"
                             >
-                                <TrophyIconSolid className="w-8 h-8 text-yellow-300" />
+                                <TrophyIconSolid className="w-5 h-5 text-yellow-300/90" />
                             </div>
                             <div>
-                                <h1 className="text-3xl font-bold drop-shadow-lg">Leaderboard</h1>
-                                <p className="text-violet-100 text-sm">Top contributors in the community</p>
+                                <h1 className="text-2xl font-bold drop-shadow-md">Leaderboard</h1>
+                                <p className="text-violet-100/80 text-xs">Updated daily · Based on upvotes, answers & posts</p>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                {/* Time Range Filter */}
-                <div className="px-4 md:px-0 space-y-6">
-                    <div className="flex gap-2">
-                        {timeRanges.map(range => (
-                            <button
-                                key={range.id}
-                                onClick={() => setTimeRange(range.id)}
-                                className={`px-5 py-2.5 rounded-xl text-sm font-semibold transition-all ${timeRange === range.id
-                                    ? 'text-white shadow-lg'
-                                    : 'bg-white/80 border border-violet-200 text-violet-600 hover:bg-violet-50'
-                                    }`}
-                                style={timeRange === range.id ? {
-                                    background: 'linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%)',
-                                    boxShadow: '0 4px 15px rgba(139, 92, 246, 0.3)'
-                                } : {}}
-                            >
-                                {range.label}
-                            </button>
-                        ))}
-                    </div>
-
-                    {/* Stats */}
-                    <div className="grid grid-cols-2 gap-4">
-                        <div
-                            className="rounded-2xl p-5 text-center"
-                            style={{
-                                background: 'rgba(255, 255, 255, 0.8)',
-                                backdropFilter: 'blur(12px)',
-                                border: '1px solid rgba(139, 92, 246, 0.2)',
-                                boxShadow: '0 4px 20px rgba(139, 92, 246, 0.08)'
-                            }}
-                        >
-                            <div className="text-3xl font-bold text-violet-600">{totalParticipants}</div>
-                            <div className="text-sm text-gray-500 mt-1 font-medium">Contributors</div>
-                        </div>
-                        <div
-                            className="rounded-2xl p-5 text-center"
-                            style={{
-                                background: 'rgba(255, 255, 255, 0.8)',
-                                backdropFilter: 'blur(12px)',
-                                border: '1px solid rgba(217, 70, 239, 0.2)',
-                                boxShadow: '0 4px 20px rgba(217, 70, 239, 0.08)'
-                            }}
-                        >
-                            <div className="text-3xl font-bold text-fuchsia-600">
-                                {currentUserRank ? `#${currentUserRank.rank}` : '-'}
-                            </div>
-                            <div className="text-sm text-gray-500 mt-1 font-medium">Your Rank</div>
-                        </div>
-                    </div>
-
-                    {/* Leaderboard List */}
+                {/* Main Content */}
+                <div className="px-4 md:px-0 space-y-4">
+                    {/* Leaderboard List - Primary focus */}
                     <div className="space-y-3">
                         {loading ? (
                             <div className="flex justify-center py-12">
@@ -320,6 +267,42 @@ const Leaderboard = () => {
                                     </>
                                 )}
                             </>
+                        )}
+                    </div>
+                </div>
+            </div>
+
+            {/* Filter & Stats - Fixed to bottom */}
+            <div className="fixed bottom-0 left-0 right-0 lg:left-[256px] xl:right-[296px] z-40 bg-white/95 backdrop-blur-lg border-t border-violet-100 px-4 py-3 shadow-lg">
+                <div className="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
+                    <div className="flex gap-2">
+                        {timeRanges.map(range => (
+                            <button
+                                key={range.id}
+                                onClick={() => setTimeRange(range.id)}
+                                className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all ${timeRange === range.id
+                                    ? 'text-white shadow-md'
+                                    : 'bg-white border border-violet-200 text-violet-600 hover:bg-violet-50'
+                                    }`}
+                                style={timeRange === range.id ? {
+                                    background: 'linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%)',
+                                    boxShadow: '0 4px 15px rgba(139, 92, 246, 0.3)'
+                                } : {}}
+                            >
+                                {range.label}
+                            </button>
+                        ))}
+                    </div>
+                    <div className="flex items-center gap-4 text-sm">
+                        <div className="flex items-center gap-1.5">
+                            <span className="text-gray-500">Contributors:</span>
+                            <span className="font-bold text-violet-600">{totalParticipants}</span>
+                        </div>
+                        {currentUserRank && (
+                            <div className="flex items-center gap-1.5 px-3 py-1.5 bg-violet-50 rounded-xl">
+                                <span className="text-gray-600">Your Rank:</span>
+                                <span className="font-bold text-fuchsia-600">#{currentUserRank.rank}</span>
+                            </div>
                         )}
                     </div>
                 </div>

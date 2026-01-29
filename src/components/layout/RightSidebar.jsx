@@ -78,7 +78,7 @@ const RightSidebar = () => {
             const leaderboard = response.data.leaderboard || [];
             if (leaderboard.length > 0) {
                 setTopContributor(leaderboard.map(user => ({
-                    id: user._id || user.id,
+                    id: user.userId,
                     name: user.name,
                     department: user.department,
                     posts: user.postCount || 0,
