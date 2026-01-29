@@ -70,9 +70,9 @@ const AuthenticatedLayout = ({ children }) => {
 
       {/* Main Content Area */}
       <main
-        className="lg:ml-[260px] xl:mr-[300px] min-h-screen pt-16 lg:pt-[88px] pb-24 lg:pb-6 px-0 sm:px-4 lg:px-6 bg-[linear-gradient(180deg,#faf5ff_0%,#f5f3ff_50%,#ffffff_100%)] lg:bg-none"
+        className="lg:ml-[256px] xl:mr-[296px] min-h-screen pt-16 lg:pt-[72px] pb-24 lg:pb-8 px-0 sm:px-4 lg:px-6 bg-[linear-gradient(180deg,#faf5ff_0%,#f5f3ff_50%,#ffffff_100%)] lg:bg-none"
       >
-        <div className="w-full max-w-none lg:max-w-3xl xl:max-w-none mx-auto transition-all duration-300">
+        <div className="w-full max-w-lg md:max-w-2xl lg:max-w-4xl xl:max-w-5xl mx-auto transition-all duration-300">
           {children}
         </div>
       </main>
