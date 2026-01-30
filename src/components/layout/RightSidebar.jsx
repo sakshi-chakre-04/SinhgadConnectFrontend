@@ -92,9 +92,9 @@ const RightSidebar = () => {
 
     return (
         <aside className="hidden xl:flex flex-col fixed right-4 top-[72px] bottom-4 w-[280px] overflow-y-auto scrollbar-thin scrollbar-thumb-violet-500/30 scrollbar-track-transparent z-30">
-            <div className="space-y-3">
-                {/* For You Card - Ultra Compact */}
-                <div className="relative overflow-hidden rounded-xl p-3 bg-gradient-to-br from-blue-500 via-indigo-500 to-purple-600 shadow-xl">
+            <div className="space-y-4 flex flex-col h-full">
+                {/* For You Card - Expanded */}
+                <div className="relative overflow-hidden rounded-xl p-5 bg-gradient-to-br from-blue-500 via-indigo-500 to-purple-600 shadow-xl flex-1">
                     {/* Animated background effects */}
                     <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                     <div className="absolute -top-20 -right-20 w-40 h-40 bg-white/10 rounded-full blur-3xl"></div>
@@ -138,8 +138,8 @@ const RightSidebar = () => {
                     </div>
                 </div>
 
-                {/* Your Activity - Ultra Compact */}
-                <div className="relative overflow-hidden rounded-xl p-3 bg-gradient-to-br from-emerald-500 via-teal-500 to-cyan-600 shadow-xl">
+                {/* Your Activity - Expanded */}
+                <div className="relative overflow-hidden rounded-xl p-5 bg-gradient-to-br from-emerald-500 via-teal-500 to-cyan-600 shadow-xl flex-shrink-0">
                     <div className="relative z-10">
                         <div className="flex items-center gap-2 mb-2">
                             <FireIcon className="w-4 h-4 text-white" />
@@ -168,8 +168,8 @@ const RightSidebar = () => {
                     </div>
                 </div>
 
-                {/* Top Contributors - Ultra Compact */}
-                <div className="relative overflow-hidden rounded-xl p-3 bg-gradient-to-br from-orange-500 via-amber-500 to-yellow-600 shadow-xl">
+                {/* Top Contributors - Expanded */}
+                <div className="relative overflow-hidden rounded-xl p-5 bg-gradient-to-br from-orange-500 via-amber-500 to-yellow-600 shadow-xl flex-shrink-0">
                     <div className="relative z-10">
                         <div className="flex items-center gap-2 mb-2">
                             <TrophyIcon className="w-4 h-4 text-white" />
