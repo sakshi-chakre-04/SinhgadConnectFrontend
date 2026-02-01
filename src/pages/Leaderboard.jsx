@@ -60,10 +60,61 @@ const Leaderboard = () => {
         { id: 'Electrical', label: 'Electrical' }
     ];
 
+    // Department color mapping
+    const getDepartmentColor = (department) => {
+        const colors = {
+            'Computer': 'bg-blue-50 text-blue-600 border-blue-200',
+            'IT': 'bg-cyan-50 text-cyan-600 border-cyan-200',
+            'Electronics': 'bg-orange-50 text-orange-600 border-orange-200',
+            'Mechanical': 'bg-slate-100 text-slate-600 border-slate-300',
+            'Civil': 'bg-amber-50 text-amber-700 border-amber-200',
+            'Electrical': 'bg-yellow-50 text-yellow-700 border-yellow-200'
+        };
+        return colors[department] || 'bg-violet-50 text-violet-600 border-violet-200';
+    };
+
+    // Card styling for top 3 positions
+    const getCardStyle = (rank, isCurrentUser) => {
+        const baseStyle = {
+            backdropFilter: 'blur(12px)',
+            animationFillMode: 'backwards'
+        };
+
+        if (rank === 1) {
+            return {
+                ...baseStyle,
+                background: isCurrentUser ? 'rgba(251, 191, 36, 0.15)' : 'rgba(251, 191, 36, 0.08)',
+                border: '2px solid rgba(251, 191, 36, 0.5)',
+                boxShadow: '0 4px 20px rgba(251, 191, 36, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.5)'
+            };
+        } else if (rank === 2) {
+            return {
+                ...baseStyle,
+                background: isCurrentUser ? 'rgba(148, 163, 184, 0.15)' : 'rgba(148, 163, 184, 0.08)',
+                border: '2px solid rgba(148, 163, 184, 0.5)',
+                boxShadow: '0 4px 20px rgba(148, 163, 184, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.5)'
+            };
+        } else if (rank === 3) {
+            return {
+                ...baseStyle,
+                background: isCurrentUser ? 'rgba(217, 119, 6, 0.12)' : 'rgba(217, 119, 6, 0.06)',
+                border: '2px solid rgba(217, 119, 6, 0.4)',
+                boxShadow: '0 4px 20px rgba(217, 119, 6, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.5)'
+            };
+        }
+
+        return {
+            ...baseStyle,
+            background: isCurrentUser ? 'rgba(139, 92, 246, 0.1)' : 'rgba(255, 255, 255, 0.8)',
+            border: '1px solid rgba(139, 92, 246, 0.15)',
+            boxShadow: '0 4px 15px rgba(139, 92, 246, 0.06)'
+        };
+    };
+
     const getMedalStyle = (rank) => {
         switch (rank) {
             case 1:
-                return 'bg-gradient-to-br from-yellow-300 to-amber-500 text-white shadow-lg shadow-amber-500/30';
+                return 'bg-gradient-to-br from-yellow-300 to-amber-500 text-white shadow-lg shadow-amber-500/30 animate-pulse-subtle';
             case 2:
                 return 'bg-gradient-to-br from-slate-300 to-slate-500 text-white shadow-lg shadow-slate-500/30';
             case 3:
@@ -144,23 +195,24 @@ const Leaderboard = () => {
                                     <div
                                         key={user.userId}
                                         onClick={() => navigate(`/user/${user.userId}`)}
-                                        className={`flex items-center gap-4 p-4 rounded-2xl transition-all cursor-pointer hover:scale-[1.01] ${user.userId === currentUserRank?.userId
-                                            ? 'ring-2 ring-violet-300'
-                                            : ''
+                                        className={`flex items-center gap-4 p-4 rounded-2xl transition-all cursor-pointer hover:scale-[1.01] animate-fade-in-up ${user.userId === currentUserRank?.userId && user.rank > 3
+                                                ? 'ring-2 ring-violet-300'
+                                                : ''
                                             }`}
                                         style={{
-                                            background: user.userId === currentUserRank?.userId
-                                                ? 'rgba(139, 92, 246, 0.1)'
-                                                : 'rgba(255, 255, 255, 0.8)',
-                                            backdropFilter: 'blur(12px)',
-                                            border: '1px solid rgba(139, 92, 246, 0.15)',
-                                            boxShadow: '0 4px 15px rgba(139, 92, 246, 0.06)'
+                                            ...getCardStyle(user.rank, user.userId === currentUserRank?.userId),
+                                            animationDelay: `${index * 50}ms`
                                         }}
                                         onMouseEnter={(e) => {
-                                            e.currentTarget.style.boxShadow = '0 8px 25px rgba(139, 92, 246, 0.12)';
+                                            const hoverShadow = user.rank <= 3
+                                                ? e.currentTarget.style.boxShadow.replace(/0 4px 20px/, '0 8px 30px')
+                                                : '0 8px 25px rgba(139, 92, 246, 0.15)';
+                                            e.currentTarget.style.boxShadow = hoverShadow;
+                                            e.currentTarget.style.transform = 'scale(1.01)';
                                         }}
                                         onMouseLeave={(e) => {
-                                            e.currentTarget.style.boxShadow = '0 4px 15px rgba(139, 92, 246, 0.06)';
+                                            e.currentTarget.style.boxShadow = getCardStyle(user.rank, user.userId === currentUserRank?.userId).boxShadow;
+                                            e.currentTarget.style.transform = 'scale(1)';
                                         }}
                                     >
                                         {/* Rank Badge */}
@@ -178,35 +230,37 @@ const Leaderboard = () => {
                                                     )}
                                                 </h3>
                                             </div>
-                                            <div className="flex items-center gap-2 mt-1 text-xs text-gray-500">
-                                                <span className="px-2 py-0.5 bg-violet-50 text-violet-600 rounded-full font-medium">{user.department}</span>
-                                                <span>•</span>
-                                                <span>{user.year}</span>
+                                            <div className="flex items-center gap-2 mt-1.5 text-xs text-gray-500">
+                                                <span className={`px-2.5 py-0.5 rounded-full font-medium border ${getDepartmentColor(user.department)}`}>
+                                                    {user.department}
+                                                </span>
+                                                <span className="text-gray-300">•</span>
+                                                <span className="text-gray-500">{user.year}</span>
                                             </div>
                                         </div>
 
-                                        {/* Stats */}
-                                        <div className="flex items-center gap-4 text-sm">
-                                            <div className="text-center">
-                                                <div className="flex items-center gap-1 text-green-600 font-semibold">
+                                        {/* Stats - Improved sizing */}
+                                        <div className="flex items-center gap-5 text-sm">
+                                            <div className="text-center min-w-[48px]">
+                                                <div className="flex items-center justify-center gap-1 text-green-600 font-bold text-base">
                                                     <ChevronUpIcon className="w-4 h-4" strokeWidth={2.5} />
                                                     {user.totalUpvotes}
                                                 </div>
-                                                <div className="text-xs text-gray-400">upvotes</div>
+                                                <div className="text-xs text-gray-400 mt-0.5">upvotes</div>
                                             </div>
-                                            <div className="text-center hidden sm:block">
-                                                <div className="flex items-center gap-1 text-violet-600 font-semibold">
+                                            <div className="text-center hidden sm:block min-w-[48px]">
+                                                <div className="flex items-center justify-center gap-1 text-violet-600 font-bold text-base">
                                                     <ChatBubbleLeftIcon className="w-4 h-4" />
                                                     {user.answerCount}
                                                 </div>
-                                                <div className="text-xs text-gray-400">answers</div>
+                                                <div className="text-xs text-gray-400 mt-0.5">answers</div>
                                             </div>
-                                            <div className="text-center hidden sm:block">
-                                                <div className="flex items-center gap-1 text-fuchsia-600 font-semibold">
+                                            <div className="text-center hidden sm:block min-w-[48px]">
+                                                <div className="flex items-center justify-center gap-1 text-fuchsia-600 font-bold text-base">
                                                     <DocumentTextIcon className="w-4 h-4" />
                                                     {user.postCount}
                                                 </div>
-                                                <div className="text-xs text-gray-400">posts</div>
+                                                <div className="text-xs text-gray-400 mt-0.5">posts</div>
                                             </div>
                                         </div>
                                     </div>
