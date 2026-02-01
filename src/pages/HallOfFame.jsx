@@ -3,38 +3,24 @@ import { Link } from 'react-router-dom';
 import { ArrowLeftIcon, TrophyIcon, PlayIcon, SparklesIcon, BuildingOffice2Icon } from '@heroicons/react/24/outline';
 import { TrophyIcon as TrophyIconSolid } from '@heroicons/react/24/solid';
 
-// Company logos and colors
+// Company logos - Expanded list of recruiters
 const companyData = {
-    'BNY Mellon': {
-        logo: 'https://logo.clearbit.com/bnymellon.com',
-        color: 'from-purple-500 to-purple-600',
-        bgColor: 'bg-purple-50'
-    },
-    'LTIMindtree': {
-        logo: 'https://logo.clearbit.com/ltimindtree.com',
-        color: 'from-blue-500 to-blue-600',
-        bgColor: 'bg-blue-50'
-    },
-    'Wipro': {
-        logo: 'https://logo.clearbit.com/wipro.com',
-        color: 'from-teal-500 to-teal-600',
-        bgColor: 'bg-teal-50'
-    },
-    'TCS': {
-        logo: 'https://logo.clearbit.com/tcs.com',
-        color: 'from-red-500 to-red-600',
-        bgColor: 'bg-red-50'
-    },
-    'Infosys': {
-        logo: 'https://logo.clearbit.com/infosys.com',
-        color: 'from-blue-600 to-blue-700',
-        bgColor: 'bg-blue-50'
-    },
-    'Cognizant': {
-        logo: 'https://logo.clearbit.com/cognizant.com',
-        color: 'from-blue-500 to-indigo-600',
-        bgColor: 'bg-indigo-50'
-    }
+    'TCS': { logo: 'https://logo.clearbit.com/tcs.com' },
+    'Infosys': { logo: 'https://logo.clearbit.com/infosys.com' },
+    'Wipro': { logo: 'https://logo.clearbit.com/wipro.com' },
+    'Cognizant': { logo: 'https://logo.clearbit.com/cognizant.com' },
+    'Accenture': { logo: 'https://logo.clearbit.com/accenture.com' },
+    'Capgemini': { logo: 'https://logo.clearbit.com/capgemini.com' },
+    'Tech Mahindra': { logo: 'https://logo.clearbit.com/techmahindra.com' },
+    'HCLTech': { logo: 'https://logo.clearbit.com/hcltech.com' },
+    'LTIMindtree': { logo: 'https://logo.clearbit.com/ltimindtree.com' },
+    'Persistent': { logo: 'https://logo.clearbit.com/persistent.com' },
+    'Zensar': { logo: 'https://logo.clearbit.com/zensar.com' },
+    'KPIT': { logo: 'https://logo.clearbit.com/kpit.com' },
+    'BNY Mellon': { logo: 'https://logo.clearbit.com/bnymellon.com' },
+    'Barclays': { logo: 'https://logo.clearbit.com/barclays.com' },
+    'Deutsche Bank': { logo: 'https://logo.clearbit.com/db.com' },
+    'HSBC': { logo: 'https://logo.clearbit.com/hsbc.com' }
 };
 
 // Hall of Fame videos - Add your YouTube video URLs here
