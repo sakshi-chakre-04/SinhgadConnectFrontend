@@ -86,7 +86,7 @@ const Leaderboard = () => {
         leaderboard.some(u => u.userId === currentUserRank.userId);
 
     return (
-        <div className="pb-6">
+        <div className="pb-20">
             <div className="max-w-4xl mx-auto px-0 md:px-4 space-y-6">
                 {/* Header */}
                 <div
@@ -118,9 +118,8 @@ const Leaderboard = () => {
                     </div>
                 </div>
 
-                {/* Main Content */}
-                <div className="px-4 md:px-0 space-y-4">
-                    {/* Leaderboard List - Primary focus */}
+                {/* Leaderboard List */}
+                <div className="px-4 md:px-0">
                     <div className="space-y-3">
                         {loading ? (
                             <div className="flex justify-center py-12">
@@ -280,59 +279,63 @@ const Leaderboard = () => {
                             </>
                         )}
                     </div>
+                </div>
+            </div>
 
-                    {/* Filter & Stats - Part of page flow */}
-                    <div
-                        className="rounded-2xl p-4 mt-6"
-                        style={{
-                            background: 'rgba(255, 255, 255, 0.95)',
-                            backdropFilter: 'blur(16px)',
-                            border: '1px solid rgba(139, 92, 246, 0.2)',
-                            boxShadow: '0 4px 20px rgba(139, 92, 246, 0.1)'
-                        }}
-                    >
-                        <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
-                            <div className="flex flex-wrap items-center gap-2">
-                                {timeRanges.map(range => (
-                                    <button
-                                        key={range.id}
-                                        onClick={() => setTimeRange(range.id)}
-                                        className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all ${timeRange === range.id
-                                            ? 'text-white shadow-md'
-                                            : 'bg-white border border-violet-200 text-violet-600 hover:bg-violet-50'
-                                            }`}
-                                        style={timeRange === range.id ? {
-                                            background: 'linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%)',
-                                            boxShadow: '0 4px 15px rgba(139, 92, 246, 0.3)'
-                                        } : {}}
-                                    >
-                                        {range.label}
-                                    </button>
-                                ))}
-                                <select
-                                    value={department}
-                                    onChange={(e) => setDepartment(e.target.value)}
-                                    className="px-3 py-2 bg-white border border-violet-200 rounded-xl text-sm font-medium text-violet-600 focus:ring-2 focus:ring-violet-500 focus:border-transparent cursor-pointer"
+            {/* Fixed Footer - Filters & Stats */}
+            <div
+                className="fixed bottom-0 left-0 right-0 lg:left-[256px] xl:right-[296px] z-40 px-4 sm:px-4 lg:px-6 pb-4"
+            >
+                <div
+                    className="max-w-4xl mx-auto rounded-2xl p-4"
+                    style={{
+                        background: 'rgba(255, 255, 255, 0.95)',
+                        backdropFilter: 'blur(16px)',
+                        border: '1px solid rgba(139, 92, 246, 0.2)',
+                        boxShadow: '0 -4px 20px rgba(139, 92, 246, 0.1)'
+                    }}
+                >
+                    <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
+                        <div className="flex flex-wrap items-center gap-2">
+                            {timeRanges.map(range => (
+                                <button
+                                    key={range.id}
+                                    onClick={() => setTimeRange(range.id)}
+                                    className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all ${timeRange === range.id
+                                        ? 'text-white shadow-md'
+                                        : 'bg-white border border-violet-200 text-violet-600 hover:bg-violet-50'
+                                        }`}
+                                    style={timeRange === range.id ? {
+                                        background: 'linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%)',
+                                        boxShadow: '0 4px 15px rgba(139, 92, 246, 0.3)'
+                                    } : {}}
                                 >
-                                    {departments.map(dept => (
-                                        <option key={dept.id} value={dept.id}>
-                                            {dept.label}
-                                        </option>
-                                    ))}
-                                </select>
+                                    {range.label}
+                                </button>
+                            ))}
+                            <select
+                                value={department}
+                                onChange={(e) => setDepartment(e.target.value)}
+                                className="px-3 py-2 bg-white border border-violet-200 rounded-xl text-sm font-medium text-violet-600 focus:ring-2 focus:ring-violet-500 focus:border-transparent cursor-pointer"
+                            >
+                                {departments.map(dept => (
+                                    <option key={dept.id} value={dept.id}>
+                                        {dept.label}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className="flex items-center gap-4 text-sm">
+                            <div className="flex items-center gap-1.5">
+                                <span className="text-gray-500">Contributors:</span>
+                                <span className="font-bold text-violet-600">{totalParticipants}</span>
                             </div>
-                            <div className="flex items-center gap-4 text-sm">
-                                <div className="flex items-center gap-1.5">
-                                    <span className="text-gray-500">Contributors:</span>
-                                    <span className="font-bold text-violet-600">{totalParticipants}</span>
+                            {currentUserRank && (
+                                <div className="flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-violet-100 to-fuchsia-100 rounded-xl border border-violet-200">
+                                    <span className="text-gray-600">Your Rank:</span>
+                                    <span className="font-bold text-fuchsia-600">#{currentUserRank.rank}</span>
                                 </div>
-                                {currentUserRank && (
-                                    <div className="flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-violet-100 to-fuchsia-100 rounded-xl border border-violet-200">
-                                        <span className="text-gray-600">Your Rank:</span>
-                                        <span className="font-bold text-fuchsia-600">#{currentUserRank.rank}</span>
-                                    </div>
-                                )}
-                            </div>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -342,3 +345,4 @@ const Leaderboard = () => {
 };
 
 export default Leaderboard;
+

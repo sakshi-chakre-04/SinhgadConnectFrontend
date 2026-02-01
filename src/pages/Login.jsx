@@ -205,8 +205,8 @@ const Login = () => {
                 />
                 Remember me
               </label>
-              <Link 
-                to="/forgot-password" 
+              <Link
+                to="/forgot-password"
                 className="text-sm text-violet-600 hover:text-violet-700 transition-colors duration-200 hover:underline"
               >
                 Forgot password?
@@ -227,9 +227,9 @@ const Login = () => {
             {/* Registration Link */}
             <div className="text-center mt-4 lg:mt-6 text-gray-600">
               Don't have an account?{' '}
-              <Link 
-                to="/register" 
-                className="font-medium text-gray-600 hover:text-gray-800 transition-colors duration-200 hover:underline"
+              <Link
+                to="/register"
+                className="font-medium text-violet-600 hover:text-violet-700 transition-colors duration-200 hover:underline"
               >
                 Sign up
               </Link>
