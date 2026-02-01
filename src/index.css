@@ -879,44 +879,68 @@ body {
     pointer-events: none;
 }
 
-/* ===== PREMIUM TOP 3 ANIMATIONS ===== */
+/* ===== PREMIUM TOP 3 BREATHING ANIMATIONS ===== */
+/* All very subtle - felt more than seen */
 
-/* Champion Glow - Slow, luxurious gold pulse for rank 1 (7s duration) */
-@keyframes champion-glow {
-
-    0%,
-    100% {
-        box-shadow: 0 8px 32px rgba(217, 164, 6, 0.2),
-            0 0 0 1px rgba(255, 255, 255, 0.5) inset;
-    }
-
-    50% {
-        box-shadow: 0 12px 48px rgba(217, 164, 6, 0.35),
-            0 0 24px rgba(251, 191, 36, 0.15),
-            0 0 0 1px rgba(255, 255, 255, 0.7) inset;
-    }
-}
-
-.animate-champion-glow {
-    animation: champion-glow 7s ease-in-out infinite;
-}
-
-/* Silver Pulse - Subtle, professional pulse for rank 2 (5s duration) */
-@keyframes silver-pulse {
+/* Gold Breathe - Rank 1 (slowest, most subtle) */
+@keyframes breathe-gold {
 
     0%,
     100% {
-        box-shadow: 0 6px 24px rgba(100, 116, 139, 0.15),
+        transform: scale(1);
+        box-shadow: 0 10px 40px rgba(180, 140, 30, 0.12),
             0 0 0 1px rgba(255, 255, 255, 0.6) inset;
     }
 
     50% {
-        box-shadow: 0 8px 32px rgba(100, 116, 139, 0.22),
-            0 0 16px rgba(148, 163, 184, 0.08),
-            0 0 0 1px rgba(255, 255, 255, 0.75) inset;
+        transform: scale(1.008);
+        box-shadow: 0 11px 44px rgba(180, 140, 30, 0.14),
+            0 0 0 1px rgba(255, 255, 255, 0.65) inset;
     }
 }
 
-.animate-silver-pulse {
-    animation: silver-pulse 5s ease-in-out infinite;
+.animate-breathe-gold {
+    animation: breathe-gold 10s ease-in-out infinite;
+}
+
+/* Silver Breathe - Rank 2 (even more subtle) */
+@keyframes breathe-silver {
+
+    0%,
+    100% {
+        transform: scale(1);
+        box-shadow: 0 8px 32px rgba(80, 100, 130, 0.12),
+            0 0 0 1px rgba(255, 255, 255, 0.7) inset;
+    }
+
+    50% {
+        transform: scale(1.005);
+        box-shadow: 0 9px 36px rgba(80, 100, 130, 0.13),
+            0 0 0 1px rgba(255, 255, 255, 0.72) inset;
+    }
+}
+
+.animate-breathe-silver {
+    animation: breathe-silver 12s ease-in-out infinite;
+}
+
+/* Bronze Breathe - Rank 3 (barely noticeable) */
+@keyframes breathe-bronze {
+
+    0%,
+    100% {
+        transform: scale(1);
+        box-shadow: 0 6px 24px rgba(140, 80, 20, 0.08),
+            0 0 0 1px rgba(255, 255, 255, 0.5) inset;
+    }
+
+    50% {
+        transform: scale(1.003);
+        box-shadow: 0 7px 26px rgba(140, 80, 20, 0.09),
+            0 0 0 1px rgba(255, 255, 255, 0.52) inset;
+    }
+}
+
+.animate-breathe-bronze {
+    animation: breathe-bronze 14s ease-in-out infinite;
 }

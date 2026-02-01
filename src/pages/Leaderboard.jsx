@@ -78,35 +78,38 @@ const Leaderboard = () => {
         const baseStyle = {
             backdropFilter: 'blur(12px)',
             animationFillMode: 'backwards',
-            transition: 'all 0.3s ease'
+            transition: 'all 0.4s ease'
         };
 
         if (rank === 1) {
-            // Champion - Soft gold gradient with premium glow
+            // Champion - Softer "award certificate" gold with more white
             return {
                 ...baseStyle,
-                background: 'linear-gradient(135deg, rgba(255, 251, 235, 0.95) 0%, rgba(254, 243, 199, 0.9) 50%, rgba(253, 230, 138, 0.85) 100%)',
-                border: '2px solid rgba(217, 164, 6, 0.4)',
-                boxShadow: '0 8px 32px rgba(217, 164, 6, 0.2), 0 0 0 1px rgba(255, 255, 255, 0.5) inset',
-                minHeight: '96px' // 12% taller
+                background: 'linear-gradient(135deg, rgba(255, 253, 245, 0.97) 0%, rgba(255, 250, 235, 0.94) 50%, rgba(254, 245, 215, 0.9) 100%)',
+                border: '2px solid rgba(202, 158, 40, 0.3)',
+                boxShadow: '0 10px 40px rgba(180, 140, 30, 0.12), 0 0 0 1px rgba(255, 255, 255, 0.6) inset',
+                borderRadius: '20px',
+                minHeight: '96px'
             };
         } else if (rank === 2) {
-            // Runner-up - Light silver gradient
+            // Runner-up - Stronger silver with more contrast
             return {
                 ...baseStyle,
-                background: 'linear-gradient(135deg, rgba(248, 250, 252, 0.95) 0%, rgba(241, 245, 249, 0.9) 50%, rgba(226, 232, 240, 0.85) 100%)',
-                border: '2px solid rgba(148, 163, 184, 0.4)',
-                boxShadow: '0 6px 24px rgba(100, 116, 139, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.6) inset',
-                minHeight: '92px' // 8% taller
+                background: 'linear-gradient(135deg, rgba(250, 251, 252, 0.97) 0%, rgba(241, 245, 249, 0.94) 50%, rgba(220, 228, 238, 0.88) 100%)',
+                border: '2px solid rgba(120, 140, 165, 0.35)',
+                boxShadow: '0 8px 32px rgba(80, 100, 130, 0.12), 0 0 0 1px rgba(255, 255, 255, 0.7) inset',
+                borderRadius: '20px',
+                minHeight: '92px'
             };
         } else if (rank === 3) {
-            // Third Place - Warm bronze tint
+            // Third Place - Cooler bronze with more neutral white
             return {
                 ...baseStyle,
-                background: 'linear-gradient(135deg, rgba(255, 251, 245, 0.95) 0%, rgba(254, 243, 230, 0.9) 50%, rgba(253, 224, 194, 0.85) 100%)',
-                border: '2px solid rgba(180, 83, 9, 0.3)',
-                boxShadow: '0 4px 20px rgba(180, 83, 9, 0.12), 0 0 0 1px rgba(255, 255, 255, 0.5) inset',
-                minHeight: '88px' // 5% taller
+                background: 'linear-gradient(135deg, rgba(255, 253, 250, 0.96) 0%, rgba(250, 245, 240, 0.92) 50%, rgba(240, 228, 218, 0.85) 100%)',
+                border: '2px solid rgba(150, 100, 60, 0.22)',
+                boxShadow: '0 6px 24px rgba(120, 80, 40, 0.06), 0 0 0 1px rgba(255, 255, 255, 0.55) inset',
+                borderRadius: '20px',
+                minHeight: '88px'
             };
         }
 
@@ -118,18 +121,19 @@ const Leaderboard = () => {
         };
     };
 
-    // Get animation class for top 3
+    // Get animation class - all top 3 with decreasing intensity
     const getAnimationClass = (rank) => {
-        if (rank === 1) return 'animate-champion-glow';
-        if (rank === 2) return 'animate-silver-pulse';
+        if (rank === 1) return 'animate-breathe-gold';
+        if (rank === 2) return 'animate-breathe-silver';
+        if (rank === 3) return 'animate-breathe-bronze';
         return '';
     };
 
-    // Get title label for top 3
+    // Get title label with rank number for top 3
     const getTitleLabel = (rank) => {
-        if (rank === 1) return 'Campus Champion';
-        if (rank === 2) return 'Top Contributor';
-        if (rank === 3) return 'Top Contributor';
+        if (rank === 1) return '👑 #1 Campus Champion';
+        if (rank === 2) return '🥈 #2 Top Contributor';
+        if (rank === 3) return '🥉 #3 Top Contributor';
         return null;
     };
 
@@ -248,10 +252,10 @@ const Leaderboard = () => {
                                         <div className="flex-1 min-w-0">
                                             <div className="flex items-center gap-2">
                                                 <h3 className={`truncate ${user.rank === 1
-                                                        ? 'text-lg font-bold text-amber-900'
-                                                        : user.rank <= 3
-                                                            ? 'text-base font-bold text-gray-900'
-                                                            : 'font-semibold text-gray-900'
+                                                    ? 'text-lg font-bold text-amber-900'
+                                                    : user.rank <= 3
+                                                        ? 'text-base font-bold text-gray-900'
+                                                        : 'font-semibold text-gray-900'
                                                     }`}>
                                                     {user.name}
                                                     {user.userId === currentUserRank?.userId && (
@@ -262,10 +266,10 @@ const Leaderboard = () => {
                                             {/* Title Label for Top 3 */}
                                             {getTitleLabel(user.rank) && (
                                                 <div className={`text-xs font-semibold mt-0.5 ${user.rank === 1
-                                                        ? 'text-amber-600'
-                                                        : user.rank === 2
-                                                            ? 'text-slate-500'
-                                                            : 'text-orange-600'
+                                                    ? 'text-amber-600'
+                                                    : user.rank === 2
+                                                        ? 'text-slate-500'
+                                                        : 'text-orange-600'
                                                     }`}>
                                                     {getTitleLabel(user.rank)}
                                                 </div>
