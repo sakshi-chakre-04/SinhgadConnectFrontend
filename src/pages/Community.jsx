@@ -64,34 +64,28 @@ export default function Community() {
     <div className="space-y-8 pb-8">
       {/* Hero Section */}
       <div
-        className="relative overflow-hidden rounded-2xl p-6 text-white shadow-2xl transition-all duration-500 group mx-3 md:mx-4"
+        className="relative overflow-hidden rounded-2xl p-6 text-white mx-3 md:mx-4"
         style={{
           background: 'linear-gradient(135deg, #7c3aed 0%, #8b5cf6 25%, #a855f7 50%, #c026d3 75%, #d946ef 100%)',
           boxShadow: '0 10px 40px rgba(139, 92, 246, 0.3), 0 0 60px rgba(217, 70, 239, 0.15)'
         }}
       >
-        {/* Animated Background Effects */}
+        {/* Background Effects */}
         <div className="absolute inset-0 opacity-30 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] mix-blend-overlay"></div>
-        <div className="absolute -top-24 -right-24 w-72 h-72 bg-white/20 blur-3xl rounded-full group-hover:scale-125 transition-transform duration-1000"></div>
-        <div className="absolute -bottom-24 -left-24 w-72 h-72 bg-fuchsia-400/30 blur-3xl rounded-full group-hover:scale-125 transition-transform duration-1000"></div>
+        <div className="absolute -top-24 -right-24 w-72 h-72 bg-white/20 blur-3xl rounded-full"></div>
+        <div className="absolute -bottom-24 -left-24 w-72 h-72 bg-fuchsia-400/30 blur-3xl rounded-full"></div>
 
-        <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="text-center md:text-left">
-            {/* Animated Pill */}
-            <div className="inline-flex items-center px-4 py-1.5 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-xs font-medium mb-3 animate-pulse">
-              <UserGroupIcon className="w-4 h-4 mr-2" />
-              Campus Communities
+        <div className="relative z-10">
+          <div className="flex items-center gap-3">
+            <div
+              className="w-14 h-14 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center"
+              style={{ boxShadow: '0 4px 15px rgba(0,0,0,0.1)' }}
+            >
+              <UserGroupIcon className="w-7 h-7 text-white" />
             </div>
-            <h1 className="text-3xl font-bold mb-2 drop-shadow-lg">
-              Find Your Tribe 🎓
-            </h1>
-            <p className="text-violet-100 max-w-xl text-sm leading-relaxed">
-              Connect with department peers, share resources, and get mentorship from seniors within your field.
-            </p>
-          </div>
-          <div className="hidden md:block">
-            <div className="w-20 h-20 bg-white/15 rounded-2xl flex items-center justify-center backdrop-blur-md border border-white/30 transform rotate-12 hover:rotate-0 transition-transform duration-500">
-              <SparklesIcon className="w-10 h-10 text-white" />
+            <div>
+              <h1 className="text-3xl font-bold drop-shadow-lg">Find Your Tribe 🎓</h1>
+              <p className="text-violet-100 text-sm">Connect with department peers and get mentorship</p>
             </div>
           </div>
         </div>

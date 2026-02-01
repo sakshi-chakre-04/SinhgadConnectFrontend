@@ -129,11 +129,11 @@ const Leaderboard = () => {
         return '';
     };
 
-    // Get title label with rank number for top 3
+    // Get title label with rank number for top 3 - clean, professional
     const getTitleLabel = (rank) => {
-        if (rank === 1) return '👑 #1 Campus Champion';
-        if (rank === 2) return '🥈 #2 Top Contributor';
-        if (rank === 3) return '🥉 #3 Top Contributor';
+        if (rank === 1) return '#1 · Campus Champion';
+        if (rank === 2) return '#2 · Top Contributor';
+        if (rank === 3) return '#3 · Top Contributor';
         return null;
     };
 
@@ -163,220 +163,217 @@ const Leaderboard = () => {
         leaderboard.some(u => u.userId === currentUserRank.userId);
 
     return (
-        <div className="pb-20">
-            <div className="max-w-4xl mx-auto px-0 md:px-4 space-y-6">
-                {/* Header */}
-                <div
-                    className="relative overflow-hidden rounded-2xl mx-3 md:mx-0 p-5 text-white"
-                    style={{
-                        background: 'linear-gradient(135deg, #7c3aed 0%, #8b5cf6 25%, #a855f7 50%, #c026d3 75%, #d946ef 100%)',
-                        boxShadow: '0 8px 30px rgba(139, 92, 246, 0.25)'
-                    }}
-                >
-                    {/* Background Effects */}
-                    <div className="absolute inset-0 opacity-30 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] mix-blend-overlay"></div>
-                    <div className="absolute -top-24 -right-24 w-72 h-72 bg-white/15 blur-3xl rounded-full"></div>
-                    <div className="absolute -bottom-24 -left-24 w-72 h-72 bg-fuchsia-400/20 blur-3xl rounded-full"></div>
-                    {/* Frosted overlay to de-emphasize gradient */}
-                    <div className="absolute inset-0 bg-white/[0.08]"></div>
+        <div className="pb-20 space-y-6">
+            {/* Header */}
+            <div
+                className="relative overflow-hidden rounded-2xl mx-3 md:mx-4 p-6 text-white"
+                style={{
+                    background: 'linear-gradient(135deg, #7c3aed 0%, #8b5cf6 25%, #a855f7 50%, #c026d3 75%, #d946ef 100%)',
+                    boxShadow: '0 10px 40px rgba(139, 92, 246, 0.3), 0 0 60px rgba(217, 70, 239, 0.15)'
+                }}
+            >
+                {/* Background Effects */}
+                <div className="absolute inset-0 opacity-30 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] mix-blend-overlay"></div>
+                <div className="absolute -top-24 -right-24 w-72 h-72 bg-white/20 blur-3xl rounded-full"></div>
+                <div className="absolute -bottom-24 -left-24 w-72 h-72 bg-fuchsia-400/30 blur-3xl rounded-full"></div>
 
-                    <div className="relative z-10">
-                        <div className="flex items-center gap-3">
-                            <div
-                                className="w-10 h-10 rounded-xl bg-white/15 backdrop-blur-sm flex items-center justify-center"
-                            >
-                                <TrophyIconSolid className="w-5 h-5 text-yellow-300/90" />
-                            </div>
-                            <div>
-                                <h1 className="text-2xl font-bold drop-shadow-md">Leaderboard</h1>
-                                <p className="text-violet-100/80 text-xs">Updated daily · Based on upvotes, answers & posts</p>
-                            </div>
+                <div className="relative z-10">
+                    <div className="flex items-center gap-3">
+                        <div
+                            className="w-14 h-14 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center"
+                            style={{ boxShadow: '0 4px 15px rgba(0,0,0,0.1)' }}
+                        >
+                            <TrophyIconSolid className="w-7 h-7 text-yellow-300" />
+                        </div>
+                        <div>
+                            <h1 className="text-3xl font-bold drop-shadow-lg">Leaderboard</h1>
+                            <p className="text-violet-100 text-sm">Updated daily · Based on upvotes, answers & posts</p>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                {/* Leaderboard List */}
-                <div className="px-4 md:px-0">
-                    <div className="space-y-3">
-                        {loading ? (
-                            <div className="flex justify-center py-12">
-                                <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-violet-500"></div>
-                            </div>
-                        ) : leaderboard.length === 0 ? (
-                            <div
-                                className="text-center py-12 rounded-2xl"
-                                style={{
-                                    background: 'rgba(255, 255, 255, 0.8)',
-                                    backdropFilter: 'blur(12px)',
-                                    border: '1px solid rgba(139, 92, 246, 0.15)'
-                                }}
-                            >
-                                <TrophyIcon className="w-16 h-16 mx-auto text-violet-300 mb-4" />
-                                <p className="text-gray-700 font-semibold">No contributors yet</p>
-                                <p className="text-gray-500 text-sm mt-1">Be the first to help others!</p>
-                            </div>
-                        ) : (
-                            <>
-                                {leaderboard.map((user, index) => (
+            {/* Leaderboard List */}
+            <div className="mx-3 md:mx-4">
+                <div className="space-y-3">
+                    {loading ? (
+                        <div className="flex justify-center py-12">
+                            <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-violet-500"></div>
+                        </div>
+                    ) : leaderboard.length === 0 ? (
+                        <div
+                            className="text-center py-12 rounded-2xl"
+                            style={{
+                                background: 'rgba(255, 255, 255, 0.8)',
+                                backdropFilter: 'blur(12px)',
+                                border: '1px solid rgba(139, 92, 246, 0.15)'
+                            }}
+                        >
+                            <TrophyIcon className="w-16 h-16 mx-auto text-violet-300 mb-4" />
+                            <p className="text-gray-700 font-semibold">No contributors yet</p>
+                            <p className="text-gray-500 text-sm mt-1">Be the first to help others!</p>
+                        </div>
+                    ) : (
+                        <>
+                            {leaderboard.map((user, index) => (
+                                <div
+                                    key={user.userId}
+                                    onClick={() => navigate(`/user/${user.userId}`)}
+                                    className={`flex items-center gap-4 p-4 rounded-2xl cursor-pointer animate-fade-in-up ${user.rank <= 3 ? getAnimationClass(user.rank) : ''
+                                        } ${user.userId === currentUserRank?.userId && user.rank > 3
+                                            ? 'ring-2 ring-violet-300'
+                                            : ''
+                                        }`}
+                                    style={{
+                                        ...getCardStyle(user.rank, user.userId === currentUserRank?.userId),
+                                        animationDelay: `${index * 50}ms`
+                                    }}
+                                    onMouseEnter={(e) => {
+                                        if (user.rank <= 3) {
+                                            e.currentTarget.style.transform = 'scale(1.02)';
+                                        } else {
+                                            e.currentTarget.style.boxShadow = '0 8px 25px rgba(139, 92, 246, 0.15)';
+                                            e.currentTarget.style.transform = 'scale(1.01)';
+                                        }
+                                    }}
+                                    onMouseLeave={(e) => {
+                                        e.currentTarget.style.boxShadow = getCardStyle(user.rank, user.userId === currentUserRank?.userId).boxShadow;
+                                        e.currentTarget.style.transform = 'scale(1)';
+                                    }}
+                                >
+                                    {/* Rank Badge */}
+                                    <div className={`flex-shrink-0 ${user.rank <= 3 ? 'w-14 h-14' : 'w-12 h-12'} rounded-2xl flex items-center justify-center font-bold text-lg ${getMedalStyle(user.rank)}`}>
+                                        {getMedalEmoji(user.rank) || user.rank}
+                                    </div>
+
+                                    {/* User Info */}
+                                    <div className="flex-1 min-w-0">
+                                        <div className="flex items-center gap-2">
+                                            <h3 className={`truncate ${user.rank === 1
+                                                ? 'text-lg font-bold text-amber-900'
+                                                : user.rank <= 3
+                                                    ? 'text-base font-bold text-gray-900'
+                                                    : 'font-semibold text-gray-900'
+                                                }`}>
+                                                {user.name}
+                                                {user.userId === currentUserRank?.userId && (
+                                                    <span className="ml-2 text-xs text-violet-600 font-medium">(You)</span>
+                                                )}
+                                            </h3>
+                                        </div>
+                                        {/* Title Label for Top 3 */}
+                                        {getTitleLabel(user.rank) && (
+                                            <div className={`text-xs font-semibold mt-0.5 ${user.rank === 1
+                                                ? 'text-amber-600'
+                                                : user.rank === 2
+                                                    ? 'text-slate-500'
+                                                    : 'text-orange-600'
+                                                }`}>
+                                                {getTitleLabel(user.rank)}
+                                            </div>
+                                        )}
+                                        <div className="flex items-center gap-2 mt-1.5 text-xs text-gray-500">
+                                            <span className={`px-2.5 py-0.5 rounded-full font-medium border ${getDepartmentColor(user.department)}`}>
+                                                {user.department}
+                                            </span>
+                                            <span className="text-gray-300">•</span>
+                                            <span className="text-gray-500">{user.year}</span>
+                                        </div>
+                                    </div>
+
+                                    {/* Stats - Improved sizing */}
+                                    <div className="flex items-center gap-5 text-sm">
+                                        <div className="text-center min-w-[48px]">
+                                            <div className="flex items-center justify-center gap-1 text-green-600 font-bold text-base">
+                                                <ChevronUpIcon className="w-4 h-4" strokeWidth={2.5} />
+                                                {user.totalUpvotes}
+                                            </div>
+                                            <div className="text-xs text-gray-400 mt-0.5">upvotes</div>
+                                        </div>
+                                        <div className="text-center hidden sm:block min-w-[48px]">
+                                            <div className="flex items-center justify-center gap-1 text-violet-600 font-bold text-base">
+                                                <ChatBubbleLeftIcon className="w-4 h-4" />
+                                                {user.answerCount}
+                                            </div>
+                                            <div className="text-xs text-gray-400 mt-0.5">answers</div>
+                                        </div>
+                                        <div className="text-center hidden sm:block min-w-[48px]">
+                                            <div className="flex items-center justify-center gap-1 text-fuchsia-600 font-bold text-base">
+                                                <DocumentTextIcon className="w-4 h-4" />
+                                                {user.postCount}
+                                            </div>
+                                            <div className="text-xs text-gray-400 mt-0.5">posts</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+
+                            {/* Current User Card (if not in top 20) */}
+                            {currentUserRank && !isCurrentUserInTop && (
+                                <>
+                                    <div className="flex items-center justify-center gap-2 text-gray-400 py-2">
+                                        <div className="w-8 h-px bg-violet-200"></div>
+                                        <span className="text-xs font-medium">Your Position</span>
+                                        <div className="w-8 h-px bg-violet-200"></div>
+                                    </div>
                                     <div
-                                        key={user.userId}
-                                        onClick={() => navigate(`/user/${user.userId}`)}
-                                        className={`flex items-center gap-4 p-4 rounded-2xl cursor-pointer animate-fade-in-up ${user.rank <= 3 ? getAnimationClass(user.rank) : ''
-                                            } ${user.userId === currentUserRank?.userId && user.rank > 3
-                                                ? 'ring-2 ring-violet-300'
-                                                : ''
-                                            }`}
+                                        onClick={() => navigate(`/user/${currentUserRank.userId}`)}
+                                        className="flex items-center gap-4 p-4 rounded-2xl ring-2 ring-violet-300 cursor-pointer hover:shadow-lg transition-all"
                                         style={{
-                                            ...getCardStyle(user.rank, user.userId === currentUserRank?.userId),
-                                            animationDelay: `${index * 50}ms`
-                                        }}
-                                        onMouseEnter={(e) => {
-                                            if (user.rank <= 3) {
-                                                e.currentTarget.style.transform = 'scale(1.02)';
-                                            } else {
-                                                e.currentTarget.style.boxShadow = '0 8px 25px rgba(139, 92, 246, 0.15)';
-                                                e.currentTarget.style.transform = 'scale(1.01)';
-                                            }
-                                        }}
-                                        onMouseLeave={(e) => {
-                                            e.currentTarget.style.boxShadow = getCardStyle(user.rank, user.userId === currentUserRank?.userId).boxShadow;
-                                            e.currentTarget.style.transform = 'scale(1)';
+                                            background: 'rgba(139, 92, 246, 0.1)',
+                                            backdropFilter: 'blur(12px)',
+                                            border: '1px solid rgba(139, 92, 246, 0.2)'
                                         }}
                                     >
                                         {/* Rank Badge */}
-                                        <div className={`flex-shrink-0 ${user.rank <= 3 ? 'w-14 h-14' : 'w-12 h-12'} rounded-2xl flex items-center justify-center font-bold text-lg ${getMedalStyle(user.rank)}`}>
-                                            {getMedalEmoji(user.rank) || user.rank}
+                                        <div className="flex-shrink-0 w-12 h-12 rounded-2xl flex items-center justify-center font-bold text-lg bg-violet-100 text-violet-600 border border-violet-200">
+                                            {currentUserRank.rank}
                                         </div>
 
                                         {/* User Info */}
                                         <div className="flex-1 min-w-0">
                                             <div className="flex items-center gap-2">
-                                                <h3 className={`truncate ${user.rank === 1
-                                                    ? 'text-lg font-bold text-amber-900'
-                                                    : user.rank <= 3
-                                                        ? 'text-base font-bold text-gray-900'
-                                                        : 'font-semibold text-gray-900'
-                                                    }`}>
-                                                    {user.name}
-                                                    {user.userId === currentUserRank?.userId && (
-                                                        <span className="ml-2 text-xs text-violet-600 font-medium">(You)</span>
-                                                    )}
+                                                <h3 className="font-semibold text-gray-900 truncate">
+                                                    {currentUserRank.name}
+                                                    <span className="ml-2 text-xs text-violet-600 font-medium">(You)</span>
                                                 </h3>
                                             </div>
-                                            {/* Title Label for Top 3 */}
-                                            {getTitleLabel(user.rank) && (
-                                                <div className={`text-xs font-semibold mt-0.5 ${user.rank === 1
-                                                    ? 'text-amber-600'
-                                                    : user.rank === 2
-                                                        ? 'text-slate-500'
-                                                        : 'text-orange-600'
-                                                    }`}>
-                                                    {getTitleLabel(user.rank)}
-                                                </div>
-                                            )}
-                                            <div className="flex items-center gap-2 mt-1.5 text-xs text-gray-500">
-                                                <span className={`px-2.5 py-0.5 rounded-full font-medium border ${getDepartmentColor(user.department)}`}>
-                                                    {user.department}
-                                                </span>
-                                                <span className="text-gray-300">•</span>
-                                                <span className="text-gray-500">{user.year}</span>
+                                            <div className="flex items-center gap-2 mt-1 text-xs text-gray-500">
+                                                <span className="px-2 py-0.5 bg-violet-100 text-violet-600 rounded-full font-medium">{currentUserRank.department}</span>
+                                                <span>•</span>
+                                                <span>{currentUserRank.year}</span>
                                             </div>
                                         </div>
 
-                                        {/* Stats - Improved sizing */}
-                                        <div className="flex items-center gap-5 text-sm">
-                                            <div className="text-center min-w-[48px]">
-                                                <div className="flex items-center justify-center gap-1 text-green-600 font-bold text-base">
+                                        {/* Stats */}
+                                        <div className="flex items-center gap-4 text-sm">
+                                            <div className="text-center">
+                                                <div className="flex items-center gap-1 text-green-600 font-semibold">
                                                     <ChevronUpIcon className="w-4 h-4" strokeWidth={2.5} />
-                                                    {user.totalUpvotes}
+                                                    {currentUserRank.totalUpvotes}
                                                 </div>
-                                                <div className="text-xs text-gray-400 mt-0.5">upvotes</div>
+                                                <div className="text-xs text-gray-400">upvotes</div>
                                             </div>
-                                            <div className="text-center hidden sm:block min-w-[48px]">
-                                                <div className="flex items-center justify-center gap-1 text-violet-600 font-bold text-base">
+                                            <div className="text-center hidden sm:block">
+                                                <div className="flex items-center gap-1 text-violet-600 font-semibold">
                                                     <ChatBubbleLeftIcon className="w-4 h-4" />
-                                                    {user.answerCount}
+                                                    {currentUserRank.answerCount}
                                                 </div>
-                                                <div className="text-xs text-gray-400 mt-0.5">answers</div>
+                                                <div className="text-xs text-gray-400">answers</div>
                                             </div>
-                                            <div className="text-center hidden sm:block min-w-[48px]">
-                                                <div className="flex items-center justify-center gap-1 text-fuchsia-600 font-bold text-base">
+                                            <div className="text-center hidden sm:block">
+                                                <div className="flex items-center gap-1 text-fuchsia-600 font-semibold">
                                                     <DocumentTextIcon className="w-4 h-4" />
-                                                    {user.postCount}
+                                                    {currentUserRank.postCount}
                                                 </div>
-                                                <div className="text-xs text-gray-400 mt-0.5">posts</div>
+                                                <div className="text-xs text-gray-400">posts</div>
                                             </div>
                                         </div>
                                     </div>
-                                ))}
-
-                                {/* Current User Card (if not in top 20) */}
-                                {currentUserRank && !isCurrentUserInTop && (
-                                    <>
-                                        <div className="flex items-center justify-center gap-2 text-gray-400 py-2">
-                                            <div className="w-8 h-px bg-violet-200"></div>
-                                            <span className="text-xs font-medium">Your Position</span>
-                                            <div className="w-8 h-px bg-violet-200"></div>
-                                        </div>
-                                        <div
-                                            onClick={() => navigate(`/user/${currentUserRank.userId}`)}
-                                            className="flex items-center gap-4 p-4 rounded-2xl ring-2 ring-violet-300 cursor-pointer hover:shadow-lg transition-all"
-                                            style={{
-                                                background: 'rgba(139, 92, 246, 0.1)',
-                                                backdropFilter: 'blur(12px)',
-                                                border: '1px solid rgba(139, 92, 246, 0.2)'
-                                            }}
-                                        >
-                                            {/* Rank Badge */}
-                                            <div className="flex-shrink-0 w-12 h-12 rounded-2xl flex items-center justify-center font-bold text-lg bg-violet-100 text-violet-600 border border-violet-200">
-                                                {currentUserRank.rank}
-                                            </div>
-
-                                            {/* User Info */}
-                                            <div className="flex-1 min-w-0">
-                                                <div className="flex items-center gap-2">
-                                                    <h3 className="font-semibold text-gray-900 truncate">
-                                                        {currentUserRank.name}
-                                                        <span className="ml-2 text-xs text-violet-600 font-medium">(You)</span>
-                                                    </h3>
-                                                </div>
-                                                <div className="flex items-center gap-2 mt-1 text-xs text-gray-500">
-                                                    <span className="px-2 py-0.5 bg-violet-100 text-violet-600 rounded-full font-medium">{currentUserRank.department}</span>
-                                                    <span>•</span>
-                                                    <span>{currentUserRank.year}</span>
-                                                </div>
-                                            </div>
-
-                                            {/* Stats */}
-                                            <div className="flex items-center gap-4 text-sm">
-                                                <div className="text-center">
-                                                    <div className="flex items-center gap-1 text-green-600 font-semibold">
-                                                        <ChevronUpIcon className="w-4 h-4" strokeWidth={2.5} />
-                                                        {currentUserRank.totalUpvotes}
-                                                    </div>
-                                                    <div className="text-xs text-gray-400">upvotes</div>
-                                                </div>
-                                                <div className="text-center hidden sm:block">
-                                                    <div className="flex items-center gap-1 text-violet-600 font-semibold">
-                                                        <ChatBubbleLeftIcon className="w-4 h-4" />
-                                                        {currentUserRank.answerCount}
-                                                    </div>
-                                                    <div className="text-xs text-gray-400">answers</div>
-                                                </div>
-                                                <div className="text-center hidden sm:block">
-                                                    <div className="flex items-center gap-1 text-fuchsia-600 font-semibold">
-                                                        <DocumentTextIcon className="w-4 h-4" />
-                                                        {currentUserRank.postCount}
-                                                    </div>
-                                                    <div className="text-xs text-gray-400">posts</div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </>
-                                )}
-                            </>
-                        )}
-                    </div>
+                                </>
+                            )}
+                        </>
+                    )}
                 </div>
             </div>
 
@@ -443,4 +440,3 @@ const Leaderboard = () => {
 };
 
 export default Leaderboard;
-

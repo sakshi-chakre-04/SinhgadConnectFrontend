@@ -131,7 +131,7 @@ const HallOfFame = () => {
         <div className="pb-20 lg:pb-6">
             {/* Hero Header */}
             <div
-                className="relative overflow-hidden rounded-2xl mx-3 md:mx-4 p-8 lg:p-10"
+                className="relative overflow-hidden rounded-2xl mx-3 md:mx-4 p-6"
                 style={{
                     background: 'linear-gradient(135deg, #7c3aed 0%, #8b5cf6 25%, #a855f7 50%, #c026d3 75%, #d946ef 100%)',
                     boxShadow: '0 10px 40px rgba(139, 92, 246, 0.3), 0 0 60px rgba(217, 70, 239, 0.15)'
@@ -141,28 +141,19 @@ const HallOfFame = () => {
                 <div className="absolute inset-0 opacity-30 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] mix-blend-overlay"></div>
                 <div className="absolute -top-24 -right-24 w-72 h-72 bg-white/20 blur-3xl rounded-full"></div>
                 <div className="absolute -bottom-24 -left-24 w-72 h-72 bg-fuchsia-400/30 blur-3xl rounded-full"></div>
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-yellow-300/10 blur-3xl rounded-full"></div>
 
                 <div className="relative z-10">
-                    <Link
-                        to="/dashboard"
-                        className="inline-flex items-center gap-2 text-white/80 hover:text-white mb-4 text-sm transition-colors"
-                    >
-                        <ArrowLeftIcon className="w-4 h-4" />
-                        Back to Dashboard
-                    </Link>
-
-                    <div className="flex items-center gap-4 mb-3">
+                    <div className="flex items-center gap-3">
                         <div
-                            className="w-16 h-16 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center"
+                            className="w-14 h-14 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center"
                             style={{ boxShadow: '0 4px 15px rgba(0,0,0,0.1)' }}
                         >
-                            <TrophyIconSolid className="w-9 h-9 text-yellow-300 drop-shadow-lg" />
+                            <TrophyIconSolid className="w-7 h-7 text-yellow-300" />
                         </div>
                         <div>
-                            <h1 className="text-3xl lg:text-4xl font-bold text-white drop-shadow-lg flex items-center gap-2">
+                            <h1 className="text-3xl font-bold text-white drop-shadow-lg flex items-center gap-2">
                                 Hall of Fame
-                                <SparklesIcon className="w-6 h-6 text-yellow-300 animate-pulse" />
+                                <SparklesIcon className="w-6 h-6 text-yellow-300" />
                             </h1>
                             <p className="text-violet-100 text-sm">Celebrating our successful alumni</p>
                         </div>
