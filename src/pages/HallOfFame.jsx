@@ -249,13 +249,13 @@ const HallOfFame = () => {
                         <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-white/90 to-transparent z-10 pointer-events-none"></div>
                         <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-white/90 to-transparent z-10 pointer-events-none"></div>
 
-                        {/* Scrolling content - duplicated for seamless loop */}
-                        <div className="flex items-center gap-6 animate-marquee">
+                        {/* Scrolling content - inline-flex w-max prevents wrapping */}
+                        <div className="inline-flex w-max items-center gap-6 animate-marquee">
                             {/* First set */}
                             {Object.entries(companyData).map(([name, data]) => (
                                 <div
                                     key={`first-${name}`}
-                                    className="flex items-center gap-2 px-3 py-2 rounded-lg bg-white/80 border border-gray-100 shadow-sm flex-shrink-0"
+                                    className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border border-violet-100 shadow-sm"
                                 >
                                     <img
                                         src={data.logo}
@@ -272,7 +272,7 @@ const HallOfFame = () => {
                             {Object.entries(companyData).map(([name, data]) => (
                                 <div
                                     key={`second-${name}`}
-                                    className="flex items-center gap-2 px-3 py-2 rounded-lg bg-white/80 border border-gray-100 shadow-sm flex-shrink-0"
+                                    className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border border-violet-100 shadow-sm"
                                 >
                                     <img
                                         src={data.logo}
