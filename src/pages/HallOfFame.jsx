@@ -307,6 +307,31 @@ const HallOfFame = () => {
                         <p className="text-gray-500 text-sm mt-1">Check back later!</p>
                     </div>
                 )}
+
+                {/* Motivational CTA Section */}
+                <div
+                    className="rounded-2xl p-8 text-center mt-6"
+                    style={{
+                        background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.08) 0%, rgba(217, 70, 239, 0.08) 100%)',
+                        border: '1px solid rgba(139, 92, 246, 0.15)'
+                    }}
+                >
+                    <div className="max-w-md mx-auto">
+                        <div className="text-4xl mb-3">🎓</div>
+                        <h3 className="text-xl font-bold text-gray-800 mb-2">
+                            Your Story Could Be Next!
+                        </h3>
+                        <p className="text-gray-600 text-sm mb-4">
+                            Got placed? Share your journey and inspire thousands of juniors.
+                            Your experience matters!
+                        </p>
+                        <div className="flex items-center justify-center gap-3">
+                            <span className="px-4 py-2 rounded-full bg-violet-100 text-violet-700 text-sm font-medium">
+                                📧 Contact Placement Cell
+                            </span>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             {/* Video Modal */}
