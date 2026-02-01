@@ -879,28 +879,24 @@ body {
     pointer-events: none;
 }
 
-/* ===== PREMIUM TOP 3 BREATHING ANIMATIONS ===== */
-/* All very subtle - felt more than seen */
+/* ===== SUBTLE RANK 1 AMBIENT ANIMATION ===== */
+/* Barely perceptible - professional, not game-like */
 
-/* Gold Breathe - Rank 1 (slowest, most subtle) */
+/* Gold Breathe - Very subtle ambient glow */
 @keyframes breathe-gold {
 
     0%,
     100% {
-        transform: scale(1);
-        box-shadow: 0 10px 40px rgba(180, 140, 30, 0.12),
-            0 0 0 1px rgba(255, 255, 255, 0.6) inset;
+        box-shadow: 0 2px 8px rgba(180, 140, 30, 0.08);
     }
 
     50% {
-        transform: scale(1.008);
-        box-shadow: 0 11px 44px rgba(180, 140, 30, 0.14),
-            0 0 0 1px rgba(255, 255, 255, 0.65) inset;
+        box-shadow: 0 2px 12px rgba(180, 140, 30, 0.12);
     }
 }
 
 .animate-breathe-gold {
-    animation: breathe-gold 10s ease-in-out infinite;
+    animation: breathe-gold 8s ease-in-out infinite;
 }
 
 /* Silver Breathe - Rank 2 (even more subtle) */
@@ -943,4 +939,21 @@ body {
 
 .animate-breathe-bronze {
     animation: breathe-bronze 14s ease-in-out infinite;
+}
+
+/* Crown Bounce Animation - Slow float for podium */
+@keyframes bounce-slow {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-6px);
+    }
+}
+
+.animate-bounce-slow {
+    animation: bounce-slow 2s ease-in-out infinite;
 }

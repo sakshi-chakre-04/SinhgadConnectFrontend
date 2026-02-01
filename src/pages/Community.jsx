@@ -92,7 +92,7 @@ export default function Community() {
       </div>
 
       {/* Department Cards Grid */}
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5 px-4 md:px-0">
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5 mx-3 md:mx-4">
         {departments.map((dept) => {
           const Icon = dept.icon;
           return (

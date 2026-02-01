@@ -73,51 +73,48 @@ const Leaderboard = () => {
         return colors[department] || 'bg-violet-50 text-violet-600 border-violet-200';
     };
 
-    // Premium card styling for top 3 positions
+    // Card styling for ranked positions
     const getCardStyle = (rank, isCurrentUser) => {
         const baseStyle = {
-            backdropFilter: 'blur(12px)',
-            animationFillMode: 'backwards',
-            transition: 'all 0.4s ease'
+            backdropFilter: 'blur(8px)',
+            transition: 'all 0.2s ease'
         };
 
         if (rank === 1) {
-            // Champion - Softer "award certificate" gold with more white
+            // Gold - subtle but distinct
             return {
                 ...baseStyle,
-                background: 'linear-gradient(135deg, rgba(255, 253, 245, 0.97) 0%, rgba(255, 250, 235, 0.94) 50%, rgba(254, 245, 215, 0.9) 100%)',
-                border: '2px solid rgba(202, 158, 40, 0.3)',
-                boxShadow: '0 10px 40px rgba(180, 140, 30, 0.12), 0 0 0 1px rgba(255, 255, 255, 0.6) inset',
-                borderRadius: '20px',
-                minHeight: '96px'
+                background: 'linear-gradient(135deg, rgba(255, 251, 235, 0.95) 0%, rgba(254, 243, 199, 0.9) 100%)',
+                border: '1.5px solid rgba(202, 158, 40, 0.3)',
+                boxShadow: '0 2px 8px rgba(180, 140, 30, 0.08)',
+                borderRadius: '12px'
             };
         } else if (rank === 2) {
-            // Runner-up - Stronger silver with more contrast
+            // Silver - subtle
             return {
                 ...baseStyle,
-                background: 'linear-gradient(135deg, rgba(250, 251, 252, 0.97) 0%, rgba(241, 245, 249, 0.94) 50%, rgba(220, 228, 238, 0.88) 100%)',
-                border: '2px solid rgba(120, 140, 165, 0.35)',
-                boxShadow: '0 8px 32px rgba(80, 100, 130, 0.12), 0 0 0 1px rgba(255, 255, 255, 0.7) inset',
-                borderRadius: '20px',
-                minHeight: '92px'
+                background: 'linear-gradient(135deg, rgba(248, 250, 252, 0.95) 0%, rgba(226, 232, 240, 0.9) 100%)',
+                border: '1.5px solid rgba(120, 140, 165, 0.25)',
+                boxShadow: '0 2px 8px rgba(80, 100, 130, 0.06)',
+                borderRadius: '12px'
             };
         } else if (rank === 3) {
-            // Third Place - Cooler bronze with more neutral white
+            // Bronze - subtle
             return {
                 ...baseStyle,
-                background: 'linear-gradient(135deg, rgba(255, 253, 250, 0.96) 0%, rgba(250, 245, 240, 0.92) 50%, rgba(240, 228, 218, 0.85) 100%)',
-                border: '2px solid rgba(150, 100, 60, 0.22)',
-                boxShadow: '0 6px 24px rgba(120, 80, 40, 0.06), 0 0 0 1px rgba(255, 255, 255, 0.55) inset',
-                borderRadius: '20px',
-                minHeight: '88px'
+                background: 'linear-gradient(135deg, rgba(255, 251, 245, 0.95) 0%, rgba(254, 235, 220, 0.9) 100%)',
+                border: '1.5px solid rgba(180, 120, 60, 0.2)',
+                boxShadow: '0 2px 8px rgba(120, 80, 40, 0.05)',
+                borderRadius: '12px'
             };
         }
 
         return {
             ...baseStyle,
-            background: isCurrentUser ? 'rgba(139, 92, 246, 0.1)' : 'rgba(255, 255, 255, 0.8)',
-            border: '1px solid rgba(139, 92, 246, 0.15)',
-            boxShadow: '0 4px 15px rgba(139, 92, 246, 0.06)'
+            background: isCurrentUser ? 'rgba(139, 92, 246, 0.08)' : 'rgba(255, 255, 255, 0.85)',
+            border: '1px solid rgba(139, 92, 246, 0.12)',
+            boxShadow: '0 1px 4px rgba(139, 92, 246, 0.04)',
+            borderRadius: '12px'
         };
     };
 
@@ -140,11 +137,11 @@ const Leaderboard = () => {
     const getMedalStyle = (rank) => {
         switch (rank) {
             case 1:
-                return 'bg-gradient-to-br from-yellow-300 via-amber-400 to-yellow-500 text-white shadow-lg shadow-amber-500/40';
+                return 'bg-gradient-to-br from-amber-100 to-amber-200 text-amber-700 border border-amber-300';
             case 2:
-                return 'bg-gradient-to-br from-slate-300 via-slate-400 to-slate-500 text-white shadow-lg shadow-slate-500/30';
+                return 'bg-gradient-to-br from-slate-100 to-slate-200 text-slate-600 border border-slate-300';
             case 3:
-                return 'bg-gradient-to-br from-orange-300 via-amber-500 to-orange-600 text-white shadow-lg shadow-orange-500/25';
+                return 'bg-gradient-to-br from-orange-100 to-orange-200 text-orange-700 border border-orange-300';
             default:
                 return 'bg-violet-50 text-violet-600 border border-violet-200';
         }
@@ -163,7 +160,7 @@ const Leaderboard = () => {
         leaderboard.some(u => u.userId === currentUserRank.userId);
 
     return (
-        <div className="pb-20 space-y-6">
+        <div className="pb-20 space-y-4">
             {/* Header */}
             <div
                 className="relative overflow-hidden rounded-2xl mx-3 md:mx-4 p-6 text-white"
@@ -195,7 +192,7 @@ const Leaderboard = () => {
 
             {/* Leaderboard List */}
             <div className="mx-3 md:mx-4">
-                <div className="space-y-3">
+                <div className="space-y-2">
                     {loading ? (
                         <div className="flex justify-center py-12">
                             <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-violet-500"></div>
@@ -215,94 +212,139 @@ const Leaderboard = () => {
                         </div>
                     ) : (
                         <>
+                            {/* Compact Podium Highlight - Decorative Only */}
+                            {leaderboard.length >= 3 && (
+                                <div
+                                    className="rounded-xl p-3 mb-2"
+                                    style={{
+                                        background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.06) 0%, rgba(217, 70, 239, 0.06) 100%)',
+                                        border: '1px solid rgba(139, 92, 246, 0.12)'
+                                    }}
+                                >
+                                    <div className="flex items-end justify-center gap-6 sm:gap-10">
+                                        {/* 2nd Place */}
+                                        <div
+                                            className="flex flex-col items-center cursor-pointer group"
+                                            onClick={() => navigate(`/user/${leaderboard[1].userId}`)}
+                                        >
+                                            <div className="relative">
+                                                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-gradient-to-br from-slate-200 to-slate-300 flex items-center justify-center text-lg sm:text-xl border-2 border-white shadow group-hover:scale-105 transition-transform">
+                                                    🥈
+                                                </div>
+                                                <div className="absolute -bottom-0.5 -right-0.5 w-5 h-5 rounded-full bg-slate-500 flex items-center justify-center text-white text-xs font-bold">
+                                                    2
+                                                </div>
+                                            </div>
+                                            <span className="text-xs font-medium text-gray-700 mt-1.5 truncate max-w-[60px]">{leaderboard[1].name.split(' ')[0]}</span>
+                                            <span className="text-xs text-slate-500 font-semibold">{leaderboard[1].totalUpvotes} pts</span>
+                                        </div>
+
+                                        {/* 1st Place - Slightly Elevated */}
+                                        <div
+                                            className="flex flex-col items-center cursor-pointer group -mt-3"
+                                            onClick={() => navigate(`/user/${leaderboard[0].userId}`)}
+                                        >
+                                            <div className="text-lg mb-0.5">👑</div>
+                                            <div className="relative">
+                                                <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-gradient-to-br from-amber-200 to-yellow-300 flex items-center justify-center text-xl sm:text-2xl border-2 border-white shadow-md group-hover:scale-105 transition-transform">
+                                                    🏆
+                                                </div>
+                                                <div className="absolute -bottom-0.5 -right-0.5 w-5 h-5 rounded-full bg-amber-500 flex items-center justify-center text-white text-xs font-bold">
+                                                    1
+                                                </div>
+                                            </div>
+                                            <span className="text-sm font-semibold text-gray-800 mt-1.5 truncate max-w-[70px]">{leaderboard[0].name.split(' ')[0]}</span>
+                                            <span className="text-xs text-amber-600 font-bold">{leaderboard[0].totalUpvotes} pts</span>
+                                        </div>
+
+                                        {/* 3rd Place */}
+                                        <div
+                                            className="flex flex-col items-center cursor-pointer group"
+                                            onClick={() => navigate(`/user/${leaderboard[2].userId}`)}
+                                        >
+                                            <div className="relative">
+                                                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-gradient-to-br from-orange-200 to-amber-200 flex items-center justify-center text-lg sm:text-xl border-2 border-white shadow group-hover:scale-105 transition-transform">
+                                                    🥉
+                                                </div>
+                                                <div className="absolute -bottom-0.5 -right-0.5 w-5 h-5 rounded-full bg-orange-500 flex items-center justify-center text-white text-xs font-bold">
+                                                    3
+                                                </div>
+                                            </div>
+                                            <span className="text-xs font-medium text-gray-700 mt-1.5 truncate max-w-[60px]">{leaderboard[2].name.split(' ')[0]}</span>
+                                            <span className="text-xs text-orange-500 font-semibold">{leaderboard[2].totalUpvotes} pts</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Full Ranked Cards - All Users */}
                             {leaderboard.map((user, index) => (
                                 <div
                                     key={user.userId}
                                     onClick={() => navigate(`/user/${user.userId}`)}
-                                    className={`flex items-center gap-4 p-4 rounded-2xl cursor-pointer animate-fade-in-up ${user.rank <= 3 ? getAnimationClass(user.rank) : ''
+                                    className={`flex items-center gap-3 p-3 rounded-xl cursor-pointer transition-all ${user.rank === 1 ? 'animate-breathe-gold' : ''
                                         } ${user.userId === currentUserRank?.userId && user.rank > 3
                                             ? 'ring-2 ring-violet-300'
                                             : ''
                                         }`}
                                     style={{
                                         ...getCardStyle(user.rank, user.userId === currentUserRank?.userId),
-                                        animationDelay: `${index * 50}ms`
+                                        animationDelay: `${index * 30}ms`
                                     }}
                                     onMouseEnter={(e) => {
-                                        if (user.rank <= 3) {
-                                            e.currentTarget.style.transform = 'scale(1.02)';
-                                        } else {
-                                            e.currentTarget.style.boxShadow = '0 8px 25px rgba(139, 92, 246, 0.15)';
-                                            e.currentTarget.style.transform = 'scale(1.01)';
-                                        }
+                                        e.currentTarget.style.transform = 'translateX(2px)';
                                     }}
                                     onMouseLeave={(e) => {
-                                        e.currentTarget.style.boxShadow = getCardStyle(user.rank, user.userId === currentUserRank?.userId).boxShadow;
-                                        e.currentTarget.style.transform = 'scale(1)';
+                                        e.currentTarget.style.transform = 'translateX(0)';
                                     }}
                                 >
                                     {/* Rank Badge */}
-                                    <div className={`flex-shrink-0 ${user.rank <= 3 ? 'w-14 h-14' : 'w-12 h-12'} rounded-2xl flex items-center justify-center font-bold text-lg ${getMedalStyle(user.rank)}`}>
-                                        {getMedalEmoji(user.rank) || user.rank}
+                                    <div className={`flex-shrink-0 w-9 h-9 rounded-lg flex items-center justify-center font-bold text-sm ${getMedalStyle(user.rank)}`}>
+                                        {user.rank <= 3 ? getMedalEmoji(user.rank) : user.rank}
                                     </div>
 
-                                    {/* User Info */}
+                                    {/* User Info - Name Prominent */}
                                     <div className="flex-1 min-w-0">
-                                        <div className="flex items-center gap-2">
-                                            <h3 className={`truncate ${user.rank === 1
-                                                ? 'text-lg font-bold text-amber-900'
-                                                : user.rank <= 3
-                                                    ? 'text-base font-bold text-gray-900'
-                                                    : 'font-semibold text-gray-900'
-                                                }`}>
-                                                {user.name}
-                                                {user.userId === currentUserRank?.userId && (
-                                                    <span className="ml-2 text-xs text-violet-600 font-medium">(You)</span>
-                                                )}
-                                            </h3>
-                                        </div>
-                                        {/* Title Label for Top 3 */}
-                                        {getTitleLabel(user.rank) && (
-                                            <div className={`text-xs font-semibold mt-0.5 ${user.rank === 1
-                                                ? 'text-amber-600'
-                                                : user.rank === 2
-                                                    ? 'text-slate-500'
-                                                    : 'text-orange-600'
-                                                }`}>
-                                                {getTitleLabel(user.rank)}
-                                            </div>
-                                        )}
-                                        <div className="flex items-center gap-2 mt-1.5 text-xs text-gray-500">
-                                            <span className={`px-2.5 py-0.5 rounded-full font-medium border ${getDepartmentColor(user.department)}`}>
+                                        <h3 className={`font-semibold truncate ${user.rank === 1 ? 'text-amber-800' :
+                                            user.rank === 2 ? 'text-slate-700' :
+                                                user.rank === 3 ? 'text-orange-700' : 'text-gray-900'
+                                            }`}>
+                                            {user.name}
+                                            {user.userId === currentUserRank?.userId && (
+                                                <span className="ml-1.5 text-xs text-violet-600 font-medium">(You)</span>
+                                            )}
+                                        </h3>
+                                        <div className="flex items-center gap-1.5 mt-0.5 text-xs text-gray-500">
+                                            <span className={`px-1.5 py-0.5 rounded font-medium ${getDepartmentColor(user.department)}`}>
                                                 {user.department}
                                             </span>
                                             <span className="text-gray-300">•</span>
-                                            <span className="text-gray-500">{user.year}</span>
+                                            <span>{user.year}</span>
                                         </div>
                                     </div>
 
-                                    {/* Stats - Improved sizing */}
-                                    <div className="flex items-center gap-5 text-sm">
-                                        <div className="text-center min-w-[48px]">
-                                            <div className="flex items-center justify-center gap-1 text-green-600 font-bold text-base">
-                                                <ChevronUpIcon className="w-4 h-4" strokeWidth={2.5} />
+                                    {/* Stats - Readable at Glance */}
+                                    <div className="flex items-center gap-3 text-xs">
+                                        <div className="text-center">
+                                            <div className="flex items-center gap-0.5 text-green-600 font-bold">
+                                                <ChevronUpIcon className="w-3.5 h-3.5" />
                                                 {user.totalUpvotes}
                                             </div>
-                                            <div className="text-xs text-gray-400 mt-0.5">upvotes</div>
+                                            <div className="text-gray-400">upvotes</div>
                                         </div>
-                                        <div className="text-center hidden sm:block min-w-[48px]">
-                                            <div className="flex items-center justify-center gap-1 text-violet-600 font-bold text-base">
-                                                <ChatBubbleLeftIcon className="w-4 h-4" />
+                                        <div className="text-center hidden sm:block">
+                                            <div className="flex items-center gap-0.5 text-violet-600 font-bold">
+                                                <ChatBubbleLeftIcon className="w-3.5 h-3.5" />
                                                 {user.answerCount}
                                             </div>
-                                            <div className="text-xs text-gray-400 mt-0.5">answers</div>
+                                            <div className="text-gray-400">answers</div>
                                         </div>
-                                        <div className="text-center hidden sm:block min-w-[48px]">
-                                            <div className="flex items-center justify-center gap-1 text-fuchsia-600 font-bold text-base">
-                                                <DocumentTextIcon className="w-4 h-4" />
+                                        <div className="text-center hidden sm:block">
+                                            <div className="flex items-center gap-0.5 text-fuchsia-600 font-bold">
+                                                <DocumentTextIcon className="w-3.5 h-3.5" />
                                                 {user.postCount}
                                             </div>
-                                            <div className="text-xs text-gray-400 mt-0.5">posts</div>
+                                            <div className="text-gray-400">posts</div>
                                         </div>
                                     </div>
                                 </div>
