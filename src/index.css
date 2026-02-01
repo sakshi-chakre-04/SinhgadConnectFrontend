@@ -878,3 +878,45 @@ body {
     background: linear-gradient(to bottom, transparent, rgba(248, 250, 252, 0.95));
     pointer-events: none;
 }
+
+/* ===== PREMIUM TOP 3 ANIMATIONS ===== */
+
+/* Champion Glow - Slow, luxurious gold pulse for rank 1 (7s duration) */
+@keyframes champion-glow {
+
+    0%,
+    100% {
+        box-shadow: 0 8px 32px rgba(217, 164, 6, 0.2),
+            0 0 0 1px rgba(255, 255, 255, 0.5) inset;
+    }
+
+    50% {
+        box-shadow: 0 12px 48px rgba(217, 164, 6, 0.35),
+            0 0 24px rgba(251, 191, 36, 0.15),
+            0 0 0 1px rgba(255, 255, 255, 0.7) inset;
+    }
+}
+
+.animate-champion-glow {
+    animation: champion-glow 7s ease-in-out infinite;
+}
+
+/* Silver Pulse - Subtle, professional pulse for rank 2 (5s duration) */
+@keyframes silver-pulse {
+
+    0%,
+    100% {
+        box-shadow: 0 6px 24px rgba(100, 116, 139, 0.15),
+            0 0 0 1px rgba(255, 255, 255, 0.6) inset;
+    }
+
+    50% {
+        box-shadow: 0 8px 32px rgba(100, 116, 139, 0.22),
+            0 0 16px rgba(148, 163, 184, 0.08),
+            0 0 0 1px rgba(255, 255, 255, 0.75) inset;
+    }
+}
+
+.animate-silver-pulse {
+    animation: silver-pulse 5s ease-in-out infinite;
+}

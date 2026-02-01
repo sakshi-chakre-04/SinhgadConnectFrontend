@@ -73,33 +73,40 @@ const Leaderboard = () => {
         return colors[department] || 'bg-violet-50 text-violet-600 border-violet-200';
     };
 
-    // Card styling for top 3 positions
+    // Premium card styling for top 3 positions
     const getCardStyle = (rank, isCurrentUser) => {
         const baseStyle = {
             backdropFilter: 'blur(12px)',
-            animationFillMode: 'backwards'
+            animationFillMode: 'backwards',
+            transition: 'all 0.3s ease'
         };
 
         if (rank === 1) {
+            // Champion - Soft gold gradient with premium glow
             return {
                 ...baseStyle,
-                background: isCurrentUser ? 'rgba(251, 191, 36, 0.15)' : 'rgba(251, 191, 36, 0.08)',
-                border: '2px solid rgba(251, 191, 36, 0.5)',
-                boxShadow: '0 4px 20px rgba(251, 191, 36, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.5)'
+                background: 'linear-gradient(135deg, rgba(255, 251, 235, 0.95) 0%, rgba(254, 243, 199, 0.9) 50%, rgba(253, 230, 138, 0.85) 100%)',
+                border: '2px solid rgba(217, 164, 6, 0.4)',
+                boxShadow: '0 8px 32px rgba(217, 164, 6, 0.2), 0 0 0 1px rgba(255, 255, 255, 0.5) inset',
+                minHeight: '96px' // 12% taller
             };
         } else if (rank === 2) {
+            // Runner-up - Light silver gradient
             return {
                 ...baseStyle,
-                background: isCurrentUser ? 'rgba(148, 163, 184, 0.15)' : 'rgba(148, 163, 184, 0.08)',
-                border: '2px solid rgba(148, 163, 184, 0.5)',
-                boxShadow: '0 4px 20px rgba(148, 163, 184, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.5)'
+                background: 'linear-gradient(135deg, rgba(248, 250, 252, 0.95) 0%, rgba(241, 245, 249, 0.9) 50%, rgba(226, 232, 240, 0.85) 100%)',
+                border: '2px solid rgba(148, 163, 184, 0.4)',
+                boxShadow: '0 6px 24px rgba(100, 116, 139, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.6) inset',
+                minHeight: '92px' // 8% taller
             };
         } else if (rank === 3) {
+            // Third Place - Warm bronze tint
             return {
                 ...baseStyle,
-                background: isCurrentUser ? 'rgba(217, 119, 6, 0.12)' : 'rgba(217, 119, 6, 0.06)',
-                border: '2px solid rgba(217, 119, 6, 0.4)',
-                boxShadow: '0 4px 20px rgba(217, 119, 6, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.5)'
+                background: 'linear-gradient(135deg, rgba(255, 251, 245, 0.95) 0%, rgba(254, 243, 230, 0.9) 50%, rgba(253, 224, 194, 0.85) 100%)',
+                border: '2px solid rgba(180, 83, 9, 0.3)',
+                boxShadow: '0 4px 20px rgba(180, 83, 9, 0.12), 0 0 0 1px rgba(255, 255, 255, 0.5) inset',
+                minHeight: '88px' // 5% taller
             };
         }
 
@@ -111,14 +118,29 @@ const Leaderboard = () => {
         };
     };
 
+    // Get animation class for top 3
+    const getAnimationClass = (rank) => {
+        if (rank === 1) return 'animate-champion-glow';
+        if (rank === 2) return 'animate-silver-pulse';
+        return '';
+    };
+
+    // Get title label for top 3
+    const getTitleLabel = (rank) => {
+        if (rank === 1) return 'Campus Champion';
+        if (rank === 2) return 'Top Contributor';
+        if (rank === 3) return 'Top Contributor';
+        return null;
+    };
+
     const getMedalStyle = (rank) => {
         switch (rank) {
             case 1:
-                return 'bg-gradient-to-br from-yellow-300 to-amber-500 text-white shadow-lg shadow-amber-500/30 animate-pulse-subtle';
+                return 'bg-gradient-to-br from-yellow-300 via-amber-400 to-yellow-500 text-white shadow-lg shadow-amber-500/40';
             case 2:
-                return 'bg-gradient-to-br from-slate-300 to-slate-500 text-white shadow-lg shadow-slate-500/30';
+                return 'bg-gradient-to-br from-slate-300 via-slate-400 to-slate-500 text-white shadow-lg shadow-slate-500/30';
             case 3:
-                return 'bg-gradient-to-br from-orange-300 to-amber-600 text-white shadow-lg shadow-orange-500/20';
+                return 'bg-gradient-to-br from-orange-300 via-amber-500 to-orange-600 text-white shadow-lg shadow-orange-500/25';
             default:
                 return 'bg-violet-50 text-violet-600 border border-violet-200';
         }
@@ -126,7 +148,7 @@ const Leaderboard = () => {
 
     const getMedalEmoji = (rank) => {
         switch (rank) {
-            case 1: return '🥇';
+            case 1: return '👑'; // Crown for champion
             case 2: return '🥈';
             case 3: return '🥉';
             default: return null;
@@ -195,7 +217,8 @@ const Leaderboard = () => {
                                     <div
                                         key={user.userId}
                                         onClick={() => navigate(`/user/${user.userId}`)}
-                                        className={`flex items-center gap-4 p-4 rounded-2xl transition-all cursor-pointer hover:scale-[1.01] animate-fade-in-up ${user.userId === currentUserRank?.userId && user.rank > 3
+                                        className={`flex items-center gap-4 p-4 rounded-2xl cursor-pointer animate-fade-in-up ${user.rank <= 3 ? getAnimationClass(user.rank) : ''
+                                            } ${user.userId === currentUserRank?.userId && user.rank > 3
                                                 ? 'ring-2 ring-violet-300'
                                                 : ''
                                             }`}
@@ -204,11 +227,12 @@ const Leaderboard = () => {
                                             animationDelay: `${index * 50}ms`
                                         }}
                                         onMouseEnter={(e) => {
-                                            const hoverShadow = user.rank <= 3
-                                                ? e.currentTarget.style.boxShadow.replace(/0 4px 20px/, '0 8px 30px')
-                                                : '0 8px 25px rgba(139, 92, 246, 0.15)';
-                                            e.currentTarget.style.boxShadow = hoverShadow;
-                                            e.currentTarget.style.transform = 'scale(1.01)';
+                                            if (user.rank <= 3) {
+                                                e.currentTarget.style.transform = 'scale(1.02)';
+                                            } else {
+                                                e.currentTarget.style.boxShadow = '0 8px 25px rgba(139, 92, 246, 0.15)';
+                                                e.currentTarget.style.transform = 'scale(1.01)';
+                                            }
                                         }}
                                         onMouseLeave={(e) => {
                                             e.currentTarget.style.boxShadow = getCardStyle(user.rank, user.userId === currentUserRank?.userId).boxShadow;
@@ -216,20 +240,36 @@ const Leaderboard = () => {
                                         }}
                                     >
                                         {/* Rank Badge */}
-                                        <div className={`flex-shrink-0 w-12 h-12 rounded-2xl flex items-center justify-center font-bold text-lg ${getMedalStyle(user.rank)}`}>
+                                        <div className={`flex-shrink-0 ${user.rank <= 3 ? 'w-14 h-14' : 'w-12 h-12'} rounded-2xl flex items-center justify-center font-bold text-lg ${getMedalStyle(user.rank)}`}>
                                             {getMedalEmoji(user.rank) || user.rank}
                                         </div>
 
                                         {/* User Info */}
                                         <div className="flex-1 min-w-0">
                                             <div className="flex items-center gap-2">
-                                                <h3 className="font-semibold text-gray-900 truncate">
+                                                <h3 className={`truncate ${user.rank === 1
+                                                        ? 'text-lg font-bold text-amber-900'
+                                                        : user.rank <= 3
+                                                            ? 'text-base font-bold text-gray-900'
+                                                            : 'font-semibold text-gray-900'
+                                                    }`}>
                                                     {user.name}
                                                     {user.userId === currentUserRank?.userId && (
                                                         <span className="ml-2 text-xs text-violet-600 font-medium">(You)</span>
                                                     )}
                                                 </h3>
                                             </div>
+                                            {/* Title Label for Top 3 */}
+                                            {getTitleLabel(user.rank) && (
+                                                <div className={`text-xs font-semibold mt-0.5 ${user.rank === 1
+                                                        ? 'text-amber-600'
+                                                        : user.rank === 2
+                                                            ? 'text-slate-500'
+                                                            : 'text-orange-600'
+                                                    }`}>
+                                                    {getTitleLabel(user.rank)}
+                                                </div>
+                                            )}
                                             <div className="flex items-center gap-2 mt-1.5 text-xs text-gray-500">
                                                 <span className={`px-2.5 py-0.5 rounded-full font-medium border ${getDepartmentColor(user.department)}`}>
                                                     {user.department}
