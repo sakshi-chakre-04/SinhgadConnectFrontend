@@ -957,3 +957,22 @@ body {
 .animate-bounce-slow {
     animation: bounce-slow 2s ease-in-out infinite;
 }
+
+/* Marquee Animation - Smooth infinite scroll for logo strips */
+@keyframes marquee {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+.animate-marquee {
+    animation: marquee 25s linear infinite;
+}
+
+.animate-marquee:hover {
+    animation-play-state: paused;
+}
