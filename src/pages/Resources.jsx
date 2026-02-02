@@ -11,8 +11,7 @@ import {
     ArrowTopRightOnSquareIcon,
     ChevronDownIcon,
     FolderOpenIcon,
-    SparklesIcon,
-    ChatBubbleLeftRightIcon
+    SparklesIcon
 } from '@heroicons/react/24/outline';
 
 // ============================================
@@ -272,32 +271,47 @@ const Resources = () => {
                         </div>
                     </div>
 
-                    {/* Year Syllabus - Compact Inline */}
+                    {/* Year Syllabus */}
                     {selectedYear && (
                         <a
                             href={academicResources.syllabus[selectedYear]?.url || '#'}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="flex items-center gap-3 rounded-xl p-3 bg-white border border-emerald-100 transition-all group hover:border-emerald-200 hover:shadow-sm"
+                            className="block rounded-2xl p-5 transition-all group hover:scale-[1.01]"
+                            style={{
+                                background: 'linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(16, 185, 129, 0.1) 100%)',
+                                border: '1px solid rgba(34, 197, 94, 0.3)',
+                                boxShadow: '0 4px 15px rgba(34, 197, 94, 0.1)'
+                            }}
                         >
-                            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center shrink-0">
-                                <ClipboardDocumentListIcon className="w-5 h-5 text-white" />
+                            <div className="flex items-center gap-4">
+                                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-green-500 to-emerald-500 flex items-center justify-center shadow-lg">
+                                    <ClipboardDocumentListIcon className="w-6 h-6 text-white" />
+                                </div>
+                                <div className="flex-1">
+                                    <h3 className="font-semibold text-gray-800 group-hover:text-green-600 transition-colors">
+                                        {selectedYear === 'FE' ? 'First Year' : selectedYear === 'SE' ? 'Second Year' : selectedYear === 'TE' ? 'Third Year' : 'Final Year'} Complete Syllabus
+                                    </h3>
+                                    <p className="text-sm text-gray-500">SPPU Official Syllabus PDF</p>
+                                </div>
+                                <ArrowTopRightOnSquareIcon className="w-5 h-5 text-gray-400 group-hover:text-green-500 transition-colors" />
                             </div>
-                            <div className="flex-1 min-w-0">
-                                <h3 className="font-semibold text-gray-800 text-sm group-hover:text-emerald-600 transition-colors">
-                                    {selectedYear === 'FE' ? 'First Year' : selectedYear === 'SE' ? 'Second Year' : selectedYear === 'TE' ? 'Third Year' : 'Final Year'} Complete Syllabus
-                                </h3>
-                                <p className="text-xs text-gray-500">SPPU Official PDF</p>
-                            </div>
-                            <ArrowTopRightOnSquareIcon className="w-4 h-4 text-gray-300 group-hover:text-emerald-500 transition-colors shrink-0" />
                         </a>
                     )}
 
-                    {/* Subject Selection - Compact Pills */}
+                    {/* Subject Selection */}
                     {selectedDept && selectedYear && (
-                        <div className="rounded-xl p-4 bg-white border border-gray-100">
-                            <h3 className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
-                                <BookOpenIcon className="w-4 h-4 text-violet-500" />
+                        <div
+                            className="rounded-2xl p-6"
+                            style={{
+                                background: 'rgba(255, 255, 255, 0.8)',
+                                backdropFilter: 'blur(12px)',
+                                border: '1px solid rgba(139, 92, 246, 0.15)',
+                                boxShadow: '0 4px 20px rgba(139, 92, 246, 0.08)'
+                            }}
+                        >
+                            <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                                <BookOpenIcon className="w-5 h-5 text-violet-500" />
                                 Choose Subject
                             </h3>
                             <div className="flex flex-wrap gap-2">
@@ -305,9 +319,9 @@ const Resources = () => {
                                     <button
                                         key={idx}
                                         onClick={() => setSelectedSubject(subject)}
-                                        className={`px-3 py-1.5 rounded-lg font-medium text-xs transition-all ${selectedSubject === subject
-                                            ? 'bg-violet-600 text-white shadow-sm'
-                                            : 'bg-gray-50 text-gray-600 hover:bg-violet-50 hover:text-violet-700 border border-gray-100'
+                                        className={`px-4 py-2 rounded-lg font-medium text-sm transition-all ${selectedSubject === subject
+                                            ? 'bg-violet-200 text-violet-800 ring-2 ring-violet-400 ring-offset-1'
+                                            : 'bg-violet-50 text-violet-700 hover:bg-violet-100'
                                             }`}
                                     >
                                         {subject}
@@ -317,35 +331,37 @@ const Resources = () => {
                         </div>
                     )}
 
-                    {/* Subject Resources - Polished Cards */}
+                    {/* Subject Resources */}
                     {selectedSubject && (
-                        <div className="space-y-3 animate-fade-slide-in">
-                            <h3 className="text-base font-bold text-gray-800 flex items-center gap-2 px-1">
-                                <SparklesIcon className="w-4 h-4 text-violet-500" />
-                                Resources for <span className="text-violet-600">{selectedSubject}</span>
+                        <div className="space-y-3">
+                            <h3 className="text-xl font-bold text-gray-900 flex items-center gap-2 px-1">
+                                <SparklesIcon className="w-5 h-5 text-violet-600" />
+                                Resources for <span className="text-violet-700">{selectedSubject}</span>
                             </h3>
 
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                 {/* Notes Card */}
-                                <div className="rounded-xl p-4 bg-white border border-gray-100 transition-all group hover:shadow-md hover:border-violet-200">
-                                    <div className="flex items-start gap-3">
-                                        <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center shrink-0">
-                                            <DocumentTextIcon className="w-5 h-5 text-white" />
-                                        </div>
-                                        <div className="flex-1 min-w-0">
-                                            <h4 className="font-semibold text-gray-800 text-sm group-hover:text-violet-600 transition-colors">Notes</h4>
-                                            <p className="text-xs text-gray-500 mt-0.5">Lecture notes & material</p>
-                                            <div className="mt-2">
-                                                {academicResources.notes[selectedSubject] ? (
-                                                    <a href={academicResources.notes[selectedSubject][0]?.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-violet-600 text-xs font-medium hover:underline">
-                                                        View Notes <ArrowTopRightOnSquareIcon className="w-3 h-3" />
-                                                    </a>
-                                                ) : (
-                                                    <span className="text-[10px] text-gray-400 bg-gray-50 px-2 py-0.5 rounded">Coming Soon</span>
-                                                )}
-                                            </div>
-                                        </div>
+                                <div
+                                    className="rounded-2xl p-6 transition-all group cursor-pointer hover:scale-[1.02]"
+                                    style={{
+                                        background: 'rgba(255, 255, 255, 0.8)',
+                                        backdropFilter: 'blur(12px)',
+                                        border: '1px solid rgba(139, 92, 246, 0.15)',
+                                        boxShadow: '0 4px 20px rgba(139, 92, 246, 0.08)'
+                                    }}
+                                >
+                                    <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center mb-4 shadow-lg" style={{ boxShadow: '0 8px 20px rgba(139, 92, 246, 0.3)' }}>
+                                        <DocumentTextIcon className="w-7 h-7 text-white" />
                                     </div>
+                                    <h4 className="font-semibold text-gray-800 mb-1 group-hover:text-violet-600 transition-colors">Notes</h4>
+                                    <p className="text-sm text-gray-500 mb-4">Lecture notes & study material</p>
+                                    {academicResources.notes[selectedSubject] ? (
+                                        <a href={academicResources.notes[selectedSubject][0]?.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-violet-600 text-sm font-medium hover:underline">
+                                            View Notes <ArrowTopRightOnSquareIcon className="w-4 h-4" />
+                                        </a>
+                                    ) : (
+                                        <span className="text-xs text-amber-600 bg-amber-50 px-2 py-1 rounded-lg">Coming Soon</span>
+                                    )}
                                 </div>
 
                                 {/* PYQ Card */}
@@ -353,22 +369,22 @@ const Resources = () => {
                                     href={academicResources.pyq.url}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="rounded-xl p-4 bg-white border border-gray-100 transition-all group hover:shadow-md hover:border-orange-200"
+                                    className="rounded-2xl p-6 transition-all group hover:scale-[1.02]"
+                                    style={{
+                                        background: 'rgba(255, 255, 255, 0.8)',
+                                        backdropFilter: 'blur(12px)',
+                                        border: '1px solid rgba(251, 146, 60, 0.2)',
+                                        boxShadow: '0 4px 20px rgba(251, 146, 60, 0.08)'
+                                    }}
                                 >
-                                    <div className="flex items-start gap-3">
-                                        <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center shrink-0">
-                                            <ClipboardDocumentListIcon className="w-5 h-5 text-white" />
-                                        </div>
-                                        <div className="flex-1 min-w-0">
-                                            <h4 className="font-semibold text-gray-800 text-sm group-hover:text-orange-600 transition-colors">Previous Year Papers</h4>
-                                            <p className="text-xs text-gray-500 mt-0.5">Past exam questions</p>
-                                            <div className="mt-2">
-                                                <span className="inline-flex items-center gap-1 text-orange-600 text-xs font-medium">
-                                                    View PYQs <ArrowTopRightOnSquareIcon className="w-3 h-3" />
-                                                </span>
-                                            </div>
-                                        </div>
+                                    <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center mb-4 shadow-lg" style={{ boxShadow: '0 8px 20px rgba(251, 146, 60, 0.3)' }}>
+                                        <ClipboardDocumentListIcon className="w-7 h-7 text-white" />
                                     </div>
+                                    <h4 className="font-semibold text-gray-800 mb-1 group-hover:text-orange-600 transition-colors">Previous Year Papers</h4>
+                                    <p className="text-sm text-gray-500 mb-4">Past exam questions</p>
+                                    <span className="inline-flex items-center gap-1 text-orange-600 text-sm font-medium">
+                                        View PYQs <ArrowTopRightOnSquareIcon className="w-4 h-4" />
+                                    </span>
                                 </a>
 
                                 {/* Video Lectures Card */}
@@ -376,46 +392,57 @@ const Resources = () => {
                                     href={`https://www.youtube.com/results?search_query=${encodeURIComponent(selectedSubject + ' SPPU lectures')}`}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="rounded-xl p-4 bg-white border border-gray-100 transition-all group hover:shadow-md hover:border-red-200"
+                                    className="rounded-2xl p-6 transition-all group hover:scale-[1.02]"
+                                    style={{
+                                        background: 'rgba(255, 255, 255, 0.8)',
+                                        backdropFilter: 'blur(12px)',
+                                        border: '1px solid rgba(239, 68, 68, 0.2)',
+                                        boxShadow: '0 4px 20px rgba(239, 68, 68, 0.08)'
+                                    }}
                                 >
-                                    <div className="flex items-start gap-3">
-                                        <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-red-500 to-pink-500 flex items-center justify-center shrink-0">
-                                            <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
-                                                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
-                                            </svg>
-                                        </div>
-                                        <div className="flex-1 min-w-0">
-                                            <h4 className="font-semibold text-gray-800 text-sm group-hover:text-red-600 transition-colors">Video Lectures</h4>
-                                            <p className="text-xs text-gray-500 mt-0.5">YouTube tutorials</p>
-                                            <div className="mt-2">
-                                                <span className="inline-flex items-center gap-1 text-red-600 text-xs font-medium">
-                                                    Search Videos <ArrowTopRightOnSquareIcon className="w-3 h-3" />
-                                                </span>
-                                            </div>
-                                        </div>
+                                    <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-red-500 to-pink-500 flex items-center justify-center mb-4 shadow-lg" style={{ boxShadow: '0 8px 20px rgba(239, 68, 68, 0.3)' }}>
+                                        <svg className="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+                                        </svg>
                                     </div>
+                                    <h4 className="font-semibold text-gray-800 mb-1 group-hover:text-red-600 transition-colors">Video Lectures</h4>
+                                    <p className="text-sm text-gray-500 mb-4">YouTube tutorials</p>
+                                    <span className="inline-flex items-center gap-1 text-red-600 text-sm font-medium">
+                                        Search Videos <ArrowTopRightOnSquareIcon className="w-4 h-4" />
+                                    </span>
                                 </a>
                             </div>
                         </div>
                     )}
 
-                    {/* Empty State - No Dept/Year */}
+                    {/* Prompt if not selected */}
                     {(!selectedDept || !selectedYear) && (
                         <div
-                            className="text-center py-10 rounded-xl animate-fade-slide-in bg-white border border-gray-100"
+                            className="text-center py-12 rounded-2xl animate-fade-slide-in"
+                            style={{
+                                background: 'rgba(255, 255, 255, 0.8)',
+                                backdropFilter: 'blur(12px)',
+                                border: '1px solid rgba(139, 92, 246, 0.15)'
+                            }}
                         >
                             <div className="animate-gentle-pulse">
-                                <AcademicCapIcon className="w-12 h-12 text-violet-200 mx-auto mb-3" />
+                                <AcademicCapIcon className="w-16 h-16 text-violet-300 mx-auto mb-4" />
                             </div>
-                            <p className="text-gray-600 font-medium">Select your department and year</p>
-                            <p className="text-gray-400 text-sm mt-0.5">to explore subjects and resources</p>
+                            <p className="text-gray-600 text-lg font-medium">Select your department and year</p>
+                            <p className="text-gray-400 text-sm mt-1">to explore subjects and resources</p>
                         </div>
                     )}
 
-                    {/* Empty State - No Subject Selected */}
+                    {/* Prompt to select subject */}
                     {selectedDept && selectedYear && !selectedSubject && (
-                        <div className="text-center py-6 rounded-xl bg-violet-50/50 border border-violet-100">
-                            <p className="text-violet-600 text-sm font-medium">👆 Select a subject to view resources</p>
+                        <div
+                            className="text-center py-8 rounded-2xl"
+                            style={{
+                                background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(217, 70, 239, 0.1) 100%)',
+                                border: '1px solid rgba(139, 92, 246, 0.2)'
+                            }}
+                        >
+                            <p className="text-violet-600 font-medium">👆 Select a subject above to see Notes, PYQs & Videos</p>
                         </div>
                     )}
                 </div>
@@ -424,21 +451,21 @@ const Resources = () => {
             {/* Placement Section */}
             {activeSection === 'placement' && (
                 <div className="px-4 mt-2 space-y-4 animate-fade-slide-in">
-                    {/* Placement Header - Compact */}
-                    <div className="flex items-center gap-2">
+                    {/* Placement Header Accent */}
+                    <div className="flex items-center gap-3">
                         <div
-                            className="w-8 h-8 rounded-lg flex items-center justify-center"
+                            className="w-10 h-10 rounded-xl flex items-center justify-center"
                             style={{ background: 'linear-gradient(135deg, #f97316 0%, #ec4899 100%)' }}
                         >
-                            <span className="text-white text-sm">🎯</span>
+                            <span className="text-white text-lg">🎯</span>
                         </div>
                         <div>
-                            <h2 className="text-base font-bold text-gray-900">Placement Preparation Hub</h2>
-                            <p className="text-xs text-gray-500">Interview prep • Coding • Aptitude</p>
+                            <h2 className="text-lg font-bold text-gray-900">Placement Preparation Hub</h2>
+                            <p className="text-sm text-gray-500">Interview prep • Coding • Aptitude</p>
                         </div>
                     </div>
 
-                    {/* Track-Style Tabs - Compact */}
+                    {/* Track-Style Tabs - Toned Down */}
                     <div className="flex gap-2 overflow-x-auto pb-1">
                         {[
                             { id: 'dsa', label: 'DSA & Coding', icon: CodeBracketIcon },
@@ -451,29 +478,31 @@ const Resources = () => {
                                 <button
                                     key={tab.id}
                                     onClick={() => setPlacementTab(tab.id)}
-                                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-medium text-xs whitespace-nowrap transition-all duration-200 ${isActive
-                                        ? 'bg-orange-600 text-white shadow-sm'
-                                        : 'bg-gray-50 text-gray-500 hover:bg-orange-50 hover:text-orange-600 border border-gray-100'
+                                    className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-medium text-sm whitespace-nowrap transition-all duration-200 ${isActive
+                                        ? 'bg-white text-orange-600 border-2 border-orange-300 shadow-sm'
+                                        : 'bg-gray-50 text-gray-500 hover:bg-gray-100 hover:text-gray-700 border border-gray-200'
                                         }`}
                                 >
-                                    <Icon className={`w-4 h-4 ${isActive ? '' : 'opacity-60'}`} />
+                                    <Icon className={`w-5 h-5 ${isActive ? 'text-orange-500' : 'opacity-60'}`} />
                                     {tab.label}
                                 </button>
                             );
                         })}
                     </div>
 
-                    {/* Recommended Order Hint - Subtle */}
+                    {/* Recommended Order Hint */}
                     {placementTab === 'dsa' && (
-                        <div className="flex items-center gap-2 px-3 py-2 rounded-lg text-xs bg-gray-50 border border-gray-100">
+                        <div
+                            className="flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm bg-gray-50 border border-gray-200"
+                        >
                             <span className="text-orange-500">⭐</span>
-                            <span className="text-gray-500">Recommended:</span>
-                            <span className="font-medium text-gray-700">Striver SDE Sheet → LeetCode</span>
+                            <span className="text-gray-600">Recommended:</span>
+                            <span className="font-medium text-gray-800">Start with Striver SDE Sheet → Practice on LeetCode</span>
                         </div>
                     )}
 
-                    {/* Resource Cards - Matching Academics Style */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    {/* Resource Cards - Neutral with Warm Icon Hero */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {placementResources[placementTab]?.map((resource, idx) => {
                             const Icon = resource.icon;
                             return (
@@ -482,28 +511,25 @@ const Resources = () => {
                                     href={resource.url}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="group rounded-xl p-4 bg-white border border-gray-100 transition-all duration-200 hover:shadow-md hover:border-orange-200"
+                                    className="group rounded-2xl p-5 bg-white border border-gray-100 transition-all duration-200 hover:-translate-y-1 hover:shadow-lg hover:border-gray-200"
                                 >
-                                    <div className="flex items-start gap-3">
+                                    <div className="flex items-center gap-4">
                                         <div
-                                            className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0 transition-transform duration-200 group-hover:scale-105"
+                                            className="w-14 h-14 rounded-xl flex items-center justify-center shrink-0 transition-transform duration-200 group-hover:scale-105"
                                             style={{
-                                                background: 'linear-gradient(135deg, #f97316 0%, #ec4899 100%)'
+                                                background: 'linear-gradient(135deg, #f97316 0%, #ec4899 100%)',
+                                                boxShadow: '0 6px 15px rgba(249, 115, 22, 0.25)'
                                             }}
                                         >
-                                            <Icon className="w-5 h-5 text-white" />
+                                            <Icon className="w-7 h-7 text-white" />
                                         </div>
                                         <div className="flex-1 min-w-0">
-                                            <h3 className="font-semibold text-gray-800 text-sm group-hover:text-orange-600 transition-colors">
+                                            <h3 className="font-bold text-gray-900 group-hover:text-orange-600 transition-colors">
                                                 {resource.title}
                                             </h3>
-                                            <p className="text-xs text-gray-500 mt-0.5">{resource.description}</p>
-                                            <div className="mt-2">
-                                                <span className="inline-flex items-center gap-1 text-orange-600 text-xs font-medium">
-                                                    Open <ArrowTopRightOnSquareIcon className="w-3 h-3" />
-                                                </span>
-                                            </div>
+                                            <p className="text-sm text-gray-500 mt-0.5">{resource.description}</p>
                                         </div>
+                                        <ArrowTopRightOnSquareIcon className="w-5 h-5 text-gray-300 group-hover:text-orange-500 shrink-0 transition-all duration-200 group-hover:scale-110" />
                                     </div>
                                 </a>
                             );
@@ -515,22 +541,32 @@ const Resources = () => {
             {/* GATE Section */}
             {activeSection === 'gate' && (
                 <div className="px-4 mt-2 space-y-4 animate-fade-slide-in">
-                    {/* GATE Header - Compact Inline */}
-                    <div className="flex items-center gap-2">
-                        <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-500 to-fuchsia-600 flex items-center justify-center">
-                            <BookOpenIcon className="w-4 h-4 text-white" />
-                        </div>
-                        <div>
-                            <h2 className="text-base font-bold text-gray-900">GATE Preparation Resources</h2>
-                            <p className="text-xs text-gray-500">Curated resources for GATE CS/IT</p>
-                        </div>
+                    {/* Compact Header */}
+                    <div
+                        className="rounded-xl p-4"
+                        style={{
+                            background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(217, 70, 239, 0.1) 100%)',
+                            border: '1px solid rgba(139, 92, 246, 0.2)'
+                        }}
+                    >
+                        <h2 className="text-lg font-bold text-violet-800 flex items-center gap-2">
+                            <BookOpenIcon className="w-5 h-5" />
+                            GATE Preparation Resources
+                        </h2>
+                        <p className="text-sm text-violet-600 mt-0.5">Curated resources for GATE CS/IT preparation</p>
                     </div>
 
-                    {/* Suggested Flow - Subtle */}
-                    <div className="flex items-center gap-2 px-3 py-2 rounded-lg text-xs bg-gray-50 border border-gray-100">
+                    {/* Recommended Order Hint */}
+                    <div
+                        className="flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm"
+                        style={{
+                            background: 'rgba(139, 92, 246, 0.06)',
+                            border: '1px solid rgba(139, 92, 246, 0.12)'
+                        }}
+                    >
                         <span className="text-violet-500">⭐</span>
-                        <span className="text-gray-500">Suggested:</span>
-                        <span className="font-medium text-gray-700">Concepts → Practice (PYQs) → Discussion</span>
+                        <span className="text-gray-600">Suggested flow:</span>
+                        <span className="font-medium text-gray-800">Concepts (NPTEL / Made Easy) → Practice (PYQs) → Discussion (GATE Overflow)</span>
                     </div>
 
                     {/* Concept Building */}
@@ -543,26 +579,32 @@ const Resources = () => {
                                     href={resource.url}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="group rounded-xl p-4 bg-white border border-gray-100 transition-all duration-200 hover:shadow-md hover:border-violet-200"
+                                    className="group rounded-xl p-4 transition-all duration-200 hover:-translate-y-0.5"
+                                    style={{
+                                        background: 'rgba(255, 255, 255, 0.9)',
+                                        border: '1px solid rgba(139, 92, 246, 0.1)',
+                                        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.03)'
+                                    }}
+                                    onMouseEnter={(e) => {
+                                        e.currentTarget.style.boxShadow = '0 6px 20px rgba(139, 92, 246, 0.12)';
+                                    }}
+                                    onMouseLeave={(e) => {
+                                        e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.03)';
+                                    }}
                                 >
-                                    <div className="flex items-start gap-3">
-                                        <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-violet-500 to-fuchsia-600 flex items-center justify-center shrink-0 transition-transform duration-200 group-hover:scale-105">
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-violet-500 to-fuchsia-600 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
                                             <BookOpenIcon className="w-5 h-5 text-white" />
                                         </div>
                                         <div className="flex-1 min-w-0">
-                                            <h4 className="font-semibold text-gray-800 text-sm group-hover:text-violet-600 transition-colors">
+                                            <h4 className="font-semibold text-gray-900 group-hover:text-violet-600 transition-colors text-sm">
                                                 {resource.title}
                                             </h4>
-                                            <p className="text-xs text-gray-500 mt-0.5 truncate">{resource.description}</p>
-                                            <div className="mt-2 flex items-center gap-2">
-                                                <span className="text-[10px] px-1.5 py-0.5 rounded bg-violet-50 text-violet-600 font-medium">
-                                                    {resource.category}
-                                                </span>
-                                                <span className="inline-flex items-center gap-1 text-violet-600 text-xs font-medium">
-                                                    Open <ArrowTopRightOnSquareIcon className="w-3 h-3" />
-                                                </span>
-                                            </div>
+                                            <p className="text-xs text-gray-500 truncate">{resource.description}</p>
                                         </div>
+                                        <span className="text-[10px] px-2 py-0.5 rounded-full bg-violet-100 text-violet-600 font-medium shrink-0">
+                                            {resource.category}
+                                        </span>
                                     </div>
                                 </a>
                             ))}
@@ -579,26 +621,32 @@ const Resources = () => {
                                     href={resource.url}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="group rounded-xl p-4 bg-white border border-gray-100 transition-all duration-200 hover:shadow-md hover:border-emerald-200"
+                                    className="group rounded-xl p-4 transition-all duration-200 hover:-translate-y-0.5"
+                                    style={{
+                                        background: 'rgba(255, 255, 255, 0.9)',
+                                        border: '1px solid rgba(139, 92, 246, 0.1)',
+                                        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.03)'
+                                    }}
+                                    onMouseEnter={(e) => {
+                                        e.currentTarget.style.boxShadow = '0 6px 20px rgba(139, 92, 246, 0.12)';
+                                    }}
+                                    onMouseLeave={(e) => {
+                                        e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.03)';
+                                    }}
                                 >
-                                    <div className="flex items-start gap-3">
-                                        <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center shrink-0 transition-transform duration-200 group-hover:scale-105">
-                                            <ClipboardDocumentListIcon className="w-5 h-5 text-white" />
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                                            <BookOpenIcon className="w-5 h-5 text-white" />
                                         </div>
                                         <div className="flex-1 min-w-0">
-                                            <h4 className="font-semibold text-gray-800 text-sm group-hover:text-emerald-600 transition-colors">
+                                            <h4 className="font-semibold text-gray-900 group-hover:text-emerald-600 transition-colors text-sm">
                                                 {resource.title}
                                             </h4>
-                                            <p className="text-xs text-gray-500 mt-0.5 truncate">{resource.description}</p>
-                                            <div className="mt-2 flex items-center gap-2">
-                                                <span className="text-[10px] px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-600 font-medium">
-                                                    {resource.category}
-                                                </span>
-                                                <span className="inline-flex items-center gap-1 text-emerald-600 text-xs font-medium">
-                                                    Open <ArrowTopRightOnSquareIcon className="w-3 h-3" />
-                                                </span>
-                                            </div>
+                                            <p className="text-xs text-gray-500 truncate">{resource.description}</p>
                                         </div>
+                                        <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-600 font-medium shrink-0">
+                                            {resource.category}
+                                        </span>
                                     </div>
                                 </a>
                             ))}
@@ -615,26 +663,32 @@ const Resources = () => {
                                     href={resource.url}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="group rounded-xl p-4 bg-white border border-gray-100 transition-all duration-200 hover:shadow-md hover:border-amber-200"
+                                    className="group rounded-xl p-4 transition-all duration-200 hover:-translate-y-0.5"
+                                    style={{
+                                        background: 'rgba(255, 255, 255, 0.9)',
+                                        border: '1px solid rgba(139, 92, 246, 0.1)',
+                                        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.03)'
+                                    }}
+                                    onMouseEnter={(e) => {
+                                        e.currentTarget.style.boxShadow = '0 6px 20px rgba(139, 92, 246, 0.12)';
+                                    }}
+                                    onMouseLeave={(e) => {
+                                        e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.03)';
+                                    }}
                                 >
-                                    <div className="flex items-start gap-3">
-                                        <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center shrink-0 transition-transform duration-200 group-hover:scale-105">
-                                            <ChatBubbleLeftRightIcon className="w-5 h-5 text-white" />
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                                            <BookOpenIcon className="w-5 h-5 text-white" />
                                         </div>
                                         <div className="flex-1 min-w-0">
-                                            <h4 className="font-semibold text-gray-800 text-sm group-hover:text-amber-600 transition-colors">
+                                            <h4 className="font-semibold text-gray-900 group-hover:text-amber-600 transition-colors text-sm">
                                                 {resource.title}
                                             </h4>
-                                            <p className="text-xs text-gray-500 mt-0.5 truncate">{resource.description}</p>
-                                            <div className="mt-2 flex items-center gap-2">
-                                                <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-50 text-amber-600 font-medium">
-                                                    {resource.category}
-                                                </span>
-                                                <span className="inline-flex items-center gap-1 text-amber-600 text-xs font-medium">
-                                                    Open <ArrowTopRightOnSquareIcon className="w-3 h-3" />
-                                                </span>
-                                            </div>
+                                            <p className="text-xs text-gray-500 truncate">{resource.description}</p>
                                         </div>
+                                        <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-100 text-amber-600 font-medium shrink-0">
+                                            {resource.category}
+                                        </span>
                                     </div>
                                 </a>
                             ))}
@@ -642,7 +696,7 @@ const Resources = () => {
                     </div>
                 </div>
             )}
-        </div >
+        </div>
     );
 };
 
