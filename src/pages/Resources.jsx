@@ -440,36 +440,66 @@ const Resources = () => {
 
             {/* Placement Section */}
             {activeSection === 'placement' && (
-                <div className="px-4 mt-6 space-y-6">
-                    {/* Placement Tabs */}
-                    <div className="flex gap-2 overflow-x-auto pb-2">
+                <div className="px-4 mt-4 space-y-4">
+                    {/* Placement Header Accent */}
+                    <div className="flex items-center gap-3">
+                        <div
+                            className="w-10 h-10 rounded-xl flex items-center justify-center"
+                            style={{ background: 'linear-gradient(135deg, #f97316 0%, #ec4899 100%)' }}
+                        >
+                            <span className="text-white text-lg">🎯</span>
+                        </div>
+                        <div>
+                            <h2 className="text-lg font-bold text-gray-900">Placement Preparation Hub</h2>
+                            <p className="text-sm text-gray-500">Interview prep • Coding • Aptitude</p>
+                        </div>
+                    </div>
+
+                    {/* Track-Style Tabs */}
+                    <div className="flex gap-2 overflow-x-auto pb-1">
                         {[
                             { id: 'dsa', label: 'DSA & Coding', icon: CodeBracketIcon },
                             { id: 'coreSubjects', label: 'Core Subjects', icon: CpuChipIcon },
                             { id: 'aptitude', label: 'Aptitude', icon: CalculatorIcon }
                         ].map(tab => {
                             const Icon = tab.icon;
+                            const isActive = placementTab === tab.id;
                             return (
                                 <button
                                     key={tab.id}
                                     onClick={() => setPlacementTab(tab.id)}
-                                    className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-medium text-sm whitespace-nowrap transition-all ${placementTab === tab.id
+                                    className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-medium text-sm whitespace-nowrap transition-all duration-200 ${isActive
                                         ? 'text-white shadow-lg'
-                                        : 'bg-white/80 text-violet-600 hover:bg-violet-50 border border-violet-200'
+                                        : 'bg-gray-100/80 text-gray-500 hover:bg-gray-200/80 hover:text-gray-700'
                                         }`}
-                                    style={placementTab === tab.id ? {
-                                        background: 'linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%)',
-                                        boxShadow: '0 4px 15px rgba(139, 92, 246, 0.3)'
+                                    style={isActive ? {
+                                        background: 'linear-gradient(135deg, #f97316 0%, #ec4899 100%)',
+                                        boxShadow: '0 4px 15px rgba(249, 115, 22, 0.3)'
                                     } : {}}
                                 >
-                                    <Icon className="w-4 h-4" />
+                                    <Icon className={`w-5 h-5 ${isActive ? '' : 'opacity-60'}`} />
                                     {tab.label}
                                 </button>
                             );
                         })}
                     </div>
 
-                    {/* Resource Cards */}
+                    {/* Recommended Order Hint */}
+                    {placementTab === 'dsa' && (
+                        <div
+                            className="flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm"
+                            style={{
+                                background: 'linear-gradient(135deg, rgba(249, 115, 22, 0.08) 0%, rgba(236, 72, 153, 0.08) 100%)',
+                                border: '1px solid rgba(249, 115, 22, 0.15)'
+                            }}
+                        >
+                            <span className="text-orange-500">⭐</span>
+                            <span className="text-gray-600">Recommended:</span>
+                            <span className="font-medium text-gray-800">Start with Striver SDE Sheet → Practice on LeetCode</span>
+                        </div>
+                    )}
+
+                    {/* Resource Cards - Enhanced */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {placementResources[placementTab]?.map((resource, idx) => {
                             const Icon = resource.icon;
@@ -479,25 +509,39 @@ const Resources = () => {
                                     href={resource.url}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="rounded-2xl p-5 transition-all group hover:scale-[1.01]"
+                                    className="group rounded-2xl p-5 transition-all duration-200 hover:-translate-y-1"
                                     style={{
-                                        background: 'rgba(255, 255, 255, 0.8)',
+                                        background: 'rgba(255, 255, 255, 0.9)',
                                         backdropFilter: 'blur(12px)',
-                                        border: '1px solid rgba(139, 92, 246, 0.15)',
-                                        boxShadow: '0 4px 20px rgba(139, 92, 246, 0.08)'
+                                        border: '1px solid rgba(249, 115, 22, 0.1)',
+                                        boxShadow: '0 2px 12px rgba(0, 0, 0, 0.04)'
+                                    }}
+                                    onMouseEnter={(e) => {
+                                        e.currentTarget.style.boxShadow = '0 8px 25px rgba(249, 115, 22, 0.15)';
+                                        e.currentTarget.style.borderColor = 'rgba(249, 115, 22, 0.25)';
+                                    }}
+                                    onMouseLeave={(e) => {
+                                        e.currentTarget.style.boxShadow = '0 2px 12px rgba(0, 0, 0, 0.04)';
+                                        e.currentTarget.style.borderColor = 'rgba(249, 115, 22, 0.1)';
                                     }}
                                 >
                                     <div className="flex items-center gap-4">
-                                        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center shrink-0 shadow-lg" style={{ boxShadow: '0 6px 15px rgba(139, 92, 246, 0.3)' }}>
-                                            <Icon className="w-6 h-6 text-white" />
+                                        <div
+                                            className="w-14 h-14 rounded-xl flex items-center justify-center shrink-0 transition-transform duration-200 group-hover:scale-105"
+                                            style={{
+                                                background: 'linear-gradient(135deg, #f97316 0%, #ec4899 100%)',
+                                                boxShadow: '0 6px 15px rgba(249, 115, 22, 0.25)'
+                                            }}
+                                        >
+                                            <Icon className="w-7 h-7 text-white" />
                                         </div>
                                         <div className="flex-1 min-w-0">
-                                            <h3 className="font-semibold text-gray-800 group-hover:text-violet-600 transition-colors">
+                                            <h3 className="font-bold text-gray-900 group-hover:text-orange-600 transition-colors">
                                                 {resource.title}
                                             </h3>
-                                            <p className="text-sm text-gray-500 truncate">{resource.description}</p>
+                                            <p className="text-sm text-gray-500 mt-0.5">{resource.description}</p>
                                         </div>
-                                        <ArrowTopRightOnSquareIcon className="w-5 h-5 text-gray-400 group-hover:text-violet-500 shrink-0 transition-colors" />
+                                        <ArrowTopRightOnSquareIcon className="w-5 h-5 text-gray-300 group-hover:text-orange-500 shrink-0 transition-all duration-200 group-hover:scale-110" />
                                     </div>
                                 </a>
                             );
