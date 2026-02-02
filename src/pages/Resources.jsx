@@ -11,7 +11,8 @@ import {
     ArrowTopRightOnSquareIcon,
     ChevronDownIcon,
     FolderOpenIcon,
-    SparklesIcon
+    SparklesIcon,
+    ChatBubbleLeftRightIcon
 } from '@heroicons/react/24/outline';
 
 // ============================================
@@ -423,21 +424,21 @@ const Resources = () => {
             {/* Placement Section */}
             {activeSection === 'placement' && (
                 <div className="px-4 mt-2 space-y-4 animate-fade-slide-in">
-                    {/* Placement Header Accent */}
-                    <div className="flex items-center gap-3">
+                    {/* Placement Header - Compact */}
+                    <div className="flex items-center gap-2">
                         <div
-                            className="w-10 h-10 rounded-xl flex items-center justify-center"
+                            className="w-8 h-8 rounded-lg flex items-center justify-center"
                             style={{ background: 'linear-gradient(135deg, #f97316 0%, #ec4899 100%)' }}
                         >
-                            <span className="text-white text-lg">🎯</span>
+                            <span className="text-white text-sm">🎯</span>
                         </div>
                         <div>
-                            <h2 className="text-lg font-bold text-gray-900">Placement Preparation Hub</h2>
-                            <p className="text-sm text-gray-500">Interview prep • Coding • Aptitude</p>
+                            <h2 className="text-base font-bold text-gray-900">Placement Preparation Hub</h2>
+                            <p className="text-xs text-gray-500">Interview prep • Coding • Aptitude</p>
                         </div>
                     </div>
 
-                    {/* Track-Style Tabs - Toned Down */}
+                    {/* Track-Style Tabs - Compact */}
                     <div className="flex gap-2 overflow-x-auto pb-1">
                         {[
                             { id: 'dsa', label: 'DSA & Coding', icon: CodeBracketIcon },
@@ -450,31 +451,29 @@ const Resources = () => {
                                 <button
                                     key={tab.id}
                                     onClick={() => setPlacementTab(tab.id)}
-                                    className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-medium text-sm whitespace-nowrap transition-all duration-200 ${isActive
-                                        ? 'bg-white text-orange-600 border-2 border-orange-300 shadow-sm'
-                                        : 'bg-gray-50 text-gray-500 hover:bg-gray-100 hover:text-gray-700 border border-gray-200'
+                                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-medium text-xs whitespace-nowrap transition-all duration-200 ${isActive
+                                        ? 'bg-orange-600 text-white shadow-sm'
+                                        : 'bg-gray-50 text-gray-500 hover:bg-orange-50 hover:text-orange-600 border border-gray-100'
                                         }`}
                                 >
-                                    <Icon className={`w-5 h-5 ${isActive ? 'text-orange-500' : 'opacity-60'}`} />
+                                    <Icon className={`w-4 h-4 ${isActive ? '' : 'opacity-60'}`} />
                                     {tab.label}
                                 </button>
                             );
                         })}
                     </div>
 
-                    {/* Recommended Order Hint */}
+                    {/* Recommended Order Hint - Subtle */}
                     {placementTab === 'dsa' && (
-                        <div
-                            className="flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm bg-gray-50 border border-gray-200"
-                        >
+                        <div className="flex items-center gap-2 px-3 py-2 rounded-lg text-xs bg-gray-50 border border-gray-100">
                             <span className="text-orange-500">⭐</span>
-                            <span className="text-gray-600">Recommended:</span>
-                            <span className="font-medium text-gray-800">Start with Striver SDE Sheet → Practice on LeetCode</span>
+                            <span className="text-gray-500">Recommended:</span>
+                            <span className="font-medium text-gray-700">Striver SDE Sheet → LeetCode</span>
                         </div>
                     )}
 
-                    {/* Resource Cards - Neutral with Warm Icon Hero */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {/* Resource Cards - Matching Academics Style */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                         {placementResources[placementTab]?.map((resource, idx) => {
                             const Icon = resource.icon;
                             return (
@@ -483,194 +482,166 @@ const Resources = () => {
                                     href={resource.url}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="group rounded-2xl p-5 bg-white border border-gray-100 transition-all duration-200 hover:-translate-y-1 hover:shadow-lg hover:border-gray-200"
+                                    className="group rounded-xl p-4 bg-white border border-gray-100 transition-all duration-200 hover:shadow-md hover:border-orange-200"
                                 >
-                                    <div className="flex items-center gap-4">
+                                    <div className="flex items-start gap-3">
                                         <div
-                                            className="w-14 h-14 rounded-xl flex items-center justify-center shrink-0 transition-transform duration-200 group-hover:scale-105"
+                                            className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0 transition-transform duration-200 group-hover:scale-105"
                                             style={{
-                                                background: 'linear-gradient(135deg, #f97316 0%, #ec4899 100%)',
-                                                boxShadow: '0 6px 15px rgba(249, 115, 22, 0.25)'
+                                                background: 'linear-gradient(135deg, #f97316 0%, #ec4899 100%)'
                                             }}
                                         >
-                                            <Icon className="w-7 h-7 text-white" />
+                                            <Icon className="w-5 h-5 text-white" />
                                         </div>
                                         <div className="flex-1 min-w-0">
-                                            <h3 className="font-bold text-gray-900 group-hover:text-orange-600 transition-colors">
+                                            <h3 className="font-semibold text-gray-800 text-sm group-hover:text-orange-600 transition-colors">
                                                 {resource.title}
                                             </h3>
-                                            <p className="text-sm text-gray-500 mt-0.5">{resource.description}</p>
+                                            <p className="text-xs text-gray-500 mt-0.5">{resource.description}</p>
+                                            <div className="mt-2">
+                                                <span className="inline-flex items-center gap-1 text-orange-600 text-xs font-medium">
+                                                    Open <ArrowTopRightOnSquareIcon className="w-3 h-3" />
+                                                </span>
+                                            </div>
                                         </div>
-                                        <ArrowTopRightOnSquareIcon className="w-5 h-5 text-gray-300 group-hover:text-orange-500 shrink-0 transition-all duration-200 group-hover:scale-110" />
                                     </div>
                                 </a>
                             );
                         })}
                     </div>
                 </div>
-            )
-            }
+            )}
 
             {/* GATE Section */}
-            {
-                activeSection === 'gate' && (
-                    <div className="px-4 mt-2 space-y-4 animate-fade-slide-in">
-                        {/* Compact Header */}
-                        <div
-                            className="rounded-xl p-4"
-                            style={{
-                                background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(217, 70, 239, 0.1) 100%)',
-                                border: '1px solid rgba(139, 92, 246, 0.2)'
-                            }}
-                        >
-                            <h2 className="text-lg font-bold text-violet-800 flex items-center gap-2">
-                                <BookOpenIcon className="w-5 h-5" />
-                                GATE Preparation Resources
-                            </h2>
-                            <p className="text-sm text-violet-600 mt-0.5">Curated resources for GATE CS/IT preparation</p>
+            {activeSection === 'gate' && (
+                <div className="px-4 mt-2 space-y-4 animate-fade-slide-in">
+                    {/* GATE Header - Compact Inline */}
+                    <div className="flex items-center gap-2">
+                        <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-500 to-fuchsia-600 flex items-center justify-center">
+                            <BookOpenIcon className="w-4 h-4 text-white" />
                         </div>
-
-                        {/* Recommended Order Hint */}
-                        <div
-                            className="flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm"
-                            style={{
-                                background: 'rgba(139, 92, 246, 0.06)',
-                                border: '1px solid rgba(139, 92, 246, 0.12)'
-                            }}
-                        >
-                            <span className="text-violet-500">⭐</span>
-                            <span className="text-gray-600">Suggested flow:</span>
-                            <span className="font-medium text-gray-800">Concepts (NPTEL / Made Easy) → Practice (PYQs) → Discussion (GATE Overflow)</span>
-                        </div>
-
-                        {/* Concept Building */}
                         <div>
-                            <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 px-1">Concept Building</h3>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                                {gateResources.filter(r => r.category === 'Video' || r.category === 'Notes').map((resource, idx) => (
-                                    <a
-                                        key={idx}
-                                        href={resource.url}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="group rounded-xl p-4 transition-all duration-200 hover:-translate-y-0.5"
-                                        style={{
-                                            background: 'rgba(255, 255, 255, 0.9)',
-                                            border: '1px solid rgba(139, 92, 246, 0.1)',
-                                            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.03)'
-                                        }}
-                                        onMouseEnter={(e) => {
-                                            e.currentTarget.style.boxShadow = '0 6px 20px rgba(139, 92, 246, 0.12)';
-                                        }}
-                                        onMouseLeave={(e) => {
-                                            e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.03)';
-                                        }}
-                                    >
-                                        <div className="flex items-center gap-3">
-                                            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-violet-500 to-fuchsia-600 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-                                                <BookOpenIcon className="w-5 h-5 text-white" />
-                                            </div>
-                                            <div className="flex-1 min-w-0">
-                                                <h4 className="font-semibold text-gray-900 group-hover:text-violet-600 transition-colors text-sm">
-                                                    {resource.title}
-                                                </h4>
-                                                <p className="text-xs text-gray-500 truncate">{resource.description}</p>
-                                            </div>
-                                            <span className="text-[10px] px-2 py-0.5 rounded-full bg-violet-100 text-violet-600 font-medium shrink-0">
-                                                {resource.category}
-                                            </span>
-                                        </div>
-                                    </a>
-                                ))}
-                            </div>
-                        </div>
-
-                        {/* Practice & PYQs */}
-                        <div>
-                            <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 px-1">Practice & PYQs</h3>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                                {gateResources.filter(r => r.category === 'PYQ').map((resource, idx) => (
-                                    <a
-                                        key={idx}
-                                        href={resource.url}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="group rounded-xl p-4 transition-all duration-200 hover:-translate-y-0.5"
-                                        style={{
-                                            background: 'rgba(255, 255, 255, 0.9)',
-                                            border: '1px solid rgba(139, 92, 246, 0.1)',
-                                            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.03)'
-                                        }}
-                                        onMouseEnter={(e) => {
-                                            e.currentTarget.style.boxShadow = '0 6px 20px rgba(139, 92, 246, 0.12)';
-                                        }}
-                                        onMouseLeave={(e) => {
-                                            e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.03)';
-                                        }}
-                                    >
-                                        <div className="flex items-center gap-3">
-                                            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-                                                <BookOpenIcon className="w-5 h-5 text-white" />
-                                            </div>
-                                            <div className="flex-1 min-w-0">
-                                                <h4 className="font-semibold text-gray-900 group-hover:text-emerald-600 transition-colors text-sm">
-                                                    {resource.title}
-                                                </h4>
-                                                <p className="text-xs text-gray-500 truncate">{resource.description}</p>
-                                            </div>
-                                            <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-600 font-medium shrink-0">
-                                                {resource.category}
-                                            </span>
-                                        </div>
-                                    </a>
-                                ))}
-                            </div>
-                        </div>
-
-                        {/* Discussion & Community */}
-                        <div>
-                            <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 px-1">Discussion & Community</h3>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                                {gateResources.filter(r => r.category === 'Community').map((resource, idx) => (
-                                    <a
-                                        key={idx}
-                                        href={resource.url}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="group rounded-xl p-4 transition-all duration-200 hover:-translate-y-0.5"
-                                        style={{
-                                            background: 'rgba(255, 255, 255, 0.9)',
-                                            border: '1px solid rgba(139, 92, 246, 0.1)',
-                                            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.03)'
-                                        }}
-                                        onMouseEnter={(e) => {
-                                            e.currentTarget.style.boxShadow = '0 6px 20px rgba(139, 92, 246, 0.12)';
-                                        }}
-                                        onMouseLeave={(e) => {
-                                            e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.03)';
-                                        }}
-                                    >
-                                        <div className="flex items-center gap-3">
-                                            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-                                                <BookOpenIcon className="w-5 h-5 text-white" />
-                                            </div>
-                                            <div className="flex-1 min-w-0">
-                                                <h4 className="font-semibold text-gray-900 group-hover:text-amber-600 transition-colors text-sm">
-                                                    {resource.title}
-                                                </h4>
-                                                <p className="text-xs text-gray-500 truncate">{resource.description}</p>
-                                            </div>
-                                            <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-100 text-amber-600 font-medium shrink-0">
-                                                {resource.category}
-                                            </span>
-                                        </div>
-                                    </a>
-                                ))}
-                            </div>
+                            <h2 className="text-base font-bold text-gray-900">GATE Preparation Resources</h2>
+                            <p className="text-xs text-gray-500">Curated resources for GATE CS/IT</p>
                         </div>
                     </div>
-                )
-            }
+
+                    {/* Suggested Flow - Subtle */}
+                    <div className="flex items-center gap-2 px-3 py-2 rounded-lg text-xs bg-gray-50 border border-gray-100">
+                        <span className="text-violet-500">⭐</span>
+                        <span className="text-gray-500">Suggested:</span>
+                        <span className="font-medium text-gray-700">Concepts → Practice (PYQs) → Discussion</span>
+                    </div>
+
+                    {/* Concept Building */}
+                    <div>
+                        <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 px-1">Concept Building</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            {gateResources.filter(r => r.category === 'Video' || r.category === 'Notes').map((resource, idx) => (
+                                <a
+                                    key={idx}
+                                    href={resource.url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="group rounded-xl p-4 bg-white border border-gray-100 transition-all duration-200 hover:shadow-md hover:border-violet-200"
+                                >
+                                    <div className="flex items-start gap-3">
+                                        <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-violet-500 to-fuchsia-600 flex items-center justify-center shrink-0 transition-transform duration-200 group-hover:scale-105">
+                                            <BookOpenIcon className="w-5 h-5 text-white" />
+                                        </div>
+                                        <div className="flex-1 min-w-0">
+                                            <h4 className="font-semibold text-gray-800 text-sm group-hover:text-violet-600 transition-colors">
+                                                {resource.title}
+                                            </h4>
+                                            <p className="text-xs text-gray-500 mt-0.5 truncate">{resource.description}</p>
+                                            <div className="mt-2 flex items-center gap-2">
+                                                <span className="text-[10px] px-1.5 py-0.5 rounded bg-violet-50 text-violet-600 font-medium">
+                                                    {resource.category}
+                                                </span>
+                                                <span className="inline-flex items-center gap-1 text-violet-600 text-xs font-medium">
+                                                    Open <ArrowTopRightOnSquareIcon className="w-3 h-3" />
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Practice & PYQs */}
+                    <div>
+                        <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 px-1">Practice & PYQs</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            {gateResources.filter(r => r.category === 'PYQ').map((resource, idx) => (
+                                <a
+                                    key={idx}
+                                    href={resource.url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="group rounded-xl p-4 bg-white border border-gray-100 transition-all duration-200 hover:shadow-md hover:border-emerald-200"
+                                >
+                                    <div className="flex items-start gap-3">
+                                        <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center shrink-0 transition-transform duration-200 group-hover:scale-105">
+                                            <ClipboardDocumentListIcon className="w-5 h-5 text-white" />
+                                        </div>
+                                        <div className="flex-1 min-w-0">
+                                            <h4 className="font-semibold text-gray-800 text-sm group-hover:text-emerald-600 transition-colors">
+                                                {resource.title}
+                                            </h4>
+                                            <p className="text-xs text-gray-500 mt-0.5 truncate">{resource.description}</p>
+                                            <div className="mt-2 flex items-center gap-2">
+                                                <span className="text-[10px] px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-600 font-medium">
+                                                    {resource.category}
+                                                </span>
+                                                <span className="inline-flex items-center gap-1 text-emerald-600 text-xs font-medium">
+                                                    Open <ArrowTopRightOnSquareIcon className="w-3 h-3" />
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Discussion & Community */}
+                    <div>
+                        <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 px-1">Discussion & Community</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            {gateResources.filter(r => r.category === 'Community').map((resource, idx) => (
+                                <a
+                                    key={idx}
+                                    href={resource.url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="group rounded-xl p-4 bg-white border border-gray-100 transition-all duration-200 hover:shadow-md hover:border-amber-200"
+                                >
+                                    <div className="flex items-start gap-3">
+                                        <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center shrink-0 transition-transform duration-200 group-hover:scale-105">
+                                            <ChatBubbleLeftRightIcon className="w-5 h-5 text-white" />
+                                        </div>
+                                        <div className="flex-1 min-w-0">
+                                            <h4 className="font-semibold text-gray-800 text-sm group-hover:text-amber-600 transition-colors">
+                                                {resource.title}
+                                            </h4>
+                                            <p className="text-xs text-gray-500 mt-0.5 truncate">{resource.description}</p>
+                                            <div className="mt-2 flex items-center gap-2">
+                                                <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-50 text-amber-600 font-medium">
+                                                    {resource.category}
+                                                </span>
+                                                <span className="inline-flex items-center gap-1 text-amber-600 text-xs font-medium">
+                                                    Open <ArrowTopRightOnSquareIcon className="w-3 h-3" />
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            )}
         </div >
     );
 };
