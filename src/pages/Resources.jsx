@@ -440,7 +440,7 @@ const Resources = () => {
 
             {/* Placement Section */}
             {activeSection === 'placement' && (
-                <div className="px-4 mt-4 space-y-4">
+                <div className="px-4 mt-2 space-y-4">
                     {/* Placement Header Accent */}
                     <div className="flex items-center gap-3">
                         <div
@@ -470,7 +470,7 @@ const Resources = () => {
                                     onClick={() => setPlacementTab(tab.id)}
                                     className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-medium text-sm whitespace-nowrap transition-all duration-200 ${isActive
                                         ? 'text-white shadow-lg'
-                                        : 'bg-gray-100/80 text-gray-500 hover:bg-gray-200/80 hover:text-gray-700'
+                                        : 'bg-gray-100/80 text-gray-500 hover:bg-gray-200/80 hover:text-gray-700 opacity-70 hover:opacity-100'
                                         }`}
                                     style={isActive ? {
                                         background: 'linear-gradient(135deg, #f97316 0%, #ec4899 100%)',
