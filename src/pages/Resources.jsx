@@ -164,26 +164,34 @@ const Resources = () => {
                 </div>
             </div>
 
-            {/* Section Tabs */}
+            {/* Section Tabs - Enhanced with animated underline */}
             <div className="px-4 mt-6">
-                <div className="flex gap-3 overflow-x-auto pb-2">
+                <div className="flex gap-2 overflow-x-auto pb-2">
                     {sections.map(section => {
                         const Icon = section.icon;
+                        const isActive = activeSection === section.id;
                         return (
                             <button
                                 key={section.id}
                                 onClick={() => setActiveSection(section.id)}
-                                className={`flex items-center gap-2 px-5 py-3 rounded-xl font-semibold whitespace-nowrap transition-all ${activeSection === section.id
-                                    ? 'text-white shadow-lg'
-                                    : 'bg-white/80 text-violet-600 hover:bg-violet-50 border border-violet-200'
+                                className={`relative flex items-center gap-2 px-5 py-3 font-semibold whitespace-nowrap transition-all duration-200 rounded-xl ${isActive
+                                    ? 'text-white'
+                                    : 'text-violet-600 hover:bg-violet-50 bg-white/80 border border-violet-200'
                                     }`}
-                                style={activeSection === section.id ? {
+                                style={isActive ? {
                                     background: 'linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%)',
                                     boxShadow: '0 4px 15px rgba(139, 92, 246, 0.3)'
                                 } : {}}
                             >
                                 <Icon className="w-5 h-5" />
                                 {section.label}
+                                {/* Animated underline indicator */}
+                                {isActive && (
+                                    <span
+                                        className="absolute bottom-0 left-1/2 -translate-x-1/2 w-8 h-1 bg-white/40 rounded-full"
+                                        style={{ animation: 'fadeIn 0.3s ease-out' }}
+                                    />
+                                )}
                             </button>
                         );
                     })}
@@ -235,6 +243,25 @@ const Resources = () => {
                                 </select>
                             </div>
                         </div>
+
+                        {/* Sticky Context Hint */}
+                        {selectedDept && selectedYear && (
+                            <div
+                                className="mt-4 px-4 py-2.5 rounded-lg flex items-center gap-2 text-sm"
+                                style={{
+                                    background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.08) 0%, rgba(217, 70, 239, 0.08) 100%)',
+                                    border: '1px solid rgba(139, 92, 246, 0.15)'
+                                }}
+                            >
+                                <span className="text-violet-500">📚</span>
+                                <span className="text-gray-600">Showing resources for</span>
+                                <span className="font-semibold text-violet-700">{selectedDept} Engineering</span>
+                                <span className="text-violet-300">•</span>
+                                <span className="font-semibold text-violet-700">
+                                    {selectedYear === 'FE' ? 'First Year' : selectedYear === 'SE' ? 'Second Year' : selectedYear === 'TE' ? 'Third Year' : 'Final Year'}
+                                </span>
+                            </div>
+                        )}
                     </div>
 
                     {/* Year Syllabus */}
@@ -285,13 +312,10 @@ const Resources = () => {
                                     <button
                                         key={idx}
                                         onClick={() => setSelectedSubject(subject)}
-                                        className={`px-4 py-2.5 rounded-xl font-medium text-sm transition-all ${selectedSubject === subject
-                                            ? 'text-white shadow-lg'
+                                        className={`px-4 py-2 rounded-lg font-medium text-sm transition-all ${selectedSubject === subject
+                                            ? 'bg-violet-200 text-violet-800 ring-2 ring-violet-400 ring-offset-1'
                                             : 'bg-violet-50 text-violet-700 hover:bg-violet-100'
                                             }`}
-                                        style={selectedSubject === subject ? {
-                                            background: 'linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%)'
-                                        } : {}}
                                     >
                                         {subject}
                                     </button>
@@ -302,10 +326,10 @@ const Resources = () => {
 
                     {/* Subject Resources */}
                     {selectedSubject && (
-                        <div className="space-y-4">
-                            <h3 className="text-lg font-semibold text-gray-800 flex items-center gap-2 px-1">
-                                <SparklesIcon className="w-5 h-5 text-violet-500" />
-                                Resources for <span className="text-violet-600">{selectedSubject}</span>
+                        <div className="space-y-3">
+                            <h3 className="text-xl font-bold text-gray-900 flex items-center gap-2 px-1">
+                                <SparklesIcon className="w-5 h-5 text-violet-600" />
+                                Resources for <span className="text-violet-700">{selectedSubject}</span>
                             </h3>
 
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
