@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     AcademicCapIcon,
     BriefcaseIcon,
@@ -114,11 +114,37 @@ const departments = ['Computer', 'IT', 'ENTC', 'Mechanical', 'Civil', 'Electrica
 const years = ['FE', 'SE', 'TE', 'BE'];
 
 const Resources = () => {
-    const [activeSection, setActiveSection] = useState('academics');
-    const [selectedDept, setSelectedDept] = useState('');
-    const [selectedYear, setSelectedYear] = useState('');
+    // Initialize state from localStorage for persistence
+    const [activeSection, setActiveSection] = useState(() => {
+        return localStorage.getItem('resources_activeSection') || 'academics';
+    });
+    const [selectedDept, setSelectedDept] = useState(() => {
+        return localStorage.getItem('resources_selectedDept') || '';
+    });
+    const [selectedYear, setSelectedYear] = useState(() => {
+        return localStorage.getItem('resources_selectedYear') || '';
+    });
     const [selectedSubject, setSelectedSubject] = useState('');
-    const [placementTab, setPlacementTab] = useState('dsa');
+    const [placementTab, setPlacementTab] = useState(() => {
+        return localStorage.getItem('resources_placementTab') || 'dsa';
+    });
+
+    // Persist choices to localStorage
+    useEffect(() => {
+        localStorage.setItem('resources_activeSection', activeSection);
+    }, [activeSection]);
+
+    useEffect(() => {
+        localStorage.setItem('resources_placementTab', placementTab);
+    }, [placementTab]);
+
+    useEffect(() => {
+        localStorage.setItem('resources_selectedDept', selectedDept);
+    }, [selectedDept]);
+
+    useEffect(() => {
+        localStorage.setItem('resources_selectedYear', selectedYear);
+    }, [selectedYear]);
 
     const sections = [
         { id: 'academics', label: 'Academics', icon: AcademicCapIcon },
@@ -200,7 +226,7 @@ const Resources = () => {
 
             {/* Academics Section */}
             {activeSection === 'academics' && (
-                <div className="px-4 mt-6 space-y-6">
+                <div className="px-4 mt-6 space-y-6 animate-fade-slide-in">
                     {/* Department & Year Selection */}
                     <div
                         className="rounded-2xl p-6"
@@ -411,15 +437,18 @@ const Resources = () => {
                     {/* Prompt if not selected */}
                     {(!selectedDept || !selectedYear) && (
                         <div
-                            className="text-center py-12 rounded-2xl"
+                            className="text-center py-12 rounded-2xl animate-fade-slide-in"
                             style={{
                                 background: 'rgba(255, 255, 255, 0.8)',
                                 backdropFilter: 'blur(12px)',
                                 border: '1px solid rgba(139, 92, 246, 0.15)'
                             }}
                         >
-                            <AcademicCapIcon className="w-16 h-16 text-violet-300 mx-auto mb-4" />
-                            <p className="text-gray-500 text-lg">Select your department and year to view subjects</p>
+                            <div className="animate-gentle-pulse">
+                                <AcademicCapIcon className="w-16 h-16 text-violet-300 mx-auto mb-4" />
+                            </div>
+                            <p className="text-gray-600 text-lg font-medium">Select your department and year</p>
+                            <p className="text-gray-400 text-sm mt-1">to explore subjects and resources</p>
                         </div>
                     )}
 
@@ -440,7 +469,7 @@ const Resources = () => {
 
             {/* Placement Section */}
             {activeSection === 'placement' && (
-                <div className="px-4 mt-2 space-y-4">
+                <div className="px-4 mt-2 space-y-4 animate-fade-slide-in">
                     {/* Placement Header Accent */}
                     <div className="flex items-center gap-3">
                         <div
@@ -455,7 +484,7 @@ const Resources = () => {
                         </div>
                     </div>
 
-                    {/* Track-Style Tabs */}
+                    {/* Track-Style Tabs - Toned Down */}
                     <div className="flex gap-2 overflow-x-auto pb-1">
                         {[
                             { id: 'dsa', label: 'DSA & Coding', icon: CodeBracketIcon },
@@ -469,15 +498,11 @@ const Resources = () => {
                                     key={tab.id}
                                     onClick={() => setPlacementTab(tab.id)}
                                     className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-medium text-sm whitespace-nowrap transition-all duration-200 ${isActive
-                                        ? 'text-white shadow-lg'
-                                        : 'bg-gray-100/80 text-gray-500 hover:bg-gray-200/80 hover:text-gray-700 opacity-70 hover:opacity-100'
+                                        ? 'bg-white text-orange-600 border-2 border-orange-300 shadow-sm'
+                                        : 'bg-gray-50 text-gray-500 hover:bg-gray-100 hover:text-gray-700 border border-gray-200'
                                         }`}
-                                    style={isActive ? {
-                                        background: 'linear-gradient(135deg, #f97316 0%, #ec4899 100%)',
-                                        boxShadow: '0 4px 15px rgba(249, 115, 22, 0.3)'
-                                    } : {}}
                                 >
-                                    <Icon className={`w-5 h-5 ${isActive ? '' : 'opacity-60'}`} />
+                                    <Icon className={`w-5 h-5 ${isActive ? 'text-orange-500' : 'opacity-60'}`} />
                                     {tab.label}
                                 </button>
                             );
@@ -487,11 +512,7 @@ const Resources = () => {
                     {/* Recommended Order Hint */}
                     {placementTab === 'dsa' && (
                         <div
-                            className="flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm"
-                            style={{
-                                background: 'linear-gradient(135deg, rgba(249, 115, 22, 0.08) 0%, rgba(236, 72, 153, 0.08) 100%)',
-                                border: '1px solid rgba(249, 115, 22, 0.15)'
-                            }}
+                            className="flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm bg-gray-50 border border-gray-200"
                         >
                             <span className="text-orange-500">⭐</span>
                             <span className="text-gray-600">Recommended:</span>
@@ -499,7 +520,7 @@ const Resources = () => {
                         </div>
                     )}
 
-                    {/* Resource Cards - Enhanced */}
+                    {/* Resource Cards - Neutral with Warm Icon Hero */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {placementResources[placementTab]?.map((resource, idx) => {
                             const Icon = resource.icon;
@@ -509,21 +530,7 @@ const Resources = () => {
                                     href={resource.url}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="group rounded-2xl p-5 transition-all duration-200 hover:-translate-y-1"
-                                    style={{
-                                        background: 'rgba(255, 255, 255, 0.9)',
-                                        backdropFilter: 'blur(12px)',
-                                        border: '1px solid rgba(249, 115, 22, 0.1)',
-                                        boxShadow: '0 2px 12px rgba(0, 0, 0, 0.04)'
-                                    }}
-                                    onMouseEnter={(e) => {
-                                        e.currentTarget.style.boxShadow = '0 8px 25px rgba(249, 115, 22, 0.15)';
-                                        e.currentTarget.style.borderColor = 'rgba(249, 115, 22, 0.25)';
-                                    }}
-                                    onMouseLeave={(e) => {
-                                        e.currentTarget.style.boxShadow = '0 2px 12px rgba(0, 0, 0, 0.04)';
-                                        e.currentTarget.style.borderColor = 'rgba(249, 115, 22, 0.1)';
-                                    }}
+                                    className="group rounded-2xl p-5 bg-white border border-gray-100 transition-all duration-200 hover:-translate-y-1 hover:shadow-lg hover:border-gray-200"
                                 >
                                     <div className="flex items-center gap-4">
                                         <div
@@ -552,58 +559,159 @@ const Resources = () => {
 
             {/* GATE Section */}
             {activeSection === 'gate' && (
-                <div className="px-4 mt-6 space-y-6">
+                <div className="px-4 mt-2 space-y-4 animate-fade-slide-in">
+                    {/* Compact Header */}
                     <div
-                        className="rounded-2xl p-6"
+                        className="rounded-xl p-4"
                         style={{
-                            background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.15) 0%, rgba(217, 70, 239, 0.15) 100%)',
-                            border: '1px solid rgba(139, 92, 246, 0.3)'
+                            background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(217, 70, 239, 0.1) 100%)',
+                            border: '1px solid rgba(139, 92, 246, 0.2)'
                         }}
                     >
-                        <h2 className="text-lg font-semibold text-violet-700 mb-2 flex items-center gap-2">
+                        <h2 className="text-lg font-bold text-violet-800 flex items-center gap-2">
                             <BookOpenIcon className="w-5 h-5" />
                             GATE Preparation Resources
                         </h2>
-                        <p className="text-sm text-violet-600">Curated resources for GATE CS/IT preparation</p>
+                        <p className="text-sm text-violet-600 mt-0.5">Curated resources for GATE CS/IT preparation</p>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {gateResources.map((resource, idx) => (
-                            <a
-                                key={idx}
-                                href={resource.url}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="rounded-2xl p-5 transition-all group hover:scale-[1.01]"
-                                style={{
-                                    background: 'rgba(255, 255, 255, 0.8)',
-                                    backdropFilter: 'blur(12px)',
-                                    border: '1px solid rgba(139, 92, 246, 0.15)',
-                                    boxShadow: '0 4px 20px rgba(139, 92, 246, 0.08)'
-                                }}
-                            >
-                                <div className="flex items-start gap-4">
-                                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-violet-500 to-fuchsia-600 flex items-center justify-center shrink-0 shadow-lg" style={{ boxShadow: '0 6px 15px rgba(139, 92, 246, 0.3)' }}>
-                                        <BookOpenIcon className="w-6 h-6 text-white" />
-                                    </div>
-                                    <div className="flex-1 min-w-0">
-                                        <div className="flex items-center gap-2 mb-1">
-                                            <h3 className="font-semibold text-gray-800 group-hover:text-violet-600 transition-colors">
-                                                {resource.title}
-                                            </h3>
-                                            <span
-                                                className="px-2 py-0.5 text-xs rounded-full text-white font-medium"
-                                                style={{ background: 'linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%)' }}
-                                            >
-                                                {resource.category}
-                                            </span>
+                    {/* Recommended Order Hint */}
+                    <div
+                        className="flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm"
+                        style={{
+                            background: 'rgba(139, 92, 246, 0.06)',
+                            border: '1px solid rgba(139, 92, 246, 0.12)'
+                        }}
+                    >
+                        <span className="text-violet-500">⭐</span>
+                        <span className="text-gray-600">Suggested flow:</span>
+                        <span className="font-medium text-gray-800">Concepts (NPTEL / Made Easy) → Practice (PYQs) → Discussion (GATE Overflow)</span>
+                    </div>
+
+                    {/* Concept Building */}
+                    <div>
+                        <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 px-1">Concept Building</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            {gateResources.filter(r => r.category === 'Video' || r.category === 'Notes').map((resource, idx) => (
+                                <a
+                                    key={idx}
+                                    href={resource.url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="group rounded-xl p-4 transition-all duration-200 hover:-translate-y-0.5"
+                                    style={{
+                                        background: 'rgba(255, 255, 255, 0.9)',
+                                        border: '1px solid rgba(139, 92, 246, 0.1)',
+                                        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.03)'
+                                    }}
+                                    onMouseEnter={(e) => {
+                                        e.currentTarget.style.boxShadow = '0 6px 20px rgba(139, 92, 246, 0.12)';
+                                    }}
+                                    onMouseLeave={(e) => {
+                                        e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.03)';
+                                    }}
+                                >
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-violet-500 to-fuchsia-600 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                                            <BookOpenIcon className="w-5 h-5 text-white" />
                                         </div>
-                                        <p className="text-sm text-gray-500">{resource.description}</p>
+                                        <div className="flex-1 min-w-0">
+                                            <h4 className="font-semibold text-gray-900 group-hover:text-violet-600 transition-colors text-sm">
+                                                {resource.title}
+                                            </h4>
+                                            <p className="text-xs text-gray-500 truncate">{resource.description}</p>
+                                        </div>
+                                        <span className="text-[10px] px-2 py-0.5 rounded-full bg-violet-100 text-violet-600 font-medium shrink-0">
+                                            {resource.category}
+                                        </span>
                                     </div>
-                                    <ArrowTopRightOnSquareIcon className="w-5 h-5 text-gray-400 shrink-0 group-hover:text-violet-500 transition-colors" />
-                                </div>
-                            </a>
-                        ))}
+                                </a>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Practice & PYQs */}
+                    <div>
+                        <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 px-1">Practice & PYQs</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            {gateResources.filter(r => r.category === 'PYQ').map((resource, idx) => (
+                                <a
+                                    key={idx}
+                                    href={resource.url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="group rounded-xl p-4 transition-all duration-200 hover:-translate-y-0.5"
+                                    style={{
+                                        background: 'rgba(255, 255, 255, 0.9)',
+                                        border: '1px solid rgba(139, 92, 246, 0.1)',
+                                        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.03)'
+                                    }}
+                                    onMouseEnter={(e) => {
+                                        e.currentTarget.style.boxShadow = '0 6px 20px rgba(139, 92, 246, 0.12)';
+                                    }}
+                                    onMouseLeave={(e) => {
+                                        e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.03)';
+                                    }}
+                                >
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                                            <BookOpenIcon className="w-5 h-5 text-white" />
+                                        </div>
+                                        <div className="flex-1 min-w-0">
+                                            <h4 className="font-semibold text-gray-900 group-hover:text-emerald-600 transition-colors text-sm">
+                                                {resource.title}
+                                            </h4>
+                                            <p className="text-xs text-gray-500 truncate">{resource.description}</p>
+                                        </div>
+                                        <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-600 font-medium shrink-0">
+                                            {resource.category}
+                                        </span>
+                                    </div>
+                                </a>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Discussion & Community */}
+                    <div>
+                        <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 px-1">Discussion & Community</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            {gateResources.filter(r => r.category === 'Community').map((resource, idx) => (
+                                <a
+                                    key={idx}
+                                    href={resource.url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="group rounded-xl p-4 transition-all duration-200 hover:-translate-y-0.5"
+                                    style={{
+                                        background: 'rgba(255, 255, 255, 0.9)',
+                                        border: '1px solid rgba(139, 92, 246, 0.1)',
+                                        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.03)'
+                                    }}
+                                    onMouseEnter={(e) => {
+                                        e.currentTarget.style.boxShadow = '0 6px 20px rgba(139, 92, 246, 0.12)';
+                                    }}
+                                    onMouseLeave={(e) => {
+                                        e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.03)';
+                                    }}
+                                >
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                                            <BookOpenIcon className="w-5 h-5 text-white" />
+                                        </div>
+                                        <div className="flex-1 min-w-0">
+                                            <h4 className="font-semibold text-gray-900 group-hover:text-amber-600 transition-colors text-sm">
+                                                {resource.title}
+                                            </h4>
+                                            <p className="text-xs text-gray-500 truncate">{resource.description}</p>
+                                        </div>
+                                        <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-100 text-amber-600 font-medium shrink-0">
+                                            {resource.category}
+                                        </span>
+                                    </div>
+                                </a>
+                            ))}
+                        </div>
                     </div>
                 </div>
             )}
