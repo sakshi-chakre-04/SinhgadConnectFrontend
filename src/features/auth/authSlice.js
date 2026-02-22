@@ -59,7 +59,6 @@ export const updateUserProfile = createAsyncThunk(
   'auth/updateProfile',
   async (userData, { getState, rejectWithValue }) => {
     try {
-      const { token } = getState().auth;
       const response = await usersAPI.updateUserProfile(userData);
       
       // Update stored user data
