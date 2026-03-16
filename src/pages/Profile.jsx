@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectUser, selectToken, logout } from '../features/auth/authSlice';
+import { selectUser, selectToken, logout, selectIsPro } from '../features/auth/authSlice';
+import ProUpgradeModal from '../components/ProUpgradeModal';
 import {
   PencilIcon,
   DocumentTextIcon,
@@ -32,8 +33,10 @@ const getAvatarGradient = (name) => {
 const Profile = () => {
   const user = useSelector(selectUser);
   const token = useSelector(selectToken);
+  const isPro = useSelector(selectIsPro);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [showProModal, setShowProModal] = useState(false);
 
   const handleSignOut = () => {
     dispatch(logout());
@@ -150,8 +153,20 @@ const Profile = () => {
             {userData?.name?.charAt(0).toUpperCase() || 'U'}
           </div>
 
-          {/* Edit & Sign Out Buttons - top right */}
-          <div className="flex justify-end pt-4 gap-2">
+          {/* Edit, Upgrade & Sign Out Buttons - top right */}
+          <div className="flex justify-end pt-4 gap-2 flex-wrap">
+            {!isPro && (
+              <button
+                onClick={() => setShowProModal(true)}
+                className="inline-flex items-center gap-2 px-4 py-2.5 text-white rounded-xl transition-all font-medium text-sm"
+                style={{
+                  background: 'linear-gradient(135deg, #f59e0b 0%, #f97316 100%)',
+                  boxShadow: '0 4px 15px rgba(245, 158, 11, 0.3)'
+                }}
+              >
+                ⚡ Upgrade to Pro
+              </button>
+            )}
             <Link
               to="/edit-profile"
               className="inline-flex items-center gap-2 px-4 py-2.5 text-white rounded-xl transition-all font-medium text-sm"
@@ -174,7 +189,15 @@ const Profile = () => {
 
           {/* User Info */}
           <div className="mt-10">
-            <h1 className="text-2xl font-bold text-gray-900">{userData?.name || 'User'}</h1>
+            <div className="flex items-center gap-3 flex-wrap">
+              <h1 className="text-2xl font-bold text-gray-900">{userData?.name || 'User'}</h1>
+              {isPro && (
+                <span className="px-3 py-1 rounded-full text-xs font-bold text-white"
+                  style={{ background: 'linear-gradient(135deg, #f59e0b 0%, #f97316 100%)' }}>
+                  ⚡ PRO
+                </span>
+              )}
+            </div>
             <div className="flex flex-wrap items-center gap-4 mt-2 text-sm text-gray-500">
               <span className="flex items-center gap-1.5">
                 <EnvelopeIcon className="w-4 h-4 text-violet-500" />
@@ -458,6 +481,9 @@ const Profile = () => {
           )}
         </div>
       </div>
+
+      {/* Pro Upgrade Modal */}
+      {showProModal && <ProUpgradeModal onClose={() => setShowProModal(false)} />}
     </div>
   );
 };

@@ -87,6 +87,15 @@ const authSlice = createSlice({
     // Clear error messages
     clearError: (state) => {
       state.error = null;
+    },
+
+    // Upgrade user to Pro after successful payment
+    upgradeUserToPro: (state, action) => {
+      if (state.user) {
+        state.user.isPro = true;
+        state.user.proExpiresAt = action.payload.proExpiresAt;
+        localStorage.setItem('user', JSON.stringify(state.user));
+      }
     }
   },
   extraReducers: (builder) => {
@@ -136,7 +145,7 @@ const authSlice = createSlice({
   }
 });
 
-export const { logout, clearError } = authSlice.actions;
+export const { logout, clearError, upgradeUserToPro } = authSlice.actions;
 
 // Selectors - easy access to state
 export const selectUser = (state) => state.auth.user;
@@ -144,5 +153,6 @@ export const selectToken = (state) => state.auth.token;
 export const selectIsAuthenticated = (state) => !!state.auth.token;
 export const selectAuthError = (state) => state.auth.error;
 export const selectAuthLoading = (state) => state.auth.isLoading;
+export const selectIsPro = (state) => state.auth.user?.isPro || false;
 
 export default authSlice.reducer;
