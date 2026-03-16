@@ -153,12 +153,12 @@ const Profile = () => {
             {userData?.name?.charAt(0).toUpperCase() || 'U'}
           </div>
 
-          {/* Edit, Upgrade & Sign Out Buttons - top right */}
-          <div className="flex justify-end pt-4 gap-2 flex-wrap">
+          {/* Action Buttons */}
+          <div className="flex flex-col sm:flex-row justify-end pt-20 sm:pt-4 gap-2 sm:gap-3 items-end sm:items-center">
             {!isPro && (
               <button
                 onClick={() => setShowProModal(true)}
-                className="inline-flex items-center gap-2 px-4 py-2.5 text-white rounded-xl transition-all font-medium text-sm"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2.5 text-white rounded-xl transition-all font-medium text-sm"
                 style={{
                   background: 'linear-gradient(135deg, #f59e0b 0%, #f97316 100%)',
                   boxShadow: '0 4px 15px rgba(245, 158, 11, 0.3)'
@@ -167,24 +167,26 @@ const Profile = () => {
                 ⚡ Upgrade to Pro
               </button>
             )}
-            <Link
-              to="/edit-profile"
-              className="inline-flex items-center gap-2 px-4 py-2.5 text-white rounded-xl transition-all font-medium text-sm"
-              style={{
-                background: 'linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%)',
-                boxShadow: '0 4px 15px rgba(139, 92, 246, 0.3)'
-              }}
-            >
-              <PencilIcon className="w-4 h-4" />
-              Edit Profile
-            </Link>
-            <button
-              onClick={handleSignOut}
-              className="inline-flex items-center gap-2 px-4 py-2.5 text-violet-600 rounded-xl transition-all font-medium text-sm bg-white/80 border border-violet-200 hover:bg-violet-50"
-            >
-              <ArrowRightOnRectangleIcon className="w-4 h-4" />
-              Sign Out
-            </button>
+            <div className="flex gap-2 w-full sm:w-auto mt-2 sm:mt-0">
+              <Link
+                to="/edit-profile"
+                className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-4 py-2.5 text-white rounded-xl transition-all font-medium text-sm"
+                style={{
+                  background: 'linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%)',
+                  boxShadow: '0 4px 15px rgba(139, 92, 246, 0.3)'
+                }}
+              >
+                <PencilIcon className="w-4 h-4" />
+                Edit
+              </Link>
+              <button
+                onClick={handleSignOut}
+                className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-4 py-2.5 text-violet-600 rounded-xl transition-all font-medium text-sm bg-white/80 border border-violet-200 hover:bg-violet-50"
+              >
+                <ArrowRightOnRectangleIcon className="w-4 h-4" />
+                Sign Out
+              </button>
+            </div>
           </div>
 
           {/* User Info */}
