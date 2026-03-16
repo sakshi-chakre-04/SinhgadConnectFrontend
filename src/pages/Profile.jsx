@@ -154,22 +154,22 @@ const Profile = () => {
           </div>
 
           {/* Edit, Upgrade & Sign Out Buttons - top right */}
-          <div className="flex justify-end pt-4 gap-2 flex-wrap">
+          <div className="flex flex-col sm:flex-row justify-end pt-20 sm:pt-4 gap-2 sm:gap-4 pl-32 sm:pl-0 flex-wrap items-end sm:items-center">
             {!isPro && (
               <button
                 onClick={() => setShowProModal(true)}
-                className="inline-flex items-center gap-2 px-4 py-2.5 text-white rounded-xl transition-all font-medium text-sm"
+                className="inline-flex items-center gap-2 px-3 sm:px-4 py-2 sm:py-2.5 text-white rounded-xl transition-all font-medium text-xs sm:text-sm whitespace-nowrap"
                 style={{
                   background: 'linear-gradient(135deg, #f59e0b 0%, #f97316 100%)',
                   boxShadow: '0 4px 15px rgba(245, 158, 11, 0.3)'
                 }}
               >
-                ⚡ Upgrade to Pro
+                ⚡ Upgrade
               </button>
             )}
             <Link
               to="/edit-profile"
-              className="inline-flex items-center gap-2 px-4 py-2.5 text-white rounded-xl transition-all font-medium text-sm"
+              className="inline-flex items-center gap-2 px-3 sm:px-4 py-2 sm:py-2.5 text-white rounded-xl transition-all font-medium text-xs sm:text-sm whitespace-nowrap"
               style={{
                 background: 'linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%)',
                 boxShadow: '0 4px 15px rgba(139, 92, 246, 0.3)'
@@ -180,7 +180,7 @@ const Profile = () => {
             </Link>
             <button
               onClick={handleSignOut}
-              className="inline-flex items-center gap-2 px-4 py-2.5 text-violet-600 rounded-xl transition-all font-medium text-sm bg-white/80 border border-violet-200 hover:bg-violet-50"
+              className="inline-flex items-center gap-2 px-3 sm:px-4 py-2 sm:py-2.5 text-violet-600 rounded-xl transition-all font-medium text-xs sm:text-sm bg-white/80 border border-violet-200 hover:bg-violet-50 whitespace-nowrap"
             >
               <ArrowRightOnRectangleIcon className="w-4 h-4" />
               Sign Out
