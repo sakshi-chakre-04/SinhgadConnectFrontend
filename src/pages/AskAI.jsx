@@ -10,8 +10,9 @@ import {
 } from '@heroicons/react/24/solid';
 import { AnimatePresence, LayoutGroup, motion, useReducedMotion } from 'framer-motion';
 import { useSelector } from 'react-redux';
-import { selectToken } from '../features/auth/authSlice';
+import { selectToken, selectIsPro } from '../features/auth/authSlice';
 import AIOrb from '../components/ai/AIOrb';
+import ProUpgradeModal from '../components/ProUpgradeModal';
 
 // Suggestion chips
 const SUGGESTION_CHIPS = [
@@ -443,6 +444,15 @@ const AskAI = () => {
     const [autoScrollEnabled, setAutoScrollEnabled] = useState(true);
     const [showJumpToBottom, setShowJumpToBottom] = useState(false);
     const [pendingFirstUserMessage, setPendingFirstUserMessage] = useState(null);
+    const [showProModal, setShowProModal] = useState(false);
+    const [showProBanner, setShowProBanner] = useState(() => !localStorage.getItem('hideAskAIPromo'));
+
+    const handleCloseBanner = (e) => {
+        e.stopPropagation();
+        setShowProBanner(false);
+        localStorage.setItem('hideAskAIPromo', 'true');
+    };
+
     const messagesEndRef = useRef(null);
     const messagesRef = useRef([]);
     const scrollContainerRef = useRef(null);
@@ -452,6 +462,7 @@ const AskAI = () => {
     const inputRef = useRef(null);
     const chatInputRef = useRef(null);
     const token = useSelector(selectToken);
+    const isPro = useSelector(selectIsPro);
     const reduceMotion = useReducedMotion();
 
     const handoffSpring = useMemo(
@@ -650,6 +661,16 @@ const AskAI = () => {
                         sources: data.sources || [],
                         isNew: true
                     }]);
+                } else if (response.status === 429) {
+                    setMessages(prev => [...prev, {
+                        id: `${Date.now()}-${Math.random()}`,
+                        role: 'assistant',
+                        content: isPro
+                            ? `## Daily Limit Reached\n\nYou've used all 100 Pro chat messages for today. Your limit resets at midnight. Come back then! 🌙`
+                            : `## Daily Chat Limit Reached\n\nYou've used all 10 free messages for today.\n\n⚡ **Upgrade to Pro** for 100 messages/day — just ₹99/month!\n\nGo to your **Profile → Upgrade to Pro** to unlock more.`,
+                        isNew: true,
+                        isLimitHit: true
+                    }]);
                 } else {
                     throw new Error('Failed');
                 }
@@ -720,6 +741,16 @@ const AskAI = () => {
                     sources: data.sources || [],
                     isNew: true
                 }]);
+            } else if (response.status === 429) {
+                setMessages(prev => [...prev, {
+                    id: `${Date.now()}-${Math.random()}`,
+                    role: 'assistant',
+                    content: isPro
+                        ? `## Daily Limit Reached\n\nYou've used all 100 Pro chat messages for today. Your limit resets at midnight. Come back then! 🌙`
+                        : `## Daily Chat Limit Reached\n\nYou've used all 10 free messages for today.\n\n⚡ **Upgrade to Pro** for 100 messages/day — just ₹99/month!\n\nGo to your **Profile → Upgrade to Pro** to unlock more.`,
+                    isNew: true,
+                    isLimitHit: true
+                }]);
             } else {
                 throw new Error('Failed');
             }
@@ -769,10 +800,38 @@ const AskAI = () => {
                         <h1 className="text-4xl lg:text-5xl font-light text-gray-800 tracking-tight mb-2 text-center">
                             Ask <span className="font-semibold bg-gradient-to-r from-violet-600 via-fuchsia-600 to-indigo-600 bg-clip-text text-transparent">anything</span>
                         </h1>
-                        <p className="text-gray-500 text-sm tracking-widest uppercase mb-10 flex items-center gap-2 justify-center">
+                        <p className="text-gray-500 text-sm tracking-widest uppercase mb-6 flex items-center gap-2 justify-center">
                             <span className="w-1.5 h-1.5 rounded-full bg-gradient-to-r from-violet-500 to-fuchsia-500 animate-pulse" />
                             Campus Intelligence • Powered by AI
                         </p>
+
+                        {/* Pro promo banner for free users */}
+                        {!isPro && !isInChat && showProBanner && (
+                            <div className="relative mb-8 w-full max-w-md">
+                                <button
+                                    onClick={() => setShowProModal(true)}
+                                    className="w-full flex items-center justify-between gap-3 px-5 py-3 rounded-2xl text-left transition-all hover:scale-[1.02] active:scale-[0.98]"
+                                    style={{ background: 'linear-gradient(135deg, #7c3aed22, #d946ef22)', border: '1px solid rgba(139,92,246,0.3)' }}
+                                >
+                                    <div>
+                                        <p className="text-sm font-semibold text-violet-700">⚡ Free plan: 10 chats/day</p>
+                                        <p className="text-xs text-gray-500 mt-0.5">Upgrade to Pro for 100 chats/day — ₹99/month</p>
+                                    </div>
+                                    <span className="shrink-0 px-3 py-1.5 mr-6 rounded-xl text-white text-xs font-bold"
+                                        style={{ background: 'linear-gradient(135deg, #7c3aed, #d946ef)' }}>
+                                        Upgrade ↗
+                                    </span>
+                                </button>
+                                {/* Close Button */}
+                                <button
+                                    onClick={handleCloseBanner}
+                                    className="absolute top-2 right-2 p-1.5 rounded-full text-violet-400 hover:text-violet-600 hover:bg-violet-100/50 transition-colors z-10"
+                                    title="Dismiss"
+                                >
+                                    <XMarkIcon className="w-4 h-4" />
+                                </button>
+                            </div>
+                        )}
 
                         {/* Search Input */}
                         <form onSubmit={handleSubmit} className="w-full mb-8">

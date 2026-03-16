@@ -1,5 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { selectIsPro } from '../../features/auth/authSlice';
+import ProUpgradeModal from '../ProUpgradeModal';
 import {
     HomeIcon,
     MagnifyingGlassIcon,
@@ -10,7 +13,8 @@ import {
     ChartBarIcon,
     TrophyIcon,
     BookOpenIcon,
-    SparklesIcon
+    SparklesIcon,
+    XMarkIcon
 } from '@heroicons/react/24/outline';
 import {
     HomeIcon as HomeIconSolid,
@@ -34,6 +38,15 @@ const navigation = [
 
 const Sidebar = ({ onCreatePost }) => {
     const location = useLocation();
+    const isPro = useSelector(selectIsPro);
+    const [showProModal, setShowProModal] = useState(false);
+    const [showProCard, setShowProCard] = useState(() => !localStorage.getItem('hideSidebarProCard'));
+
+    const handleCloseCard = (e) => {
+        e.stopPropagation();
+        setShowProCard(false);
+        localStorage.setItem('hideSidebarProCard', 'true');
+    };
 
     return (
         <nav className="hidden lg:flex flex-col fixed left-4 top-[72px] bottom-4 w-[240px] glass-panel rounded-[2rem] p-5 z-30 transition-all duration-300 border border-white/60 shadow-2xl shadow-indigo-500/10">
@@ -69,8 +82,38 @@ const Sidebar = ({ onCreatePost }) => {
                 })}
             </div>
 
+            {/* Pro Upgrade Card - only for non-pro users */}
+            {!isPro && showProCard && (
+                <div className="mt-4 mb-4 p-4 rounded-2xl relative overflow-hidden cursor-pointer group" onClick={() => setShowProModal(true)}
+                    style={{ background: 'linear-gradient(135deg, #7c3aed 0%, #a855f7 60%, #d946ef 100%)' }}>
+                    <div className="absolute inset-0 opacity-20 bg-[radial-gradient(ellipse_at_top_right,_white,_transparent)]" />
+                    
+                    {/* Close Button */}
+                    <button 
+                        onClick={handleCloseCard}
+                        className="absolute top-2 right-2 p-1 rounded-full text-white/50 hover:text-white hover:bg-white/10 transition-colors z-10"
+                        title="Dismiss"
+                    >
+                        <XMarkIcon className="w-4 h-4" />
+                    </button>
+
+                    <p className="text-white font-bold text-sm">⚡ Upgrade to Pro</p>
+                    <p className="text-purple-100 text-xs mt-1">10 chats/day → 100/day</p>
+                    <div className="mt-3 bg-white/20 hover:bg-white/30 transition text-white text-xs font-semibold py-1.5 px-3 rounded-xl text-center">
+                        Get Pro — ₹99/month
+                    </div>
+                </div>
+            )}
+            {isPro && (
+                <div className="mt-4 mb-4 p-3 rounded-2xl text-center"
+                    style={{ background: 'linear-gradient(135deg, #f59e0b22, #f9731622)' }}>
+                    <span className="text-xs font-bold" style={{ color: '#f59e0b' }}>⚡ PRO Member</span>
+                    <p className="text-gray-400 text-xs mt-0.5">100 chats/day</p>
+                </div>
+            )}
+
             {/* Create Post Button */}
-            <div className="mt-6 pt-6 border-t border-gray-100">
+            <div className="pt-2 border-t border-gray-100">
                 <button
                     onClick={() => onCreatePost('Create Post')}
                     className="relative group w-full py-4 px-6 rounded-2xl overflow-hidden transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl hover:shadow-indigo-500/40 active:scale-95"
@@ -83,6 +126,7 @@ const Sidebar = ({ onCreatePost }) => {
                     </div>
                 </button>
             </div>
+            {showProModal && <ProUpgradeModal onClose={() => setShowProModal(false)} />}
         </nav>
     );
 };

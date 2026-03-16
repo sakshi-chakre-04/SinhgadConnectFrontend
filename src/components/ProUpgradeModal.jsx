@@ -91,8 +91,7 @@ export default function ProUpgradeModal({ onClose }) {
                 {/* Features */}
                 <ul className="space-y-3 mb-8">
                     {[
-                        ['💬', '100 AI chat messages/hour', '20 for Free'],
-                        ['📝', '20 posts/hour', '5 for Free'],
+                        ['💬', '100 AI chat messages/day', '10/day for Free'],
                         ['⭐', 'Pro badge on your profile', ''],
                         ['🚀', 'Priority AI responses', ''],
                     ].map(([icon, feature, limit]) => (
