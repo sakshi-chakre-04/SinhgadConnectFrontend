@@ -170,9 +170,8 @@ const HallOfFame = () => {
                             <TrophyIconSolid className="w-7 h-7 text-yellow-300" />
                         </div>
                         <div>
-                            <h1 className="text-3xl font-bold text-white drop-shadow-lg flex items-center gap-2">
+                            <h1 className="text-3xl font-bold text-white drop-shadow-lg">
                                 Hall of Fame
-                                <SparklesIcon className="w-6 h-6 text-yellow-300" />
                             </h1>
                             <p className="text-violet-100 text-sm">Celebrating our successful alumni</p>
                         </div>

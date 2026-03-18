@@ -84,7 +84,7 @@ export default function Community() {
               <UserGroupIcon className="w-7 h-7 text-white" />
             </div>
             <div>
-              <h1 className="text-3xl font-bold drop-shadow-lg">Find Your Tribe 🎓</h1>
+              <h1 className="text-3xl font-bold drop-shadow-lg">Find Your Tribe</h1>
               <p className="text-violet-100 text-sm">Connect with department peers and get mentorship</p>
             </div>
           </div>
