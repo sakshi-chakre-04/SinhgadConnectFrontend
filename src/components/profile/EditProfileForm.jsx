@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { XMarkIcon, PlusIcon } from '@heroicons/react/24/outline';
+import { XMarkIcon, PlusIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
 import { selectUser, selectToken, updateUserProfile } from '../../features/auth/authSlice';
 import InputField from './InputField';
-import SelectField from './SelectField';
 import TextareaField from './TextareaField';
 import ErrorAlert from './ErrorAlert';
 
@@ -22,6 +21,27 @@ const EditProfileForm = () => {
   // Skills state
   const [skills, setSkills] = useState(user?.skills || []);
   const [skillInput, setSkillInput] = useState('');
+  
+  // Dropdown states
+  const [isDepartmentOpen, setIsDepartmentOpen] = useState(false);
+  const [isYearOpen, setIsYearOpen] = useState(false);
+  const departmentRef = useRef(null);
+  const yearRef = useRef(null);
+
+  // Close dropdowns when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (departmentRef.current && !departmentRef.current.contains(event.target)) {
+        setIsDepartmentOpen(false);
+      }
+      if (yearRef.current && !yearRef.current.contains(event.target)) {
+        setIsYearOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const methods = useForm({
     defaultValues: {
@@ -32,7 +52,7 @@ const EditProfileForm = () => {
     },
   });
 
-  const { handleSubmit, setError, formState: { isSubmitting, isDirty }, reset } = methods;
+  const { handleSubmit, setError, formState: { isSubmitting, isDirty }, reset, watch, setValue } = methods;
 
   useEffect(() => {
     reset({
@@ -115,23 +135,85 @@ const EditProfileForm = () => {
             </div>
 
             <div className="sm:col-span-3">
-              <SelectField
-                name="department"
-                label="Department *"
-                options={departments}
-                placeholder="Select department"
-                rules={{ required: 'Department is required' }}
-              />
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Department *
+              </label>
+              <div className="relative" ref={departmentRef}>
+                <button
+                  type="button"
+                  onClick={() => setIsDepartmentOpen(!isDepartmentOpen)}
+                  className="flex items-center gap-2 w-full px-4 py-2 bg-white border border-gray-200 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50 focus:ring-2 focus:ring-violet-500 focus:border-transparent cursor-pointer shadow-sm transition-all"
+                >
+                  <span>{watch('department') || 'Select department'}</span>
+                  <ChevronDownIcon className={`w-4 h-4 transition-transform ${isDepartmentOpen ? 'rotate-180' : ''}`} />
+                </button>
+                
+                {/* Dropdown Menu */}
+                {isDepartmentOpen && (
+                  <div className="absolute top-full left-0 mt-1 w-full bg-white border border-gray-200 rounded-xl shadow-lg z-50 overflow-hidden">
+                    <div className="py-1 max-h-60 overflow-y-auto">
+                      {departments.map((dept) => (
+                        <button
+                          key={dept}
+                          type="button"
+                          onClick={() => {
+                            setValue('department', dept);
+                            setIsDepartmentOpen(false);
+                          }}
+                          className={`w-full text-left px-4 py-2 text-sm font-medium transition-colors ${
+                            watch('department') === dept
+                              ? 'bg-violet-50 text-violet-700 border-l-2 border-violet-600'
+                              : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
+                          }`}
+                        >
+                          {dept}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
 
             <div className="sm:col-span-3">
-              <SelectField
-                name="year"
-                label="Year *"
-                options={years}
-                placeholder="Select year"
-                rules={{ required: 'Year is required' }}
-              />
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Year *
+              </label>
+              <div className="relative" ref={yearRef}>
+                <button
+                  type="button"
+                  onClick={() => setIsYearOpen(!isYearOpen)}
+                  className="flex items-center gap-2 w-full px-4 py-2 bg-white border border-gray-200 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50 focus:ring-2 focus:ring-violet-500 focus:border-transparent cursor-pointer shadow-sm transition-all"
+                >
+                  <span>{watch('year') || 'Select year'}</span>
+                  <ChevronDownIcon className={`w-4 h-4 transition-transform ${isYearOpen ? 'rotate-180' : ''}`} />
+                </button>
+                
+                {/* Dropdown Menu */}
+                {isYearOpen && (
+                  <div className="absolute top-full left-0 mt-1 w-full bg-white border border-gray-200 rounded-xl shadow-lg z-50 overflow-hidden">
+                    <div className="py-1 max-h-60 overflow-y-auto">
+                      {years.map((year) => (
+                        <button
+                          key={year}
+                          type="button"
+                          onClick={() => {
+                            setValue('year', year);
+                            setIsYearOpen(false);
+                          }}
+                          className={`w-full text-left px-4 py-2 text-sm font-medium transition-colors ${
+                            watch('year') === year
+                              ? 'bg-violet-50 text-violet-700 border-l-2 border-violet-600'
+                              : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
+                          }`}
+                        >
+                          {year}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
 
             <div className="sm:col-span-6">

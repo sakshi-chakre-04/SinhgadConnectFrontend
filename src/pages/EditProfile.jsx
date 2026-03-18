@@ -4,7 +4,7 @@ import EditProfileForm from '../components/profile/EditProfileForm';
 const EditProfile = () => {
   return (
     <div className="max-w-3xl mx-auto p-4 sm:p-6 mb-20 pt-8">
-      <div className="glass-panel overflow-hidden border border-white/50 animate-fadeIn relative">
+      <div className="rounded-xl overflow-hidden border border-white/60 shadow-2xl shadow-indigo-500/10 animate-fadeIn relative bg-white">
         <div className="bg-gradient-to-r from-violet-600 to-indigo-600 p-8 text-white relative overflow-hidden">
           <div className="absolute inset-0 bg-white/5 backdrop-blur-[1px]"></div>
           <div className="relative z-10">
