@@ -12,6 +12,7 @@ import {
     SparklesIcon
 } from '@heroicons/react/24/outline';
 import { TrophyIcon as TrophyIconSolid } from '@heroicons/react/24/solid';
+import { GiCrenelCrown } from 'react-icons/gi';
 
 const Leaderboard = () => {
     const token = useSelector(selectToken);
@@ -149,7 +150,7 @@ const Leaderboard = () => {
 
     const getMedalEmoji = (rank) => {
         switch (rank) {
-            case 1: return '👑'; // Crown for champion
+            case 1: return <GiCrenelCrown className="w-5 h-5 text-yellow-500" />; // Golden crown for champion
             case 2: return '🥈';
             case 3: return '🥉';
             default: return null;
@@ -244,7 +245,9 @@ const Leaderboard = () => {
                                             className="flex flex-col items-center cursor-pointer group -mt-3"
                                             onClick={() => navigate(`/user/${leaderboard[0].userId}`)}
                                         >
-                                            <div className="text-lg mb-0.5">👑</div>
+                                            <div className="mb-0.5">
+                                                <GiCrenelCrown className="w-8 h-8 text-yellow-500" />
+                                            </div>
                                             <div className="relative">
                                                 <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-gradient-to-br from-amber-200 to-yellow-300 flex items-center justify-center text-xl sm:text-2xl border-2 border-white shadow-md group-hover:scale-105 transition-transform">
                                                     🏆
