@@ -3,7 +3,6 @@ import { NavLink, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { selectIsPro } from '../../features/auth/authSlice';
 import ProUpgradeModal from '../ProUpgradeModal';
-import slideLeftIcon from '/slide-left.png';
 import {
     HomeIcon,
     MagnifyingGlassIcon,
@@ -57,7 +56,7 @@ const Sidebar = ({ onCreatePost, isCollapsed, onToggleCollapse }) => {
                 className={`absolute -right-3 top-6 w-6 h-6 bg-white rounded-full shadow-lg border border-white/60 flex items-center justify-center hover:scale-110 transition-transform duration-200 z-40 ${isCollapsed ? 'rotate-180' : ''}`}
                 title={isCollapsed ? 'Expand Sidebar' : 'Collapse Sidebar'}
             >
-                <img src={slideLeftIcon} alt="Toggle Sidebar" className="w-4 h-4" />
+                <img src="/slide-left.png" alt="Toggle Sidebar" className="w-4 h-4" />
             </button>
 
             {/* Navigation Items */}
