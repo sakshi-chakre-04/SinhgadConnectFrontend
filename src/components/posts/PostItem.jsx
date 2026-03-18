@@ -13,13 +13,14 @@ import {
   SparklesIcon
 } from '@heroicons/react/24/outline';
 import { ChatBubbleLeftIcon as ChatBubbleLeftIconSolid, SparklesIcon as SparklesIconSolid } from '@heroicons/react/24/solid';
+import { TfiAnnouncement, TfiHelpAlt, TfiComments } from 'react-icons/tfi';
 
 // Post type configuration
 const POST_TYPE_CONFIG = {
-  question: { icon: '❓', label: 'Question', className: 'bg-gradient-to-r from-cyan-500 to-blue-500 text-white' },
-  discussion: { icon: '💬', label: 'Discussion', className: 'bg-gradient-to-r from-violet-500 to-purple-500 text-white' },
-  announcement: { icon: '📢', label: 'Announcement', className: 'bg-gradient-to-r from-amber-400 to-orange-400 text-white' },
-  resource: { icon: '📚', label: 'Resource', className: 'bg-gradient-to-r from-pink-500 to-rose-500 text-white' },
+  question: { icon: <TfiHelpAlt className="w-4 h-4" />, label: 'Question', className: 'bg-gradient-to-r from-cyan-500 to-blue-500 text-white' },
+  discussion: { icon: <TfiComments className="w-4 h-4" />, label: 'Discussion', className: 'bg-gradient-to-r from-violet-500 to-purple-500 text-white' },
+  announcement: { icon: <TfiAnnouncement className="w-4 h-4" />, label: 'Announcement', className: 'bg-gradient-to-r from-amber-400 to-orange-400 text-white' },
+  resource: { icon: <SparklesIconSolid className="w-4 h-4" />, label: 'Resource', className: 'bg-gradient-to-r from-pink-500 to-rose-500 text-white' },
 };
 
 // Avatar gradient based on user ID
