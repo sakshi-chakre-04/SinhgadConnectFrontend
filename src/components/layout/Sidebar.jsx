@@ -76,7 +76,7 @@ const Sidebar = ({ onCreatePost, isCollapsed, onToggleCollapse }) => {
                         <NavLink
                             key={item.name}
                             to={item.href}
-                            className={`group relative flex items-center ${isCollapsed ? 'justify-center' : 'gap-4'} ${isCollapsed ? 'px-0' : 'px-4'} py-3.5 rounded-2xl transition-all duration-300 ease-out
+                            className={`group relative flex items-center ${isCollapsed ? 'justify-center' : 'gap-4'} ${isCollapsed ? 'px-0' : 'px-4'} py-3.5 rounded-xl transition-all duration-300 ease-out
                                 ${isActive
                                     ? 'bg-gradient-to-r from-indigo-600 via-purple-600 to-purple-700 text-white shadow-lg shadow-indigo-500/25 scale-[1.02]'
                                     : 'text-slate-500 hover:bg-indigo-50/80 hover:text-indigo-600 hover:shadow-sm'
@@ -84,7 +84,7 @@ const Sidebar = ({ onCreatePost, isCollapsed, onToggleCollapse }) => {
                             title={isCollapsed ? item.name : ''}
                         >
                             {isActive && (
-                                <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-indigo-600 to-purple-600 blur-md opacity-30 -z-10"></div>
+                                <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 blur-md opacity-30 -z-10"></div>
                             )}
                             <Icon className={`w-6 h-6 transition-transform duration-300 ${isActive ? 'scale-110 drop-shadow-md' : 'group-hover:scale-110'}`} />
                             {!isCollapsed && <span className="font-medium text-[0.95rem] tracking-wide">{item.name}</span>}
@@ -100,7 +100,7 @@ const Sidebar = ({ onCreatePost, isCollapsed, onToggleCollapse }) => {
 
             {/* Pro Upgrade Card - only for non-pro users */}
             {!isPro && showProCard && !isCollapsed && (
-                <div className="mt-4 mb-4 p-4 rounded-2xl relative overflow-hidden cursor-pointer group" onClick={() => setShowProModal(true)}
+                <div className="mt-4 mb-4 p-4 rounded-xl relative overflow-hidden cursor-pointer group" onClick={() => setShowProModal(true)}
                     style={{ background: 'linear-gradient(135deg, #7c3aed 0%, #a855f7 60%, #d946ef 100%)' }}>
                     <div className="absolute inset-0 opacity-20 bg-[radial-gradient(ellipse_at_top_right,_white,_transparent)]" />
                     
@@ -121,7 +121,7 @@ const Sidebar = ({ onCreatePost, isCollapsed, onToggleCollapse }) => {
                 </div>
             )}
             {isPro && (
-                <div className="mt-4 mb-4 p-3 rounded-2xl text-center"
+                <div className="mt-4 mb-4 p-3 rounded-xl text-center"
                     style={{ background: 'linear-gradient(135deg, #f59e0b22, #f9731622)' }}>
                     <span className="text-xs font-bold" style={{ color: '#f59e0b' }}>⚡ PRO Member</span>
                     <p className="text-gray-400 text-xs mt-0.5">100 chats/day</p>
@@ -132,11 +132,11 @@ const Sidebar = ({ onCreatePost, isCollapsed, onToggleCollapse }) => {
             <div className={`pt-2 ${!isCollapsed ? 'border-t border-gray-100' : ''}`}>
                 <button
                     onClick={() => onCreatePost('Create Post')}
-                    className={`relative group ${isCollapsed ? 'w-full aspect-square' : 'w-full'} ${isCollapsed ? 'py-0' : 'py-4'} ${isCollapsed ? 'px-0' : 'px-6'} rounded-2xl overflow-hidden transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl hover:shadow-indigo-500/40 active:scale-95`}
+                    className={`relative group ${isCollapsed ? 'w-full aspect-square' : 'w-full'} ${isCollapsed ? 'py-0' : 'py-4'} ${isCollapsed ? 'px-0' : 'px-6'} rounded-xl overflow-hidden transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl hover:shadow-indigo-500/40 active:scale-95`}
                     title={isCollapsed ? 'Create Post' : ''}
                 >
                     <div className="absolute inset-0 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 group-hover:bg-[length:200%_200%] animate-gradient-xy transition-all duration-300"></div>
-                    <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" style={{ boxShadow: 'inset 0 0 20px rgba(255,255,255,0.15)' }}></div>
+                    <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" style={{ boxShadow: 'inset 0 0 20px rgba(255,255,255,0.15)' }}></div>
                     <div className={`relative flex items-center justify-center ${isCollapsed ? '' : 'gap-3'} text-white font-bold tracking-wide`}>
                         <PlusCircleIcon className={`w-6 h-6 group-hover:rotate-90 transition-transform duration-500`} />
                         {!isCollapsed && <span>Create Post</span>}
