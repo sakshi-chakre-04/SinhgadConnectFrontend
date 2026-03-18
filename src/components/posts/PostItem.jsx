@@ -164,7 +164,10 @@ const PostItem = ({ post, show, onToggleComments, onVote, onCommentCountUpdate, 
         {/* Badges & Delete */}
         <div className="flex items-center gap-2">
           <span className={`tag ${postTypeConfig.className}`}>
-            {postTypeConfig.icon} {postTypeConfig.label}
+            <span className="flex items-center gap-1">
+              {postTypeConfig.icon}
+              {postTypeConfig.label}
+            </span>
           </span>
           {isAuthor && (
             <button
