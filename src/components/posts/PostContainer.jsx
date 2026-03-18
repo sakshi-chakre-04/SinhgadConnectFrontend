@@ -128,18 +128,20 @@ const PostsContainer = () => {
         </div>
 
         {/* Department Filter */}
-        <div className="flex items-center gap-2">
-          <select
-            value={filter}
-            onChange={(e) => setFilter(e.target.value)}
-            className="px-3 py-2 bg-white border border-gray-200 rounded-xl text-sm font-medium text-gray-700 focus:ring-2 focus:ring-violet-500 focus:border-transparent cursor-pointer shadow-sm"
-          >
-            {DEPARTMENTS.map((dept) => (
-              <option key={dept.value} value={dept.value}>
-                {dept.label}
-              </option>
-            ))}
-          </select>
+        <div className="flex items-center bg-white rounded-xl p-1 border border-gray-200 shadow-sm">
+          {DEPARTMENTS.map((dept) => (
+            <button
+              key={dept.value}
+              onClick={() => setFilter(dept.value)}
+              className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all cursor-pointer ${
+                filter === dept.value
+                  ? 'bg-violet-600 text-white shadow-sm'
+                  : 'text-gray-600 hover:bg-gray-100'
+              }`}
+            >
+              {dept.label}
+            </button>
+          ))}
         </div>
       </div>
 
