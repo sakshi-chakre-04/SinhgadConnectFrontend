@@ -7,9 +7,16 @@ export const POST_TYPES = {
 
 // Labels for post types (display in UI)
 export const POST_TYPE_LABELS = {
-  [POST_TYPES.QUESTION]: '❓ Question',
-  [POST_TYPES.DISCUSSION]: '💬 Discussion',
-  [POST_TYPES.ANNOUNCEMENT]: '📢 Announcement'
+  [POST_TYPES.QUESTION]: 'Question',
+  [POST_TYPES.DISCUSSION]: 'Discussion',
+  [POST_TYPES.ANNOUNCEMENT]: 'Announcement'
+};
+
+// Icons for post types (React components)
+export const POST_TYPE_ICONS = {
+  [POST_TYPES.QUESTION]: '❓',
+  [POST_TYPES.DISCUSSION]: '💬',
+  [POST_TYPES.ANNOUNCEMENT]: '📢'
 };
 
 // Department options

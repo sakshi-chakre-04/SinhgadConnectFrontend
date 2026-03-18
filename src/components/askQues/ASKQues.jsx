@@ -9,6 +9,7 @@ import FormFooter from './FormFooter';
 import {
   POST_TYPES,
   POST_TYPE_LABELS,
+  POST_TYPE_ICONS,
   DEPARTMENTS,
   DEFAULT_POST_TYPE,
   VALIDATION_RULES,
@@ -16,6 +17,7 @@ import {
 } from './constants';
 import FileUpload from './FileUpload';
 import { SparklesIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { TfiAnnouncement, TfiHelpAlt, TfiComments } from 'react-icons/tfi';
 
 const ASKQues = ({ isOpen, onClose, onPostCreated }) => {
   const user = useSelector(selectUser);
@@ -178,10 +180,24 @@ const ASKQues = ({ isOpen, onClose, onPostCreated }) => {
                 Post Type <span className="text-red-500">*</span>
               </label>
               <div className="grid grid-cols-3 gap-3">
-                {Object.entries(POST_TYPES).map(([key, value]) => (
+                {Object.entries(POST_TYPES).map(([key, value]) => {
+                  const getIcon = (type) => {
+                    switch(type) {
+                      case POST_TYPES.QUESTION:
+                        return <TfiHelpAlt className="w-4 h-4" />;
+                      case POST_TYPES.DISCUSSION:
+                        return <TfiComments className="w-4 h-4" />;
+                      case POST_TYPES.ANNOUNCEMENT:
+                        return <TfiAnnouncement className="w-4 h-4" />;
+                      default:
+                        return null;
+                    }
+                  };
+                  
+                  return (
                   <label
                     key={key}
-                    className={`flex items-center justify-center p-3 border-2 rounded-xl cursor-pointer transition-all ${selectedType === value
+                    className={`flex flex-col items-center justify-center p-3 border-2 rounded-xl cursor-pointer transition-all ${selectedType === value
                       ? 'border-violet-500 bg-violet-50 text-violet-700'
                       : 'border-gray-200 hover:border-violet-200 hover:bg-violet-50/50'
                       }`}
@@ -193,9 +209,13 @@ const ASKQues = ({ isOpen, onClose, onPostCreated }) => {
                       {...register('postType', VALIDATION_RULES.postType)}
                       className="sr-only"
                     />
-                    <span className="text-sm font-medium">{POST_TYPE_LABELS[value]}</span>
+                    <div className="flex items-center gap-1 mb-1">
+                      {getIcon(value)}
+                      <span className="text-sm font-medium">{POST_TYPE_LABELS[value]}</span>
+                    </div>
                   </label>
-                ))}
+                  );
+                })}
               </div>
               {errors.postType && (
                 <p className="mt-1 text-sm text-red-500">{errors.postType.message}</p>
