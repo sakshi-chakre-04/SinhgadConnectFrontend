@@ -316,7 +316,6 @@ const HallOfFame = () => {
                     }}
                 >
                     <div className="max-w-md mx-auto">
-                        <div className="text-4xl mb-3">🎓</div>
                         <h3 className="text-xl font-bold text-gray-800 mb-2">
                             Your Story Could Be Next!
                         </h3>
