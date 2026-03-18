@@ -58,6 +58,7 @@ const PostItem = ({ post, show, onToggleComments, onVote, onCommentCountUpdate, 
   const [aiSummary, setAiSummary] = useState(post.aiSummary || '');
   const [showSummary, setShowSummary] = useState(false);
   const [isSummarizing, setIsSummarizing] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
   const currentUser = useSelector(selectUser);
   const token = useSelector(selectToken);
   const navigate = useNavigate();
@@ -223,19 +224,17 @@ const PostItem = ({ post, show, onToggleComments, onVote, onCommentCountUpdate, 
           <div className="flex flex-wrap gap-3">
             {post.attachments.map((file, index) => (
               file.type === 'image' ? (
-                <a
+                <div
                   key={index}
-                  href={file.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow"
+                  onClick={() => setSelectedImage(file)}
+                  className="block rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow cursor-pointer"
                 >
                   <img
                     src={file.url}
                     alt={file.filename}
                     className="h-28 w-28 object-cover hover:scale-105 transition-transform"
                   />
-                </a>
+                </div>
               ) : (
                 <a
                   key={index}
@@ -367,6 +366,50 @@ const PostItem = ({ post, show, onToggleComments, onVote, onCommentCountUpdate, 
               >
                 {isDeleting ? 'Deleting...' : 'Delete'}
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Image Modal */}
+      {selectedImage && (
+        <div 
+          className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+          onClick={() => setSelectedImage(null)}
+        >
+          <div 
+            className="relative max-w-4xl max-h-[90vh] w-full h-full flex items-center justify-center"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Close Button */}
+            <button
+              onClick={() => setSelectedImage(null)}
+              className="absolute top-4 right-4 w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-white/30 transition-colors z-10"
+            >
+              <XMarkIcon className="w-6 h-6" />
+            </button>
+            
+            {/* Image Container */}
+            <div className="relative w-full h-full flex items-center justify-center">
+              <img
+                src={selectedImage.url}
+                alt={selectedImage.filename}
+                className="max-w-full max-h-full object-contain rounded-lg"
+              />
+              
+              {/* Image Info */}
+              <div className="absolute bottom-4 left-4 right-4 bg-black/60 backdrop-blur-sm rounded-lg p-3 text-white">
+                <p className="text-sm font-medium truncate">{selectedImage.filename}</p>
+                <a
+                  href={selectedImage.url}
+                  download={selectedImage.filename}
+                  className="inline-flex items-center gap-2 mt-2 text-xs bg-white/20 hover:bg-white/30 px-3 py-1.5 rounded-full transition-colors"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <ArrowDownTrayIcon className="w-4 h-4" />
+                  Download
+                </a>
+              </div>
             </div>
           </div>
         </div>
