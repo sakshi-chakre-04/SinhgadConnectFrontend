@@ -10,7 +10,9 @@ import {
   ChatBubbleLeftIcon,
   ArrowTopRightOnSquareIcon,
   TrashIcon,
-  SparklesIcon
+  SparklesIcon,
+  XMarkIcon,
+  ArrowDownTrayIcon
 } from '@heroicons/react/24/outline';
 import { ChatBubbleLeftIcon as ChatBubbleLeftIconSolid, SparklesIcon as SparklesIconSolid } from '@heroicons/react/24/solid';
 import { TfiAnnouncement, TfiHelpAlt, TfiComments } from 'react-icons/tfi';
