@@ -39,6 +39,7 @@ const AuthenticatedLayout = ({ children }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [refreshKey, setRefreshKey] = useState(0);
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
   // Handle modal close with refresh option
   const handleCloseModal = useCallback((shouldRefresh = false) => {
@@ -63,14 +64,18 @@ const AuthenticatedLayout = ({ children }) => {
       <DesktopNavbar />
 
       {/* Left Sidebar */}
-      <Sidebar onCreatePost={openModal} />
+      <Sidebar 
+        onCreatePost={openModal} 
+        isCollapsed={isSidebarCollapsed}
+        onToggleCollapse={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
+      />
 
       {/* Mobile Top Navigation */}
       <MobileTopNav />
 
       {/* Main Content Area */}
       <main
-        className="lg:ml-[256px] xl:mr-[296px] min-h-screen pt-16 lg:pt-[72px] pb-24 lg:pb-8 px-0 sm:px-4 lg:px-6 bg-[linear-gradient(180deg,#faf5ff_0%,#f5f3ff_50%,#ffffff_100%)] lg:bg-none"
+        className={`${isSidebarCollapsed ? 'lg:ml-[88px]' : 'lg:ml-[256px]'} xl:mr-[296px] min-h-screen pt-16 lg:pt-[72px] pb-24 lg:pb-8 px-0 sm:px-4 lg:px-6 bg-[linear-gradient(180deg,#faf5ff_0%,#f5f3ff_50%,#ffffff_100%)] lg:bg-none transition-all duration-300`}
       >
         <div className="w-full max-w-lg md:max-w-2xl lg:max-w-4xl xl:max-w-5xl mx-auto transition-all duration-300">
           {children}
