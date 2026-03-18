@@ -44,7 +44,7 @@ const Profile = () => {
   };
 
   const [userData, setUserData] = useState(null);
-  const [activeTab, setActiveTab] = useState('posts');
+  const [activeTab, setActiveTab] = useState('about');
   const [posts, setPosts] = useState([]);
   const [comments, setComments] = useState([]);
   const [stats, setStats] = useState({ totalPosts: 0, totalComments: 0, totalUpvotes: 0 });
@@ -113,9 +113,9 @@ const Profile = () => {
   }
 
   const tabs = [
+    { id: 'about', label: 'About', count: undefined, icon: AcademicCapIcon },
     { id: 'posts', label: 'My Posts', count: stats.totalPosts, icon: DocumentTextIcon },
-    { id: 'comments', label: 'My Comments', count: stats.totalComments, icon: ChatBubbleLeftIcon },
-    { id: 'about', label: 'About', icon: AcademicCapIcon }
+    { id: 'comments', label: 'My Comments', count: stats.totalComments, icon: ChatBubbleLeftIcon }
   ];
 
   return (
