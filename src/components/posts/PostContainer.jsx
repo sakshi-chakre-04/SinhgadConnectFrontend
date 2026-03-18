@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useRef, useEffect } from 'react';
 import CustomSelect from '../common/CustomSelect';
 import {
   ChatBubbleLeftIcon,
@@ -40,6 +40,8 @@ const PostsContainer = () => {
   const [filter, setFilter] = useState('all');
   const [sortBy, setSortBy] = useState('createdAt');
   const [showComments, setShowComments] = useState({});
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
 
   const { posts, setPosts, loading, error, refetch } = usePosts({ filter, sortBy });
 
@@ -50,6 +52,18 @@ const PostsContainer = () => {
   const handleCommentCountUpdate = (postId, count) => {
     setPosts((prev) => prev.map((p) => (p._id === postId ? { ...p, commentCount: count } : p)));
   };
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const handleVote = useCallback(async (postId, voteType) => {
     if (!token) {
@@ -128,20 +142,38 @@ const PostsContainer = () => {
         </div>
 
         {/* Department Filter */}
-        <div className="flex items-center bg-white rounded-xl p-1 border border-gray-200 shadow-sm">
-          {DEPARTMENTS.map((dept) => (
-            <button
-              key={dept.value}
-              onClick={() => setFilter(dept.value)}
-              className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all cursor-pointer ${
-                filter === dept.value
-                  ? 'bg-violet-600 text-white shadow-sm'
-                  : 'text-gray-600 hover:bg-gray-100'
-              }`}
-            >
-              {dept.label}
-            </button>
-          ))}
+        <div className="relative" ref={dropdownRef}>
+          <button
+            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+            className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50 focus:ring-2 focus:ring-violet-500 focus:border-transparent cursor-pointer shadow-sm transition-all"
+          >
+            <span>{DEPARTMENTS.find(d => d.value === filter)?.label || 'All Departments'}</span>
+            <ChevronDownIcon className={`w-4 h-4 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} />
+          </button>
+          
+          {/* Dropdown Menu */}
+          {isDropdownOpen && (
+            <div className="absolute top-full left-0 mt-1 w-full bg-white border border-gray-200 rounded-xl shadow-lg z-50 overflow-hidden">
+              <div className="py-1 max-h-60 overflow-y-auto">
+                {DEPARTMENTS.map((dept) => (
+                  <button
+                    key={dept.value}
+                    onClick={() => {
+                      setFilter(dept.value);
+                      setIsDropdownOpen(false);
+                    }}
+                    className={`w-full text-left px-4 py-2 text-sm font-medium transition-colors ${
+                      filter === dept.value
+                        ? 'bg-violet-50 text-violet-700 border-l-2 border-violet-600'
+                        : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
+                    }`}
+                  >
+                    {dept.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
