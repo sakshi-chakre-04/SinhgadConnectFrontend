@@ -49,7 +49,7 @@ const Sidebar = ({ onCreatePost, isCollapsed, onToggleCollapse }) => {
     };
 
     return (
-        <nav className={`hidden lg:flex flex-col fixed left-4 top-[72px] bottom-4 ${isCollapsed ? 'w-[72px]' : 'w-[240px]'} glass-panel rounded-[2rem] ${isCollapsed ? 'p-3' : 'p-5'} z-30 transition-all duration-300 border border-white/60 shadow-2xl shadow-indigo-500/10`}>
+        <nav className={`hidden lg:flex flex-col fixed left-4 top-[72px] bottom-4 ${isCollapsed ? 'w-[72px]' : 'w-[240px]'} glass-panel rounded-xl ${isCollapsed ? 'p-3' : 'p-5'} z-30 transition-all duration-300 border border-white/60 shadow-2xl shadow-indigo-500/10`}>
             {/* Collapse/Expand Button */}
             <button
                 onClick={onToggleCollapse}
